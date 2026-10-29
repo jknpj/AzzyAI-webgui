@@ -215,6 +215,8 @@
   }
 
   function buildFile(name) {
+    // Unchanged files are written back exactly as they were.
+    if (!fileChanged(name)) return saved[name] || '';
     switch (name) {
       case 'H_Config.lua': return L.save(saved[name], HOM, state.hom);
       case 'M_Config.lua': return L.save(saved[name], MER, state.mer);
@@ -258,6 +260,27 @@
     return schema.filter(function (e) { return !sameValue(e, values[e.name], base[e.name]); }).length;
   }
 
+  function stripTactDate(s) { return s.replace(/^.*TactLastSavedDate.*$/m, ''); }
+
+  // True when the editor's content for a file differs from the applied file.
+  function fileChanged(name) {
+    switch (name) {
+      case 'H_Config.lua': return countDiff(HOM, state.hom, saved[name]) > 0;
+      case 'M_Config.lua': return countDiff(MER, state.mer, saved[name]) > 0;
+      case 'H_Tactics.lua':
+      case 'M_Tactics.lua': {
+        var k = name === 'H_Tactics.lua' ? 'hom' : 'mer';
+        return stripTactDate(T.serializeTactics(state.tact[k])) !== stripTactDate(T.serializeTactics(T.parseTactics(saved[name])));
+      }
+      case 'H_PVP_Tact.lua':
+      case 'M_PVP_Tact.lua': {
+        var p = name === 'H_PVP_Tact.lua' ? 'hompvp' : 'merpvp';
+        return T.serializePvp(saved[name], state.tact[p]) !== T.serializePvp(saved[name], T.parsePvp(saved[name]));
+      }
+      default: return (state.extra[name] || '') !== (saved[name] || '');
+    }
+  }
+
   // Returns [[tabId, label, count or null]] for every section that differs from the applied files.
   function pendingChanges() {
     var out = [];
@@ -265,17 +288,11 @@
     if (n) out.push(['tab-hom', 'Homunculus', n]);
     n = countDiff(MER, state.mer, saved['M_Config.lua']);
     if (n) out.push(['tab-mer', 'Mercenary', n]);
-    [['hom', 'H_Tactics.lua', 'tab-homtact', 'Homunculus tactics'], ['mer', 'M_Tactics.lua', 'tab-mertact', 'Mercenary tactics']].forEach(function (p) {
-      // Ignore the save timestamp line written by serializeTactics.
-      var strip = function (s) { return s.replace(/^.*TactLastSavedDate.*$/m, ''); };
-      if (strip(T.serializeTactics(state.tact[p[0]])) !== strip(T.serializeTactics(T.parseTactics(saved[p[1]])))) out.push([p[2], p[3], null]);
+    [['H_Tactics.lua', 'tab-homtact', 'Homunculus tactics'], ['M_Tactics.lua', 'tab-mertact', 'Mercenary tactics'],
+      ['H_PVP_Tact.lua', 'tab-hompvp', 'PVP tactics'], ['M_PVP_Tact.lua', 'tab-merpvp', 'Merc PVP tactics']].forEach(function (p) {
+      if (fileChanged(p[0])) out.push([p[1], p[2], null]);
     });
-    [['hompvp', 'H_PVP_Tact.lua', 'tab-hompvp', 'PVP tactics'], ['merpvp', 'M_PVP_Tact.lua', 'tab-merpvp', 'Merc PVP tactics']].forEach(function (p) {
-      if (T.serializePvp(saved[p[1]], state.tact[p[0]]) !== T.serializePvp(saved[p[1]], T.parsePvp(saved[p[1]]))) out.push([p[2], p[3], null]);
-    });
-    if (['H_Extra.lua', 'M_Extra.lua'].some(function (f) { return (state.extra[f] || '') !== (saved[f] || ''); })) {
-      out.push(['tab-extra', 'Extra options', null]);
-    }
+    if (fileChanged('H_Extra.lua') || fileChanged('M_Extra.lua')) out.push(['tab-extra', 'Extra options', null]);
     return out;
   }
 
@@ -371,8 +388,8 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  function writeToFolder(files) {
-    return Promise.all(FILES.map(function (f) {
+  function writeToFolder(files, names) {
+    return Promise.all(names.map(function (f) {
       return dirHandle.getFileHandle(f, { create: true }).then(function (h) {
         return h.createWritable();
       }).then(function (w) {
@@ -399,29 +416,57 @@
     }
     return chooseTarget().then(function (target) {
       if (target === 'cancel') return false;
-      var files;
+      var files, names;
       try {
+        // Only files with edits are written to the folder; the zip always has every file.
+        names = FILES.filter(fileChanged);
         files = buildAll();
       } catch (e) {
         return message('Error', 'Settings could not be saved completely. Your edits are still open.\n\n' + e.message).then(function () { return false; });
       }
-      return finishApply(target === 'folder' ? writeToFolder(files) : downloadAll(files), files);
+      return finishApply(target === 'folder' ? writeToFolder(files, names) : downloadAll(files), files);
     }).catch(function (e) {
       if (e && e.name === 'AbortError') return false;
       return message('Error', 'Settings could not be saved completely. Your edits are still open.\n\n' + (e && e.message)).then(function () { return false; });
     });
   }
 
-  // Files edited in place (comments and unmanaged lines are kept), so the
-  // folder's current copy is used as the base when saving there.
-  var IN_PLACE = ['H_Config.lua', 'M_Config.lua', 'H_PVP_Tact.lua', 'M_PVP_Tact.lua'];
+  function editsOf(schema, values, text) {
+    var base = L.load(text, schema);
+    var edits = {};
+    schema.forEach(function (e) { if (!sameValue(e, values[e.name], base[e.name])) edits[e.name] = values[e.name]; });
+    return edits;
+  }
+
+  // The folder chosen at Apply time may differ from what the editor was showing
+  // (e.g. browser storage). Keep only the user's edits and take everything else
+  // from the folder, so Apply never overwrites settings the user did not touch.
+  function rebase(map) {
+    var was = {};
+    FILES.forEach(function (f) { was[f] = fileChanged(f); });
+    var homEdits = editsOf(HOM, state.hom, saved['H_Config.lua']);
+    var merEdits = editsOf(MER, state.mer, saved['M_Config.lua']);
+    FILES.forEach(function (f) { if (typeof map[f] === 'string') saved[f] = map[f]; });
+    state.hom = L.load(saved['H_Config.lua'], HOM);
+    Object.keys(homEdits).forEach(function (k) { state.hom[k] = homEdits[k]; });
+    state.mer = L.load(saved['M_Config.lua'], MER);
+    Object.keys(merEdits).forEach(function (k) { state.mer[k] = merEdits[k]; });
+    if (!was['H_Tactics.lua']) state.tact.hom = T.parseTactics(saved['H_Tactics.lua']);
+    if (!was['M_Tactics.lua']) state.tact.mer = T.parseTactics(saved['M_Tactics.lua']);
+    if (!was['H_PVP_Tact.lua']) state.tact.hompvp = T.parsePvp(saved['H_PVP_Tact.lua']);
+    if (!was['M_PVP_Tact.lua']) state.tact.merpvp = T.parsePvp(saved['M_PVP_Tact.lua']);
+    ['H_Extra.lua', 'M_Extra.lua'].forEach(function (f) { if (!was[f]) state.extra[f] = saved[f] || ''; });
+    renderAll();
+  }
 
   function pickUserAiFolder() {
     return window.showDirectoryPicker({ id: 'azzyai-user-ai', mode: 'readwrite' }).then(function (handle) {
-      return Promise.all(IN_PLACE.map(function (f) {
+      var map = {};
+      return Promise.all(FILES.map(function (f) {
         return handle.getFileHandle(f).then(function (h) { return h.getFile(); })
-          .then(readText).then(function (t) { saved[f] = t; }).catch(function () { /* missing: keep base */ });
+          .then(readText).then(function (t) { map[f] = t; }).catch(function () { /* missing: keep base */ });
       })).then(function () {
+        rebase(map);
         dirHandle = handle;
         setEditing(handle.name + ' (Apply writes the .lua files directly to this folder)');
         return 'folder';

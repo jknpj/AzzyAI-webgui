@@ -1,7 +1,8 @@
 // luaConfig.js
-// Reads and writes H_Config.lua / M_Config.lua the same way the C# GUI does:
-// values are matched by "Name = value", replaced in place (keeping the rest of
-// the file untouched) and appended when missing. LastSavedDate is refreshed.
+// Reads and writes H_Config.lua / M_Config.lua: values are matched by
+// "Name = value" and only changed values are replaced in place (the rest of
+// the file stays untouched); options missing from the file are appended only
+// when they differ from the default. LastSavedDate is refreshed when something changed.
 (function () {
   'use strict';
 
@@ -94,12 +95,17 @@
     return values;
   }
 
+  function sameValue(entry, a, b) {
+    if (entry.type === 'bool') return !!a === !!b;
+    return Number(a) === Number(b);
+  }
+
+  // Replaces only the value token, keeping the line's spacing and trailing comment.
   function setAssignment(text, name, token) {
-    var re = assignRegex(name);
+    var re = new RegExp('^([ \\t]*' + escapeRegex(name) + '[ \\t]*=[ \\t]*)' + TOKEN, 'gm');
     if (re.test(text)) {
-      return text.replace(assignRegex(name), function (all, indent) {
-        return indent + padName(name) + '= ' + token;
-      });
+      re.lastIndex = 0;
+      return text.replace(re, function (all, prefix) { return prefix + token; });
     }
     var eol = eolOf(text);
     var sep = text.length === 0 || /\n$/.test(text) ? '' : eol;
@@ -110,14 +116,21 @@
     return new Date().toLocaleString();
   }
 
-  // Writes values into the template text, preserving everything else.
+  // Writes only the values that differ from the file, so untouched lines stay byte-for-byte
+  // the same. Missing options are appended only when set to something other than the default.
   function save(text, schema, values) {
     var out = text || '';
+    var base = load(out, schema);
+    var touched = false;
     schema.forEach(function (e) {
       var v = values[e.name];
       if (v === undefined) v = e.default;
+      var present = readToken(out, luaName(e)) !== null;
+      if (sameValue(e, v, present ? base[e.name] : e.default)) return;
       out = setAssignment(out, luaName(e), toToken(e, v));
+      touched = true;
     });
+    if (!touched) return out;
     var dateLine = padName('LastSavedDate') + '= "' + nowString() + '"';
     var dateRe = /^[ \t]*LastSavedDate[ \t]*=[ \t]*".*"/m;
     if (dateRe.test(out)) {
@@ -132,6 +145,7 @@
   window.AzzyLuaConfig = {
     load: load,
     save: save,
+    sameValue: sameValue,
     defaults: defaults,
     clamp: clamp,
     padName: padName,
