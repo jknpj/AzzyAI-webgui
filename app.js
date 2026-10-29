@@ -20,6 +20,7 @@
     ? 'Apply asks for your USER_AI folder and saves the .lua files there'
     : 'this browser cannot write to folders: Apply downloads AzzyAI_config.zip; use Chrome or Edge to save directly';
   var FILTER_KEY = 'azzyai.webgui.homFilters';
+  var DOC_ONLINE_URL = 'https://github.com/jknpj/AzzyAI/blob/HEAD/USER_AI/Documentation.pdf';
 
   var HOM_CATEGORIES = ['Basic Options', 'AutoSkill Options', 'Walk/Follow Options', 'Autobuff Options',
     'Berserk Options', 'Friending Options', 'PVP Options', 'Standby Options', 'Kiting Options'];
@@ -858,11 +859,16 @@
   function openDocumentation() {
     var url = '../USER_AI/Documentation.pdf';
     if (location.protocol === 'file:') { window.open(url, '_blank'); return; }
+    // Hosted without a USER_AI folder next to it (e.g. GitHub Pages): use the online copy.
+    var win = window.open('', '_blank');
     fetch(url, { method: 'HEAD' }).then(function (r) {
       if (!r.ok) throw new Error();
-      window.open(url, '_blank');
+      return url;
     }).catch(function () {
-      message('Error', 'The documentation file (Documentation.pdf) could not be found.');
+      return DOC_ONLINE_URL;
+    }).then(function (target) {
+      if (win) win.location.href = target;
+      else window.open(target, '_blank');
     });
   }
 

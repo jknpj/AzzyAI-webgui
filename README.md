@@ -14,7 +14,9 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 
 ## Usage
 
-Open `index.html` in a browser. A local file (`file://`) works, as does any static host such as GitHub Pages.
+Open `index.html` in a browser. A local file (`file://`) works, as does any static host.
+
+Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**
 
 1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded.
 2. Edit the settings.
@@ -32,13 +34,13 @@ Add this repository as a submodule next to `USER_AI`:
 git submodule add https://github.com/jknpj/AzzyAI-webgui.git webgui
 ```
 
-**Help > Documentation** opens `../USER_AI/Documentation.pdf`, so it only works with that folder layout.
+**Help > Documentation** opens `../USER_AI/Documentation.pdf` when the page sits next to `USER_AI`; otherwise (e.g. on GitHub Pages) it opens `DOC_ONLINE_URL` from `app.js`.
 
 Things specific to a fork:
 
 - `templates.js`: default contents of the `.lua` files, used by *Reset to Defaults* and when no folder is open. Keep it in sync with your fork's `USER_AI`.
 - `homSchema.js` / `merSchema.js`: the options shown in each tab, with their types, ranges and descriptions. Add entries here when your fork adds new config options.
-- `app.js`: `ABOUT_TEXT` (Help > About).
+- `app.js`: `ABOUT_TEXT` (Help > About) and `DOC_ONLINE_URL`.
 
 ## Files
 
