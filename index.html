@@ -6,17 +6,53 @@
   <title>AzzyAI Configuration</title>
   <link rel="icon" type="image/x-icon" href="azzyai.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script>
+    // Set the theme before the page renders to avoid a light flash in dark mode.
+    (function () {
+      var mode = null;
+      try { mode = localStorage.getItem('azzyai.webgui.theme'); } catch (e) { /* ignore */ }
+      var dark = mode === 'dark' || (mode !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
   <style>
     body { padding-top: 56px; padding-bottom: 64px; }
     .dropdown-menu .dropdown-header { font-weight: 600; }
-    .prop-grid { table-layout: fixed; margin-bottom: 0; }
-    .prop-grid td { vertical-align: middle; padding: .2rem .5rem; }
-    .prop-grid td.prop-name { width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
-    .grid-scroll { max-height: calc(100vh - 430px); min-height: 220px; overflow-y: auto; border: 1px solid var(--bs-border-color); }
-    .desc-box { white-space: pre-wrap; font-size: .9rem; }
+    .main-tabs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+    .main-tabs .nav-link { white-space: nowrap; }
+    .change-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; background: var(--bs-warning); margin-left: .35rem; vertical-align: middle; }
+    .prop-grid { table-layout: fixed; margin-bottom: 0; font-size: .95rem; }
+    .prop-grid td { vertical-align: middle; padding: .3rem .5rem; }
+    .prop-grid .form-control-sm, .prop-grid .form-select-sm { font-size: .9rem; }
+    .prop-grid td.prop-name { width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; border-left: 4px solid transparent; }
+    /* Changed from default: blue bar. Not applied yet: amber bar and a light tint. Text keeps the normal color. */
+    .prop-grid tr.modified td.prop-name { border-left-color: var(--bs-info); font-weight: 600; }
+    .prop-grid tr.pending > td { --bs-table-bg: rgba(var(--bs-warning-rgb), .08); }
+    .prop-grid tr.pending td.prop-name { border-left-color: var(--bs-warning); }
+    .prop-grid tr.pending .form-control, .prop-grid tr.pending .form-select { border-color: rgba(var(--bs-warning-rgb), .7); }
+    .prop-grid .btn-reset { visibility: hidden; padding: 0 .4rem; line-height: 1.5; }
+    .prop-grid tr.modified .btn-reset { visibility: visible; }
+    .prop-grid tr.group-row th { cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 1; }
+    .legend { display: inline-flex; align-items: center; gap: .35rem; }
+    .swatch { display: inline-block; width: .9rem; height: .9rem; border-radius: .2rem; border-left: 3px solid; }
+    .swatch-modified { border-left-color: var(--bs-info); background: rgba(var(--bs-info-rgb), .15); }
+    .swatch-pending { border-left-color: var(--bs-warning); background: rgba(var(--bs-warning-rgb), .3); }
+    .grid-scroll { max-height: 60vh; min-height: 220px; overflow-y: auto; border: 1px solid var(--bs-border-color); }
+    .desc-panel { max-height: 35vh; }
+    .desc-panel .card-body { overflow-y: auto; }
+    .desc-box { white-space: pre-wrap; font-size: .95rem; line-height: 1.55; }
     .tact-list { font-size: .9rem; }
     #extraText { font-family: Consolas, monospace; font-size: .85rem; min-height: calc(100vh - 300px); }
-    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bs-light); border-top: 1px solid var(--bs-border-color); }
+    .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bs-tertiary-bg); border-top: 1px solid var(--bs-border-color); z-index: 1020; }
+    @media (min-width: 992px) {
+      /* Grid and description side by side with the same height, filling the window. */
+      #tab-hom .grid-scroll, #tab-hom .desc-panel { height: calc(100vh - 400px); max-height: none; }
+      #tab-mer .grid-scroll, #tab-mer .desc-panel { height: calc(100vh - 290px); max-height: none; }
+      .desc-panel { min-height: 220px; }
+    }
+    @media (max-width: 991.98px) {
+      body { padding-bottom: 110px; }
+    }
   </style>
 </head>
 <body>
@@ -74,12 +110,25 @@
             </ul>
           </li>
         </ul>
+        <div class="d-flex flex-wrap align-items-center gap-2 py-2 py-lg-0" role="toolbar" aria-label="Actions">
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnOpenFolder" title="Open your USER_AI folder">Open USER_AI folder</button>
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnDownloadZip" title="Download all configuration files as a zip">Download zip</button>
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnRevert" disabled title="Discard the unapplied changes to the settings">Revert</button>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle" id="btnTheme" data-bs-toggle="dropdown" aria-expanded="false" title="Light / dark theme">Theme</button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btnTheme">
+              <li><button type="button" class="dropdown-item" data-theme="light">&#9728; Light</button></li>
+              <li><button type="button" class="dropdown-item" data-theme="dark">&#9790; Dark</button></li>
+              <li><button type="button" class="dropdown-item" data-theme="auto">&#9680; Same as system</button></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
 
   <div class="container-fluid mt-3">
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-tabs main-tabs" role="tablist">
       <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-hom" type="button" role="tab">Homunculus</button></li>
       <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mer" type="button" role="tab">Mercenary</button></li>
       <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-homtact" type="button" role="tab">Homunculus Tactics</button></li>
@@ -94,7 +143,13 @@
       <div class="tab-pane fade show active" id="tab-hom" role="tabpanel">
         <div class="row g-2 align-items-center mb-2">
           <div class="col-auto"><label for="homSearch" class="col-form-label">Search settings:</label></div>
-          <div class="col"><input type="search" class="form-control form-control-sm" id="homSearch" aria-label="Search setting names and descriptions"></div>
+          <div class="col"><input type="search" class="form-control form-control-sm" id="homSearch" placeholder="Name or description (Ctrl+F)" aria-label="Search setting names and descriptions"></div>
+          <div class="col-auto">
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="homOnlyModified">
+              <label class="form-check-label small" for="homOnlyModified">Only changed from default</label>
+            </div>
+          </div>
           <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-secondary" id="homClearFilters">Clear filters</button></div>
         </div>
         <div class="row g-2 align-items-center mb-2">
@@ -112,26 +167,61 @@
           </div>
         </div>
         <ul class="nav nav-tabs flex-wrap" id="homCategoryTabs"></ul>
-        <div class="grid-scroll">
-          <table class="table table-sm table-hover prop-grid"><tbody id="homGridBody"></tbody></table>
+        <div class="row g-2">
+          <div class="col-lg-8 col-xxl-9">
+            <div class="grid-scroll">
+              <table class="table table-sm table-hover prop-grid"><tbody id="homGridBody"></tbody></table>
+            </div>
+          </div>
+          <div class="col-lg-4 col-xxl-3">
+            <div class="desc-panel card">
+              <div class="card-header py-1 small fw-semibold text-truncate" id="homDescTitle">Description</div>
+              <div class="card-body py-2 desc-box" id="homDescription" role="status" aria-live="polite"></div>
+            </div>
+          </div>
         </div>
-        <div class="small text-muted mt-2" id="homSummary"></div>
-        <label for="homDescription" class="form-label small mb-0">Description:</label>
-        <textarea class="form-control form-control-sm desc-box" id="homDescription" rows="4" readonly></textarea>
+        <div class="d-flex flex-wrap align-items-center gap-3 small text-muted mt-2">
+          <span id="homSummary"></span>
+          <span class="ms-auto legend"><span class="swatch swatch-modified"></span>Changed from default</span>
+          <span class="legend"><span class="swatch swatch-pending"></span>Not applied yet</span>
+        </div>
       </div>
 
       <!-- Mercenary -->
       <div class="tab-pane fade" id="tab-mer" role="tabpanel">
-        <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Sort">
-          <button type="button" class="btn btn-outline-secondary active" id="merSortCategorized">Categorized</button>
-          <button type="button" class="btn btn-outline-secondary" id="merSortAlphabetical">Alphabetical</button>
+        <div class="row g-2 align-items-center mb-2">
+          <div class="col-auto"><label for="merSearch" class="col-form-label">Search settings:</label></div>
+          <div class="col"><input type="search" class="form-control form-control-sm" id="merSearch" placeholder="Name or description (Ctrl+F)" aria-label="Search mercenary setting names and descriptions"></div>
+          <div class="col-auto">
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="merOnlyModified">
+              <label class="form-check-label small" for="merOnlyModified">Only changed from default</label>
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Sort">
+              <button type="button" class="btn btn-outline-secondary active" id="merSortCategorized">Categorized</button>
+              <button type="button" class="btn btn-outline-secondary" id="merSortAlphabetical">Alphabetical</button>
+            </div>
+          </div>
         </div>
-        <div class="grid-scroll">
-          <table class="table table-sm table-hover prop-grid"><tbody id="merGridBody"></tbody></table>
+        <div class="row g-2">
+          <div class="col-lg-8 col-xxl-9">
+            <div class="grid-scroll">
+              <table class="table table-sm table-hover prop-grid"><tbody id="merGridBody"></tbody></table>
+            </div>
+          </div>
+          <div class="col-lg-4 col-xxl-3">
+            <div class="desc-panel card">
+              <div class="card-header py-1 small fw-semibold text-truncate" id="merDescTitle">Description</div>
+              <div class="card-body py-2 desc-box" id="merDescText" role="status" aria-live="polite"></div>
+            </div>
+          </div>
         </div>
-        <div class="border rounded p-2 mt-2" style="min-height: 90px;">
-          <div class="fw-bold" id="merDescTitle"></div>
-          <div class="desc-box" id="merDescText"></div>
+        <div class="d-flex flex-wrap align-items-center gap-3 small text-muted mt-2">
+          <span id="merSummary"></span>
+          <span class="ms-auto legend"><span class="swatch swatch-modified"></span>Changed from default</span>
+          <span class="legend"><span class="swatch swatch-pending"></span>Not applied yet</span>
         </div>
       </div>
 
@@ -158,12 +248,13 @@
   </div>
 
   <div class="app-footer">
-    <div class="container-fluid d-flex align-items-center gap-2 py-2">
+    <div class="container-fluid d-flex flex-wrap align-items-center gap-2 py-2">
       <select class="form-select form-select-sm w-auto" id="aiVersion" aria-label="AzzyAI version" title="AzzyAI version: Classic hides the options the original AzzyAI does not use">
         <option value="hg">AzzyAI HG</option>
         <option value="classic">AzzyAI Classic</option>
       </select>
       <div class="me-auto small text-truncate" id="editingLabel">Editing:</div>
+      <span class="badge text-bg-warning text-truncate d-none" id="changesLabel" style="max-width: 50vw;" role="status"></span>
       <button type="button" class="btn btn-primary btn-sm" id="btnApply" disabled>Apply Settings</button>
       <button type="button" class="btn btn-outline-secondary btn-sm" id="btnQuit">Quit</button>
     </div>

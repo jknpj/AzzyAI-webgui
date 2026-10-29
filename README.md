@@ -4,13 +4,15 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 
 ## Features
 
-- **Homunculus settings** (`H_Config.lua`): every option, grouped in the same categories as the desktop GUI, with search, Homunculus S / base type filters and a description for each option.
-- **Mercenary settings** (`M_Config.lua`): categorized or alphabetical view.
+- **Homunculus settings** (`H_Config.lua`): every option, grouped in the same categories as the desktop GUI, with search across all categories, Homunculus S / base type filters and a description for each option.
+- **Mercenary settings** (`M_Config.lua`): categorized (collapsible groups) or alphabetical view, with search.
+- **Changes at a glance**: options that differ from the default are marked and have a ↺ button to restore the default; "Only changed from default" lists just those. The footer and the tabs show what has not been applied yet.
 - **Tactics** (`H_Tactics.lua`, `M_Tactics.lua`): add, edit and remove per-monster tactics.
 - **PVP tactics** (`H_PVP_Tact.lua`, `M_PVP_Tact.lua`).
 - **Extra options** (`H_Extra.lua`, `M_Extra.lua`): free-text editor.
 - **Apply / Revert / Reset to Defaults**, import and export of individual files or all files at once.
 - Official / private server selection (`ServerType`).
+- Light / dark theme (follows the system by default) and a layout that works on phones.
 - Works with **AzzyAI HG** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
 
 ## AzzyAI versions
