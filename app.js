@@ -7,7 +7,9 @@
 
   var L = window.AzzyLuaConfig;
   var T = window.AzzyTactics;
-  var HOM = window.AzzyHomSchema || [];
+  var HOM_ALL = window.AzzyHomSchema || [];
+  var HG_ONLY = window.AzzyHomHgOnly || [];
+  var HOM = HOM_ALL;
   var MER = window.AzzyMerSchema || [];
   var HOM_ENUMS = window.AzzyHomEnums || {};
   var MER_ENUMS = window.AzzyMerEnums || {};
@@ -20,6 +22,7 @@
     ? 'Apply asks for your USER_AI folder and saves the .lua files there'
     : 'this browser cannot write to folders: Apply downloads AzzyAI_config.zip; use Chrome or Edge to save directly';
   var FILTER_KEY = 'azzyai.webgui.homFilters';
+  var VERSION_KEY = 'azzyai.webgui.version';
   var DOC_ONLINE_URL = 'https://github.com/jknpj/AzzyAI/blob/HEAD/USER_AI/Documentation.pdf';
 
   var HOM_CATEGORIES = ['Basic Options', 'AutoSkill Options', 'Walk/Follow Options', 'Autobuff Options',
@@ -157,6 +160,33 @@
     try {
       localStorage.setItem(FILTER_KEY, JSON.stringify({ s: $('homSFilter').value, base: $('homBaseFilter').value }));
     } catch (e) { /* ignore */ }
+  }
+
+  // ---------- AzzyAI version (HG / Classic) ----------
+  var version = 'hg';
+
+  function setVersion(v) {
+    version = v === 'classic' ? 'classic' : 'hg';
+    HOM = version === 'hg' ? HOM_ALL : HOM_ALL.filter(function (e) {
+      return HG_ONLY.indexOf(e.name) < 0;
+    }).map(function (e) {
+      if (!e.classicDescription) return e;
+      var copy = {};
+      Object.keys(e).forEach(function (k) { copy[k] = e[k]; });
+      copy.description = e.classicDescription;
+      return copy;
+    });
+    var sel = $('aiVersion');
+    if (sel) sel.value = version;
+    try { localStorage.setItem(VERSION_KEY, version); } catch (e) { /* ignore */ }
+  }
+
+  // HG defines ServerType in Defaults.lua; the classic AI does not.
+  function detectVersion(map) {
+    var hasServerType = /^[ \t]*ServerType[ \t]*=/m;
+    if (hasServerType.test(map['Defaults.lua'] || '') || hasServerType.test(map['H_Config.lua'] || '')) return 'hg';
+    if (typeof map['Defaults.lua'] === 'string') return 'classic';
+    return null;
   }
 
   // ---------- load/build ----------
@@ -416,6 +446,8 @@
     saved = templateFiles();
     found.forEach(function (f) { saved[f] = map[f]; });
     try { writeStore(saved); } catch (e) { /* ignore */ }
+    var detected = detectVersion(map);
+    if (detected) setVersion(detected);
     loadAll();
     renderAll();
     setDirty(false);
@@ -430,7 +462,7 @@
     if (window.showDirectoryPicker) {
       window.showDirectoryPicker({ mode: 'readwrite' }).then(function (handle) {
         var map = {};
-        return Promise.all(FILES.map(function (f) {
+        return Promise.all(FILES.concat(['Defaults.lua']).map(function (f) {
           return handle.getFileHandle(f).then(function (h) { return h.getFile(); })
             .then(readText).then(function (t) { map[f] = t; }).catch(function () { /* missing */ });
         })).then(function () {
@@ -444,7 +476,7 @@
       if (!files.length) return;
       var map = {};
       return Promise.all(files.map(function (file) {
-        if (FILES.indexOf(file.name) < 0) return null;
+        if (FILES.indexOf(file.name) < 0 && file.name !== 'Defaults.lua') return null;
         return readText(file).then(function (t) { map[file.name] = t; });
       })).then(function () {
         dirHandle = null;
@@ -890,6 +922,9 @@
     }
 
     saved = loadStore() || templateFiles();
+    var storedVersion = null;
+    try { storedVersion = localStorage.getItem(VERSION_KEY); } catch (e) { /* ignore */ }
+    setVersion(storedVersion || detectVersion(saved) || 'hg');
     loadAll();
     setEditing((loadStore() ? 'browser storage' : 'built-in defaults') + ' (' + APPLY_HINT + ')');
 
@@ -913,6 +948,16 @@
 
     $('merSortCategorized').addEventListener('click', function () { merSort = 'categorized'; renderMer(); });
     $('merSortAlphabetical').addEventListener('click', function () { merSort = 'alphabetical'; renderMer(); });
+
+    $('aiVersion').value = version;
+    $('aiVersion').addEventListener('change', function () {
+      setVersion($('aiVersion').value);
+      // Options that were hidden until now take their value from the loaded file.
+      var fromFile = L.load(saved['H_Config.lua'], HOM);
+      HOM.forEach(function (e) { if (state.hom[e.name] === undefined) state.hom[e.name] = fromFile[e.name]; });
+      if (homSelected && !HOM.some(function (e) { return e.name === homSelected; })) setHomDescription(null);
+      renderHom();
+    });
 
     $('extraSelect').addEventListener('change', function () { extraFile = $('extraSelect').value; renderExtra(); });
     $('extraText').addEventListener('input', function () { state.extra[extraFile] = $('extraText').value; changed(); });

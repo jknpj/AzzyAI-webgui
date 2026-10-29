@@ -56,6 +56,7 @@ window.AzzyHomSchema = [
   { name: 'MobileAggroDist', category: 'Basic Options', type: 'int', default: 5, min: 1, max: 15,
     description: 'When the owner is is moving, attack monsters within this distance of the owner. See also StationaryAggroDist. This should probably be relatively low so that the homun does not get left behind after chasing something while the owner is moving' },
   { name: 'OldHomunType', category: 'Basic Options', type: 'enum', enum: 'OldHomunTypeOptions', default: 3,
+    classicDescription: 'The original base type (Lif, Amistr, Filir or Vanilmirth) of your Homunculus S. The AI uses it to know which inherited skills are available. This setting is ignored for non-S homunculi.',
     description: 'Fallback base type for a Homunculus S when inherited skills cannot be detected. Normally the AI automatically detects the original type. This setting is ignored for non-S homunculi.' },
   { name: 'OpportunisticTargeting', category: 'Basic Options', type: 'bool', default: false,
     description: 'If enabled, the homunculus will switch targets if a better targetis closer.' },
@@ -362,4 +363,16 @@ window.AzzyHomSchema = [
     description: 'Allow the inherited Amistr Blood Lust buff.' },
   { name: 'AllowSBR44', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'Allow inherited Filir SBR44, which consumes intimacy.' }
+];
+
+// Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
+// never written in Classic mode.
+window.AzzyHomHgOnly = [
+  'ServerType', 'AutoDetectServerType', 'UseDieterBlastForge', 'UseDieterTempering',
+  'UseEiraTwisterCutter', 'EiraTwisterCutterLevel', 'UseEiraAbsoluteZephyr', 'EiraAbsoluteZephyrLevel',
+  'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',
+  'UseSeraToxinOfMandara', 'SeraToxinOfMandaraLevel', 'UseSeraNeedleStinger', 'SeraNeedleStingerLevel',
+  'UseBayeriGlanzenSpies', 'BayeriGlanzenSpiesLevel', 'UseBayeriHeiligePferd', 'BayeriHeiligePferdLevel',
+  'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
+  'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44'
 ];

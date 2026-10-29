@@ -11,6 +11,16 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 - **Extra options** (`H_Extra.lua`, `M_Extra.lua`): free-text editor.
 - **Apply / Revert / Reset to Defaults**, import and export of individual files or all files at once.
 - Official / private server selection (`ServerType`).
+- Works with **AzzyAI HG** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
+
+## AzzyAI versions
+
+The selector at the bottom left chooses which AzzyAI the files are for:
+
+- **AzzyAI HG**: every option.
+- **AzzyAI Classic**: hides the options the classic AI does not use (server type, the newer Homunculus S skills, Dieter Tempering/Blast Forge, inherited Bloodlust/SBR44) and does not write them to `H_Config.lua`.
+
+When you open a `USER_AI` folder, the version is detected automatically: HG defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of HG-only options is `AzzyHomHgOnly` in `homSchema.js`.
 
 ## Usage
 
