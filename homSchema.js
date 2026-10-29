@@ -344,6 +344,14 @@ window.AzzyHomSchema = [
   { name: 'BayeriGoldeneToneLevel', category: 'Autobuff Options', type: 'int', default: 10, min: 1, max: 10,
     note: 'Not clamped: Save throws InvalidOperationException if outside 1-10',
     description: 'Goldene Tone level, 1-10.' },
+  { name: 'UseEiraLightOfRegene', category: 'Autobuff Options', type: 'enum', enum: 'UseDefensiveBuffOptions', default: 0,
+    description: 'Keep Eira\'s Light of Regenerate active in the selected AI states. If the owner dies while it is active, the Eira sacrifices itself to resurrect them. The skill needs Loyal intimacy and lowers it on every cast.' },
+  { name: 'EiraLightOfRegeneLevel', category: 'Autobuff Options', type: 'int', default: 5, min: 1, max: 5,
+    note: 'Not clamped: Save throws InvalidOperationException if outside 1-5',
+    description: 'Light of Regenerate level, 1-5. Higher levels last longer and restore more HP.' },
+  { name: 'EiraLightOfRegeneOwnerHP', category: 'Autobuff Options', type: 'int', default: 100, min: 0, max: 100,
+    note: 'Not clamped: Save throws InvalidOperationException if outside 0-100',
+    description: 'Only cast Light of Regenerate while the owner\'s HP percent is at or below this value (0-100). 100 keeps it up all the time.' },
   { name: 'UseEleanorTinderBreaker', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'Enable Eleanor\'s Tinder Breaker in grappling mode.' },
   { name: 'EleanorTinderBreakerLevel', category: 'AutoSkill Options', type: 'int', default: 5, min: 1, max: 5,
@@ -373,6 +381,7 @@ window.AzzyHomHgOnly = [
   'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',
   'UseSeraToxinOfMandara', 'SeraToxinOfMandaraLevel', 'UseSeraNeedleStinger', 'SeraNeedleStingerLevel',
   'UseBayeriGlanzenSpies', 'BayeriGlanzenSpiesLevel', 'UseBayeriHeiligePferd', 'BayeriHeiligePferdLevel',
-  'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
+  'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEiraLightOfRegene', 'EiraLightOfRegeneLevel',
+  'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
   'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44'
 ];
