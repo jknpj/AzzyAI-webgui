@@ -58,6 +58,8 @@ All scripts are plain classic scripts (no modules, no build), so the page also w
 
 ## Development
 
+`.github/workflows/pages.yml` runs `node --check` on every push and pull request, and publishes the site to GitHub Pages on pushes to `main`.
+
 Syntax check (Windows `cmd`):
 
 ```
