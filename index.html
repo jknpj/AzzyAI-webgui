@@ -7,11 +7,14 @@
   <link rel="icon" type="image/x-icon" href="azzyai.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script>
-    // Set the theme before the page renders to avoid a light flash in dark mode.
+    // Set the theme before the page renders to avoid a flash of the wrong colors.
+    // Both themes use the Ragnarok in-game window look; 'auto' follows the system setting.
     (function () {
       var mode = null;
       try { mode = localStorage.getItem('azzyai.webgui.theme'); } catch (e) { /* ignore */ }
-      var dark = mode === 'dark' || (mode !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (mode === 'ragnarok') mode = 'light';
+      if (['light', 'dark', 'auto'].indexOf(mode) < 0) mode = 'auto';
+      var dark = mode === 'dark' || (mode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
       document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
     })();
   </script>
@@ -25,6 +28,7 @@
     .prop-grid td { vertical-align: middle; padding: .3rem .5rem; }
     .prop-grid .form-control-sm, .prop-grid .form-select-sm { font-size: .9rem; }
     .prop-grid td.prop-name { width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; border-left: 4px solid transparent; }
+    .prop-grid td.prop-name .skill-mini { width: 18px; height: 18px; margin-right: .35rem; vertical-align: -3px; }
     /* Changed from default: blue bar. Not applied yet: amber bar and a light tint. Text keeps the normal color. */
     .prop-grid tr.modified td.prop-name { border-left-color: var(--bs-info); font-weight: 600; }
     .prop-grid tr.pending > td { --bs-table-bg: rgba(var(--bs-warning-rgb), .08); }
@@ -44,82 +48,188 @@
     .tact-list { font-size: .9rem; }
     #extraText { font-family: Consolas, monospace; font-size: .85rem; min-height: calc(100vh - 300px); }
     .app-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bs-tertiary-bg); border-top: 1px solid var(--bs-border-color); z-index: 1020; }
+
+    /* Skill bar (homunculus window) and skill card */
+    .skill-bar { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; }
+    .skill-group { display: flex; align-items: center; gap: .3rem; }
+    .skill-group-name { font-size: .8rem; font-weight: 600; min-width: 4.5rem; }
+    .skill-btn { padding: 2px; border: 1px solid transparent; border-radius: 4px; background: transparent; line-height: 0; }
+    .skill-btn:hover { border-color: var(--bs-border-color); background: var(--bs-tertiary-bg); }
+    .skill-btn.active { border-color: var(--bs-primary); background: rgba(var(--bs-primary-rgb), .15); }
+    .skill-btn img, .skill-card img { width: 24px; height: 24px; image-rendering: pixelated; }
+    .skill-card { display: flex; gap: .5rem; align-items: flex-start; padding: .4rem .5rem; margin-bottom: .5rem; border: 1px solid var(--bs-border-color); border-radius: .35rem; background: var(--bs-tertiary-bg); white-space: normal; }
+    .skill-card .skill-title { font-weight: 600; }
+    .skill-card .skill-stats { font-size: .8rem; color: var(--bs-secondary-color); }
+    .skill-filter-chip { font-size: .8rem; }
+
     @media (min-width: 992px) {
       /* Grid and description side by side with the same height, filling the window. */
-      #tab-hom .grid-scroll, #tab-hom .desc-panel { height: calc(100vh - 400px); max-height: none; }
+      #tab-hom .grid-scroll, #tab-hom .desc-panel { height: calc(100vh - 470px); max-height: none; }
       #tab-mer .grid-scroll, #tab-mer .desc-panel { height: calc(100vh - 290px); max-height: none; }
-      .desc-panel { min-height: 220px; }
+      .grid-scroll, .desc-panel { min-height: 260px; }
     }
     @media (max-width: 991.98px) {
       body { padding-bottom: 110px; }
     }
+
+    /* ---------- Ragnarok look (in-game windows: blue title bars, framed panels), light and dark ---------- */
+    html[data-bs-theme="light"] {
+      --ro-bg-1: #dbe6f5; --ro-bg-2: #b9cbe7;
+      --ro-title-1: #7fa2d9; --ro-title-2: #4467a8; --ro-title-edge: #2d4b82; --ro-title-text: #fff;
+      --ro-border: #7f9dd0; --ro-panel: #f8fafe; --ro-panel-2: #e6eef9; --ro-grid: #fff; --ro-highlight: rgba(255, 255, 255, .9);
+      --ro-tab-1: #f2f6fc; --ro-tab-2: #d6e2f4; --ro-tab-text: #2b4a80; --ro-tab-active-text: #10213f; --ro-tab-disabled: #8a9bb8;
+      --ro-btn-1: #ffffff; --ro-btn-2: #dbe4f2; --ro-btn-border: #8aa6d6; --ro-btn-text: #23406f;
+      --ro-btn-hover-1: #eef4ff; --ro-btn-hover-2: #c4d5ef; --ro-btn-hover-text: #10213f;
+      --ro-primary-1: #86a8de; --ro-primary-2: #3d62a5; --ro-primary-disabled: #9fb3d6;
+      --ro-input-border: #9fb6dc; --ro-badge: #6f87b3; --ro-row-active: #dbe7fa;
+      --ro-footer-1: #f3f7fd; --ro-footer-2: #d9e4f4; --ro-shadow: rgba(30, 55, 100, .25);
+      --ro-card-bg: #fffdf3; --ro-card-border: #d6c28a; --ro-alert-bg: #fff7dc; --ro-alert-border: #e0c46d;
+      --bs-body-color: #222a36;
+      --bs-primary: #3d62a5; --bs-primary-rgb: 61, 98, 165;
+      --bs-link-color: #2d56a0; --bs-link-color-rgb: 45, 86, 160;
+      --bs-border-color: #a9bde0;
+      --bs-tertiary-bg: #eaf0fa;
+    }
+    html[data-bs-theme="dark"] {
+      --ro-bg-1: #0e1525; --ro-bg-2: #1b2742;
+      --ro-title-1: #4a6eae; --ro-title-2: #233c6d; --ro-title-edge: #11203d; --ro-title-text: #f2f6ff;
+      --ro-border: #3d5888; --ro-panel: #182237; --ro-panel-2: #22304c; --ro-grid: #121a2b; --ro-highlight: rgba(255, 255, 255, .06);
+      --ro-tab-1: #2a3b5d; --ro-tab-2: #1d2a44; --ro-tab-text: #b9cbec; --ro-tab-active-text: #ffffff; --ro-tab-disabled: #63749a;
+      --ro-btn-1: #33476e; --ro-btn-2: #233353; --ro-btn-border: #4b6597; --ro-btn-text: #dce6fa;
+      --ro-btn-hover-1: #3f5682; --ro-btn-hover-2: #2c3f64; --ro-btn-hover-text: #ffffff;
+      --ro-primary-1: #5f86c9; --ro-primary-2: #2f4f8c; --ro-primary-disabled: #3a4a6b;
+      --ro-input-border: #3f5683; --ro-badge: #4f6795; --ro-row-active: #2a3c5f;
+      --ro-footer-1: #1c2840; --ro-footer-2: #131c2e; --ro-shadow: rgba(0, 0, 0, .5);
+      --ro-card-bg: #2a2614; --ro-card-border: #6e5f2e; --ro-alert-bg: #3a3215; --ro-alert-border: #7d6a2a;
+      --bs-body-color: #dbe4f3; --bs-body-bg: #121a2b;
+      --bs-primary: #6d93d6; --bs-primary-rgb: 109, 147, 214;
+      --bs-link-color: #8fb1ee; --bs-link-color-rgb: 143, 177, 238;
+      --bs-border-color: #33496f;
+      --bs-tertiary-bg: #1d2a44;
+    }
+    html[data-bs-theme] { --bs-body-font-family: Tahoma, Verdana, "Segoe UI", Arial, sans-serif; }
+    body { background: linear-gradient(180deg, var(--ro-bg-1) 0%, var(--ro-bg-2) 100%) fixed; }
+    .navbar {
+      background: linear-gradient(180deg, var(--ro-title-1), var(--ro-title-2)) !important;
+      border-bottom: 1px solid var(--ro-title-edge); box-shadow: 0 2px 6px var(--ro-shadow);
+    }
+    .navbar-brand { text-shadow: 0 1px 0 rgba(0, 0, 0, .35); font-weight: 700; }
+    .tab-content, .card, .modal-content {
+      background: var(--ro-panel); border: 1px solid var(--ro-border); border-radius: 7px;
+      box-shadow: inset 0 1px 0 var(--ro-highlight), 0 3px 8px var(--ro-shadow);
+    }
+    .tab-content { border-top-left-radius: 0; }
+    .card-header, .modal-header {
+      background: linear-gradient(180deg, var(--ro-title-1), var(--ro-title-2)); color: var(--ro-title-text);
+      border-bottom: 1px solid var(--ro-title-edge); text-shadow: 0 1px 0 rgba(0, 0, 0, .35);
+    }
+    .card-header { border-radius: 6px 6px 0 0; }
+    .modal-header .btn-close { filter: invert(1) grayscale(1) brightness(2); }
+    .nav-tabs { border-bottom-color: var(--ro-border); }
+    .nav-tabs .nav-link {
+      background: linear-gradient(180deg, var(--ro-tab-1), var(--ro-tab-2)); border: 1px solid var(--ro-border); border-bottom: 0;
+      color: var(--ro-tab-text); margin-right: 2px; border-radius: 6px 6px 0 0;
+    }
+    .nav-tabs .nav-link.active { background: var(--ro-panel); color: var(--ro-tab-active-text); font-weight: 700; }
+    .nav-tabs .nav-link.disabled { color: var(--ro-tab-disabled); }
+    .grid-scroll { background: var(--ro-grid); border-color: var(--ro-border); border-radius: 4px; }
+    .prop-grid { --bs-table-bg: var(--ro-grid); }
+    .prop-grid tr.group-row th { background: var(--ro-panel-2); color: var(--ro-tab-text); }
+    .table-active > td { --bs-table-bg-state: var(--ro-row-active); }
+    .btn-primary {
+      background: linear-gradient(180deg, var(--ro-primary-1), var(--ro-primary-2)); border-color: var(--ro-title-edge);
+      color: #fff; text-shadow: 0 1px 0 rgba(0, 0, 0, .3);
+    }
+    .btn-primary:disabled { background: var(--ro-primary-disabled); border-color: var(--ro-btn-border); }
+    .btn-outline-secondary, .btn-outline-primary, .btn-secondary {
+      background: linear-gradient(180deg, var(--ro-btn-1), var(--ro-btn-2)); border-color: var(--ro-btn-border); color: var(--ro-btn-text);
+    }
+    .btn-outline-secondary:hover, .btn-outline-primary:hover, .btn-secondary:hover, .btn-outline-secondary.active {
+      background: linear-gradient(180deg, var(--ro-btn-hover-1), var(--ro-btn-hover-2)); color: var(--ro-btn-hover-text); border-color: var(--ro-btn-border);
+    }
+    .form-control, .form-select { border-color: var(--ro-input-border); }
+    .badge.text-bg-secondary { background: var(--ro-badge) !important; color: #fff !important; }
+    .app-footer {
+      background: linear-gradient(180deg, var(--ro-footer-1), var(--ro-footer-2)); border-top: 1px solid var(--ro-border);
+      box-shadow: 0 -2px 6px var(--ro-shadow);
+    }
+    .skill-card { background: var(--ro-card-bg); border-color: var(--ro-card-border); }
+    .alert-warning { background: var(--ro-alert-bg); border-color: var(--ro-alert-border); }
+    /* In-game description text keeps the client's ^RRGGBB colors; dark mode lightens them to stay readable. */
+    .ro-desc { white-space: pre-wrap; font-size: .85rem; line-height: 1.45; margin-top: .35rem; }
+    .ro-c { color: var(--c); }
+    html[data-bs-theme="dark"] .ro-c { color: color-mix(in srgb, var(--c) 40%, #e3ebf8); }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-      <span class="navbar-brand d-flex align-items-center gap-2"><img src="azzyai.ico" alt="" width="24" height="24">AzzyAI Configuration</span>
+      <span class="navbar-brand d-flex align-items-center gap-2"><img src="azzyai.ico" alt="" width="24" height="24"><span data-i18n="AzzyAI Configuration">AzzyAI Configuration</span></span>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">File</a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="File">File</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#" id="menuOpenFolder">Open USER_AI folder...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuOpenFolder" data-i18n="Open USER_AI folder...">Open USER_AI folder...</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><h6 class="dropdown-header">Import</h6></li>
-              <li><a class="dropdown-item" href="#" id="menuImportHom" data-import="H_Config.lua">Homunculus Settings...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportMer" data-import="M_Config.lua">Mercenary Settings...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportHomTact" data-import="H_Tactics.lua">Homunculus Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportMerTact" data-import="M_Tactics.lua">Mercenary Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportHomPvp" data-import="H_PVP_Tact.lua">PVP Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportMerPvp" data-import="M_PVP_Tact.lua">Merc PVP Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportHomExtra" data-import="H_Extra.lua">Homunculus Extra Options...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuImportMerExtra" data-import="M_Extra.lua">Mercenary Extra Options...</a></li>
+              <li><h6 class="dropdown-header" data-i18n="Import">Import</h6></li>
+              <li><a class="dropdown-item" href="#" id="menuImportHom" data-import="H_Config.lua" data-i18n="Homunculus Settings...">Homunculus Settings...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportMer" data-import="M_Config.lua" data-i18n="Mercenary Settings...">Mercenary Settings...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportHomTact" data-import="H_Tactics.lua" data-i18n="Homunculus Tactics...">Homunculus Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportMerTact" data-import="M_Tactics.lua" data-i18n="Mercenary Tactics...">Mercenary Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportHomPvp" data-import="H_PVP_Tact.lua" data-i18n="PVP Tactics...">PVP Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportMerPvp" data-import="M_PVP_Tact.lua" data-i18n="Merc PVP Tactics...">Merc PVP Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportHomExtra" data-import="H_Extra.lua" data-i18n="Homunculus Extra Options...">Homunculus Extra Options...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuImportMerExtra" data-import="M_Extra.lua" data-i18n="Mercenary Extra Options...">Mercenary Extra Options...</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><h6 class="dropdown-header">Export</h6></li>
-              <li><a class="dropdown-item" href="#" id="menuExportHom" data-export="H_Config.lua">Homunculus Settings...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportMer" data-export="M_Config.lua">Mercenary Settings...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportHomTact" data-export="H_Tactics.lua">Homunculus Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportMerTact" data-export="M_Tactics.lua">Mercenary Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportHomPvp" data-export="H_PVP_Tact.lua">PVP Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportMerPvp" data-export="M_PVP_Tact.lua">Merc PVP Tactics...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportHomExtra" data-export="H_Extra.lua">Homunculus Extra Options...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportMerExtra" data-export="M_Extra.lua">Mercenary Extra Options...</a></li>
-              <li><a class="dropdown-item" href="#" id="menuExportAll">All files (zip)...</a></li>
+              <li><h6 class="dropdown-header" data-i18n="Export">Export</h6></li>
+              <li><a class="dropdown-item" href="#" id="menuExportHom" data-export="H_Config.lua" data-i18n="Homunculus Settings...">Homunculus Settings...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportMer" data-export="M_Config.lua" data-i18n="Mercenary Settings...">Mercenary Settings...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportHomTact" data-export="H_Tactics.lua" data-i18n="Homunculus Tactics...">Homunculus Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportMerTact" data-export="M_Tactics.lua" data-i18n="Mercenary Tactics...">Mercenary Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportHomPvp" data-export="H_PVP_Tact.lua" data-i18n="PVP Tactics...">PVP Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportMerPvp" data-export="M_PVP_Tact.lua" data-i18n="Merc PVP Tactics...">Merc PVP Tactics...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportHomExtra" data-export="H_Extra.lua" data-i18n="Homunculus Extra Options...">Homunculus Extra Options...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportMerExtra" data-export="M_Extra.lua" data-i18n="Mercenary Extra Options...">Mercenary Extra Options...</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExportAll" data-i18n="All files (zip)...">All files (zip)...</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#" id="menuExit">Exit</a></li>
+              <li><a class="dropdown-item" href="#" id="menuExit" data-i18n="Exit">Exit</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Edit</a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="Edit">Edit</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item disabled" href="#" id="menuApply">Apply Settings <span class="text-muted small">Ctrl+S</span></a></li>
+              <li><a class="dropdown-item disabled" href="#" id="menuApply"><span data-i18n="Apply Settings">Apply Settings</span> <span class="text-muted small">Ctrl+S</span></a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item disabled" href="#" id="menuRevert">Revert</a></li>
-              <li><a class="dropdown-item" href="#" id="menuReset">Reset to Defaults</a></li>
+              <li><a class="dropdown-item disabled" href="#" id="menuRevert" data-i18n="Revert">Revert</a></li>
+              <li><a class="dropdown-item" href="#" id="menuReset" data-i18n="Reset to Defaults">Reset to Defaults</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Help</a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="Help">Help</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#" id="menuDocs">Documentation</a></li>
-              <li><a class="dropdown-item" href="#" id="menuAbout">About</a></li>
+              <li><a class="dropdown-item" href="#" id="menuDocs" data-i18n="Documentation">Documentation</a></li>
+              <li><a class="dropdown-item" href="#" id="menuAbout" data-i18n="About">About</a></li>
             </ul>
           </li>
         </ul>
         <div class="d-flex flex-wrap align-items-center gap-2 py-2 py-lg-0" role="toolbar" aria-label="Actions">
-          <button type="button" class="btn btn-sm btn-outline-light" id="btnOpenFolder" title="Open your USER_AI folder">Open USER_AI folder</button>
-          <button type="button" class="btn btn-sm btn-outline-light" id="btnDownloadZip" title="Download all configuration files as a zip">Download zip</button>
-          <button type="button" class="btn btn-sm btn-outline-light" id="btnRevert" disabled title="Discard the unapplied changes to the settings">Revert</button>
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnOpenFolder" data-i18n="Open USER_AI folder" data-i18n-title="Open your USER_AI folder">Open USER_AI folder</button>
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnDownloadZip" data-i18n="Download zip" data-i18n-title="Download all configuration files as a zip">Download zip</button>
+          <button type="button" class="btn btn-sm btn-outline-light" id="btnRevert" disabled data-i18n="Revert" data-i18n-title="Discard the unapplied changes to the settings">Revert</button>
           <div class="dropdown">
-            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle" id="btnTheme" data-bs-toggle="dropdown" aria-expanded="false" title="Light / dark theme">Theme</button>
+            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle" id="btnLang" data-bs-toggle="dropdown" aria-expanded="false" data-i18n-title="Language">&#127760; Language</button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btnLang" id="langMenu"></ul>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle" id="btnTheme" data-bs-toggle="dropdown" aria-expanded="false" data-i18n-title="Theme">Theme</button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btnTheme">
-              <li><button type="button" class="dropdown-item" data-theme="light">&#9728; Light</button></li>
-              <li><button type="button" class="dropdown-item" data-theme="dark">&#9790; Dark</button></li>
-              <li><button type="button" class="dropdown-item" data-theme="auto">&#9680; Same as system</button></li>
+              <li><button type="button" class="dropdown-item" data-theme="light">&#9728; <span data-i18n="Light">Light</span></button></li>
+              <li><button type="button" class="dropdown-item" data-theme="dark">&#9790; <span data-i18n="Dark">Dark</span></button></li>
+              <li><button type="button" class="dropdown-item" data-theme="auto">&#9680; <span data-i18n="Same as system">Same as system</span></button></li>
             </ul>
           </div>
         </div>
@@ -129,42 +239,50 @@
 
   <div class="container-fluid mt-3">
     <ul class="nav nav-tabs main-tabs" role="tablist">
-      <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-hom" type="button" role="tab">Homunculus</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mer" type="button" role="tab">Mercenary</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-homtact" type="button" role="tab">Homunculus Tactics</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mertact" type="button" role="tab">Mercenary Tactics</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hompvp" type="button" role="tab">PVP Tactics</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-merpvp" type="button" role="tab">Merc PVP Tactics</button></li>
-      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-extra" type="button" role="tab">Extra Options</button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-hom" type="button" role="tab"><span data-i18n="Homunculus">Homunculus</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mer" type="button" role="tab"><span data-i18n="Mercenary">Mercenary</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-homtact" type="button" role="tab"><span data-i18n="Homunculus Tactics">Homunculus Tactics</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mertact" type="button" role="tab"><span data-i18n="Mercenary Tactics">Mercenary Tactics</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hompvp" type="button" role="tab"><span data-i18n="PVP Tactics">PVP Tactics</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-merpvp" type="button" role="tab"><span data-i18n="Merc PVP Tactics">Merc PVP Tactics</span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-extra" type="button" role="tab"><span data-i18n="Extra Options">Extra Options</span></button></li>
     </ul>
 
     <div class="tab-content border border-top-0 rounded-bottom p-3">
       <!-- Homunculus -->
       <div class="tab-pane fade show active" id="tab-hom" role="tabpanel">
         <div class="row g-2 align-items-center mb-2">
-          <div class="col-auto"><label for="homSearch" class="col-form-label">Search settings:</label></div>
-          <div class="col"><input type="search" class="form-control form-control-sm" id="homSearch" placeholder="Name or description (Ctrl+F)" aria-label="Search setting names and descriptions"></div>
+          <div class="col-auto"><label for="homSearch" class="col-form-label" data-i18n="Search settings:">Search settings:</label></div>
+          <div class="col"><input type="search" class="form-control form-control-sm" id="homSearch" placeholder="Name or description (Ctrl+F)" data-i18n-placeholder="Name or description (Ctrl+F)" aria-label="Search setting names and descriptions" data-i18n-aria-label="Search setting names and descriptions"></div>
           <div class="col-auto">
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="homOnlyModified">
-              <label class="form-check-label small" for="homOnlyModified">Only changed from default</label>
+              <label class="form-check-label small" for="homOnlyModified" data-i18n="Only changed from default">Only changed from default</label>
             </div>
           </div>
-          <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-secondary" id="homClearFilters">Clear filters</button></div>
+          <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-secondary" id="homClearFilters" data-i18n="Clear filters">Clear filters</button></div>
         </div>
         <div class="row g-2 align-items-center mb-2">
-          <div class="col-auto"><label for="homSFilter" class="col-form-label">Homunculus S:</label></div>
+          <div class="col-auto"><label for="homSFilter" class="col-form-label" data-i18n="Homunculus S:">Homunculus S:</label></div>
           <div class="col-auto">
-            <select class="form-select form-select-sm" id="homSFilter" aria-label="Filter Homunculus S settings">
-              <option>All Types</option><option>Sera</option><option>Eira</option><option>Eleanor</option><option>Bayeri</option><option>Dieter</option>
+            <select class="form-select form-select-sm" id="homSFilter" aria-label="Filter Homunculus S settings" data-i18n-aria-label="Filter Homunculus S settings">
+              <option value="All Types" data-i18n="All Types">All Types</option><option value="Sera">Sera</option><option value="Eira">Eira</option><option value="Eleanor">Eleanor</option><option value="Bayeri">Bayeri</option><option value="Dieter">Dieter</option>
             </select>
           </div>
-          <div class="col-auto ms-3"><label for="homBaseFilter" class="col-form-label">Base homunculus:</label></div>
+          <div class="col-auto ms-3"><label for="homBaseFilter" class="col-form-label" data-i18n="Base homunculus:">Base homunculus:</label></div>
           <div class="col-auto">
-            <select class="form-select form-select-sm" id="homBaseFilter" aria-label="Filter inherited base homunculus settings">
-              <option>All Types</option><option>Lif</option><option>Amistr</option><option>Filir</option><option>Vanilmirth</option>
+            <select class="form-select form-select-sm" id="homBaseFilter" aria-label="Filter inherited base homunculus settings" data-i18n-aria-label="Filter inherited base homunculus settings">
+              <option value="All Types" data-i18n="All Types">All Types</option><option value="Lif">Lif</option><option value="Amistr">Amistr</option><option value="Filir">Filir</option><option value="Vanilmirth">Vanilmirth</option>
             </select>
           </div>
+        </div>
+        <div class="card mb-2" id="homSkillWindow">
+          <div class="card-header py-1 small fw-semibold d-flex align-items-center gap-2">
+            <span data-i18n="Homunculus skills">Homunculus skills</span>
+            <span class="fw-normal opacity-75 d-none d-md-inline" data-i18n="Click a skill to see only its settings.">Click a skill to see only its settings.</span>
+            <span class="ms-auto" id="homSkillChip"></span>
+          </div>
+          <div class="card-body py-2"><div class="skill-bar" id="homSkillBar"></div></div>
         </div>
         <ul class="nav nav-tabs flex-wrap" id="homCategoryTabs"></ul>
         <div class="row g-2">
@@ -175,33 +293,36 @@
           </div>
           <div class="col-lg-4 col-xxl-3">
             <div class="desc-panel card">
-              <div class="card-header py-1 small fw-semibold text-truncate" id="homDescTitle">Description</div>
-              <div class="card-body py-2 desc-box" id="homDescription" role="status" aria-live="polite"></div>
+              <div class="card-header py-1 small fw-semibold text-truncate" id="homDescTitle" data-i18n="Description">Description</div>
+              <div class="card-body py-2">
+                <div id="homSkillCard"></div>
+                <div class="desc-box" id="homDescription" role="status" aria-live="polite"></div>
+              </div>
             </div>
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-3 small text-muted mt-2">
           <span id="homSummary"></span>
-          <span class="ms-auto legend"><span class="swatch swatch-modified"></span>Changed from default</span>
-          <span class="legend"><span class="swatch swatch-pending"></span>Not applied yet</span>
+          <span class="ms-auto legend"><span class="swatch swatch-modified"></span><span data-i18n="Changed from default">Changed from default</span></span>
+          <span class="legend"><span class="swatch swatch-pending"></span><span data-i18n="Not applied yet">Not applied yet</span></span>
         </div>
       </div>
 
       <!-- Mercenary -->
       <div class="tab-pane fade" id="tab-mer" role="tabpanel">
         <div class="row g-2 align-items-center mb-2">
-          <div class="col-auto"><label for="merSearch" class="col-form-label">Search settings:</label></div>
-          <div class="col"><input type="search" class="form-control form-control-sm" id="merSearch" placeholder="Name or description (Ctrl+F)" aria-label="Search mercenary setting names and descriptions"></div>
+          <div class="col-auto"><label for="merSearch" class="col-form-label" data-i18n="Search settings:">Search settings:</label></div>
+          <div class="col"><input type="search" class="form-control form-control-sm" id="merSearch" placeholder="Name or description (Ctrl+F)" data-i18n-placeholder="Name or description (Ctrl+F)" aria-label="Search mercenary setting names and descriptions" data-i18n-aria-label="Search mercenary setting names and descriptions"></div>
           <div class="col-auto">
             <div class="form-check form-switch mb-0">
               <input class="form-check-input" type="checkbox" role="switch" id="merOnlyModified">
-              <label class="form-check-label small" for="merOnlyModified">Only changed from default</label>
+              <label class="form-check-label small" for="merOnlyModified" data-i18n="Only changed from default">Only changed from default</label>
             </div>
           </div>
           <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group" aria-label="Sort">
-              <button type="button" class="btn btn-outline-secondary active" id="merSortCategorized">Categorized</button>
-              <button type="button" class="btn btn-outline-secondary" id="merSortAlphabetical">Alphabetical</button>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Sort" data-i18n-aria-label="Sort">
+              <button type="button" class="btn btn-outline-secondary active" id="merSortCategorized" data-i18n="Categorized">Categorized</button>
+              <button type="button" class="btn btn-outline-secondary" id="merSortAlphabetical" data-i18n="Alphabetical">Alphabetical</button>
             </div>
           </div>
         </div>
@@ -213,15 +334,15 @@
           </div>
           <div class="col-lg-4 col-xxl-3">
             <div class="desc-panel card">
-              <div class="card-header py-1 small fw-semibold text-truncate" id="merDescTitle">Description</div>
+              <div class="card-header py-1 small fw-semibold text-truncate" id="merDescTitle" data-i18n="Description">Description</div>
               <div class="card-body py-2 desc-box" id="merDescText" role="status" aria-live="polite"></div>
             </div>
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-3 small text-muted mt-2">
           <span id="merSummary"></span>
-          <span class="ms-auto legend"><span class="swatch swatch-modified"></span>Changed from default</span>
-          <span class="legend"><span class="swatch swatch-pending"></span>Not applied yet</span>
+          <span class="ms-auto legend"><span class="swatch swatch-modified"></span><span data-i18n="Changed from default">Changed from default</span></span>
+          <span class="legend"><span class="swatch swatch-pending"></span><span data-i18n="Not applied yet">Not applied yet</span></span>
         </div>
       </div>
 
@@ -235,28 +356,28 @@
       <div class="tab-pane fade" id="tab-extra" role="tabpanel">
         <div class="row g-2 align-items-center mb-2">
           <div class="col-auto">
-            <select class="form-select form-select-sm" id="extraSelect" aria-label="Extra options file">
-              <option value="H_Extra.lua">Homunculus</option>
-              <option value="M_Extra.lua">Mercenary</option>
+            <select class="form-select form-select-sm" id="extraSelect" aria-label="Extra options file" data-i18n-aria-label="Extra options file">
+              <option value="H_Extra.lua" data-i18n="Homunculus">Homunculus</option>
+              <option value="M_Extra.lua" data-i18n="Mercenary">Mercenary</option>
             </select>
           </div>
-          <div class="col">Here you can modify configurations that are not supported by the GUI.</div>
+          <div class="col" data-i18n="Here you can modify configurations that are not supported by the GUI.">Here you can modify configurations that are not supported by the GUI.</div>
         </div>
-        <textarea class="form-control" id="extraText" spellcheck="false" aria-label="Extra options"></textarea>
+        <textarea class="form-control" id="extraText" spellcheck="false" aria-label="Extra options" data-i18n-aria-label="Extra options"></textarea>
       </div>
     </div>
   </div>
 
   <div class="app-footer">
     <div class="container-fluid d-flex flex-wrap align-items-center gap-2 py-2">
-      <select class="form-select form-select-sm w-auto" id="aiVersion" aria-label="AzzyAI version" title="AzzyAI version: Classic hides the options the original AzzyAI does not use">
+      <select class="form-select form-select-sm w-auto" id="aiVersion" aria-label="AzzyAI version" data-i18n-aria-label="AzzyAI version" title="AzzyAI version: Classic hides the options the original AzzyAI does not use" data-i18n-title="AzzyAI version: Classic hides the options the original AzzyAI does not use">
         <option value="hg">AzzyAI HG</option>
         <option value="classic">AzzyAI Classic</option>
       </select>
-      <div class="me-auto small text-truncate" id="editingLabel">Editing:</div>
+      <div class="me-auto small text-truncate" id="editingLabel"></div>
       <span class="badge text-bg-warning text-truncate d-none" id="changesLabel" style="max-width: 50vw;" role="status"></span>
-      <button type="button" class="btn btn-primary btn-sm" id="btnApply" disabled>Apply Settings</button>
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="btnQuit">Quit</button>
+      <button type="button" class="btn btn-primary btn-sm" id="btnApply" disabled data-i18n="Apply Settings">Apply Settings</button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="btnQuit" data-i18n="Quit">Quit</button>
     </div>
   </div>
 
@@ -265,7 +386,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="appModalTitle"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-i18n-aria-label="Close"></button>
         </div>
         <div class="modal-body desc-box" id="appModalBody"></div>
         <div class="modal-footer" id="appModalFooter"></div>
@@ -275,9 +396,15 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="i18n.strings.js"></script>
+  <script src="i18n.desc.pt.js"></script>
+  <script src="i18n.desc.es.js"></script>
+  <script src="i18n.js"></script>
   <script src="templates.js"></script>
   <script src="homSchema.js"></script>
   <script src="merSchema.js"></script>
+  <script src="skilldata.js"></script>
+  <script src="skills.js"></script>
   <script src="luaConfig.js"></script>
   <script src="tactics.js"></script>
   <script src="app.js"></script>

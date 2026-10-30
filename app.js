@@ -7,6 +7,13 @@
 
   var L = window.AzzyLuaConfig;
   var T = window.AzzyTactics;
+  var I18N = window.AzzyI18n;
+  var SK = window.AzzySkills;
+  // tr('English text', [args]): translated UI text. (The name t is used for tactics below.)
+  var tr = I18N ? I18N.t : function (s, a) {
+    return a ? s.replace(/\{(\d+)\}/g, function (m, i) { return a[i]; }) : s;
+  };
+  function curLang() { return I18N ? I18N.lang : 'en'; }
   var HOM_ALL = window.AzzyHomSchema || [];
   var HG_ONLY = window.AzzyHomHgOnly || [];
   var HOM = HOM_ALL;
@@ -18,9 +25,11 @@
   var FILES = ['H_Config.lua', 'M_Config.lua', 'H_Tactics.lua', 'M_Tactics.lua',
     'H_PVP_Tact.lua', 'M_PVP_Tact.lua', 'H_Extra.lua', 'M_Extra.lua'];
   var STORE_KEY = 'azzyai.webgui.files';
-  var APPLY_HINT = window.showDirectoryPicker
-    ? 'Apply asks for your USER_AI folder and saves the .lua files there'
-    : 'this browser cannot write to folders: Apply downloads AzzyAI_config.zip; use Chrome or Edge to save directly';
+  function applyHint() {
+    return window.showDirectoryPicker
+      ? tr('Apply asks for your USER_AI folder and saves the .lua files there')
+      : tr('this browser cannot write to folders: Apply downloads AzzyAI_config.zip; use Chrome or Edge to save directly');
+  }
   var FILTER_KEY = 'azzyai.webgui.homFilters';
   var VERSION_KEY = 'azzyai.webgui.version';
   var DOC_ONLINE_URL = 'https://github.com/jknpj/AzzyAI/blob/HEAD/USER_AI/Documentation.pdf';
@@ -44,8 +53,12 @@
   var S_ORDER = ['sera', 'eira', 'eleanor', 'bayeri', 'dieter'];
   var BASE_ORDER = ['lif', 'amistr', 'filir', 'vanilmirth'];
 
-  var ABOUT_TEXT = 'AzzyAI LATAM HG\nAI by Dr. Azzy; GUI by Machiavellian and contributors\n\n' +
-    'Includes current Homunculus S settings and official/private server selection.\n\nIcon by Kami Kali';
+  function aboutText() {
+    return 'AzzyAI\n' + tr('AI by Dr. Azzy; GUI by Machiavellian and contributors') + '\n\n' +
+      tr('Includes current Homunculus S settings and official/private server selection.') + '\n\n' +
+      tr('Skill icons, names and descriptions: Divine Pride (divine-pride.net). Ragnarok Online is property of Gravity Co.') +
+      '\n\n' + tr('Icon by Kami Kali');
+  }
 
   // ---------- state ----------
   var saved = {};          // last applied file texts
@@ -56,6 +69,7 @@
   var homOnlyModified = false;
   var homCategory = HOM_CATEGORIES[0];
   var homSelected = null;
+  var homSkill = null;     // skill ID picked in the skill bar: show only its settings
   var merSelected = null;
   var merSearch = '';
   var merOnlyModified = false;
@@ -65,7 +79,7 @@
   var extraFile = 'H_Extra.lua';
   var THEME_KEY = 'azzyai.webgui.theme';
   var THEMES = ['auto', 'light', 'dark'];
-  var THEME_LABELS = { auto: '\u25D0 Theme: System', light: '\u2600 Theme: Light', dark: '\u263E Theme: Dark' };
+  var THEME_LABELS = { auto: ['\u25D0', 'Theme: System'], light: ['\u2600', 'Theme: Light'], dark: ['\u263E', 'Theme: Dark'] };
   var themeMode = 'auto';
   var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
@@ -134,7 +148,7 @@
   }
 
   function message(title, text) {
-    return dialog(title, text, [['OK', 'ok', 'btn-primary']]);
+    return dialog(title, text, [[tr('OK'), 'ok', 'btn-primary']]);
   }
 
   // ---------- persistence ----------
@@ -243,7 +257,7 @@
       if (e.tagName === 'BUTTON') e.disabled = !v;
       else e.classList.toggle('disabled', !v);
     });
-    document.title = (v ? '* ' : '') + 'AzzyAI Configuration';
+    document.title = (v ? '* ' : '') + tr('AzzyAI Configuration');
     scheduleChanges();
   }
 
@@ -285,14 +299,14 @@
   function pendingChanges() {
     var out = [];
     var n = countDiff(HOM, state.hom, saved['H_Config.lua']);
-    if (n) out.push(['tab-hom', 'Homunculus', n]);
+    if (n) out.push(['tab-hom', tr('Homunculus'), n]);
     n = countDiff(MER, state.mer, saved['M_Config.lua']);
-    if (n) out.push(['tab-mer', 'Mercenary', n]);
+    if (n) out.push(['tab-mer', tr('Mercenary'), n]);
     [['H_Tactics.lua', 'tab-homtact', 'Homunculus tactics'], ['M_Tactics.lua', 'tab-mertact', 'Mercenary tactics'],
       ['H_PVP_Tact.lua', 'tab-hompvp', 'PVP tactics'], ['M_PVP_Tact.lua', 'tab-merpvp', 'Merc PVP tactics']].forEach(function (p) {
-      if (fileChanged(p[0])) out.push([p[1], p[2], null]);
+      if (fileChanged(p[0])) out.push([p[1], tr(p[2]), null]);
     });
-    if (fileChanged('H_Extra.lua') || fileChanged('M_Extra.lua')) out.push(['tab-extra', 'Extra options', null]);
+    if (fileChanged('H_Extra.lua') || fileChanged('M_Extra.lua')) out.push(['tab-extra', tr('Extra options'), null]);
     return out;
   }
 
@@ -312,14 +326,14 @@
     if (label) {
       label.classList.toggle('d-none', !dirty);
       var text = list.map(function (c) { return c[1] + (c[2] ? ' (' + c[2] + ')' : ''); }).join(', ');
-      label.textContent = 'Not applied' + (text ? ': ' + text : '');
+      label.textContent = tr('Not applied') + (text ? ': ' + text : '');
       label.title = label.textContent;
     }
     var tabs = list.map(function (c) { return c[0]; });
     Array.prototype.forEach.call(document.querySelectorAll('.main-tabs [data-bs-target]'), function (btn) {
       var dot = btn.querySelector('.change-dot');
       var on = tabs.indexOf(btn.getAttribute('data-bs-target').substring(1)) >= 0;
-      if (on && !dot) btn.appendChild(el('span', { class: 'change-dot', title: 'Not applied' }));
+      if (on && !dot) btn.appendChild(el('span', { class: 'change-dot', title: tr('Not applied') }));
       else if (!on && dot) btn.removeChild(dot);
     });
   }
@@ -329,7 +343,7 @@
     var dark = themeMode === 'dark' || (themeMode === 'auto' && darkQuery && darkQuery.matches);
     document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
     var b = $('btnTheme');
-    if (b) b.textContent = THEME_LABELS[themeMode];
+    if (b) b.textContent = THEME_LABELS[themeMode][0] + ' ' + tr(THEME_LABELS[themeMode][1]);
     Array.prototype.forEach.call(document.querySelectorAll('[data-theme]'), function (item) {
       item.classList.toggle('active', item.getAttribute('data-theme') === themeMode);
     });
@@ -337,6 +351,8 @@
 
   function initTheme() {
     try { themeMode = localStorage.getItem(THEME_KEY) || 'auto'; } catch (e) { /* ignore */ }
+    // 'ragnarok' was a separate theme before both themes got the Ragnarok look
+    if (themeMode === 'ragnarok') themeMode = 'light';
     if (THEMES.indexOf(themeMode) < 0) themeMode = 'auto';
     applyTheme();
     Array.prototype.forEach.call(document.querySelectorAll('[data-theme]'), function (item) {
@@ -358,17 +374,19 @@
     var problems = [];
     [['hom', 'Homunculus Tactics'], ['mer', 'Mercenary Tactics']].forEach(function (p) {
       var seen = {};
+      var where = tr(p[1]);
       state.tact[p[0]].forEach(function (t) {
-        if (!t.name.trim()) problems.push([p[0], p[1] + ': You must enter a monster name. (ID ' + t.id + ')']);
-        if (!/^-?\d+$/.test(t.id) || seen[t.id]) problems.push([p[0], p[1] + ': You must enter a unique monster ID (' + (t.id || 'empty') + ')']);
+        if (!t.name.trim()) problems.push([p[0], where + ': ' + tr('You must enter a monster name.') + ' (ID ' + t.id + ')']);
+        if (!/^-?\d+$/.test(t.id) || seen[t.id]) problems.push([p[0], where + ': ' + tr('You must enter a unique monster ID') + ' (' + (t.id || tr('empty')) + ')']);
         seen[t.id] = true;
       });
     });
     [['hompvp', 'PVP Tactics'], ['merpvp', 'Merc PVP Tactics']].forEach(function (p) {
       var seen = {};
+      var where = tr(p[1]);
       state.tact[p[0]].forEach(function (t) {
-        if (!t.id.trim() || t.id === 'new') problems.push([p[0], p[1] + ': You must enter a name.']);
-        else if (seen[t.id]) problems.push([p[0], p[1] + ': You must enter a unique name. (' + t.id + ')']);
+        if (!t.id.trim() || t.id === 'new') problems.push([p[0], where + ': ' + tr('You must enter a name.')]);
+        else if (seen[t.id]) problems.push([p[0], where + ': ' + tr('You must enter a unique name.') + ' (' + t.id + ')']);
         seen[t.id] = true;
       });
     });
@@ -412,7 +430,7 @@
     var problems = validateTactics();
     if (problems.length) {
       showTab(TAB_FOR[problems[0][0]]);
-      return message('AzzyAI Configuration', problems.map(function (p) { return p[1]; }).join('\n')).then(function () { return false; });
+      return message(tr('AzzyAI Configuration'), problems.map(function (p) { return p[1]; }).join('\n')).then(function () { return false; });
     }
     return chooseTarget().then(function (target) {
       if (target === 'cancel') return false;
@@ -422,13 +440,18 @@
         names = FILES.filter(fileChanged);
         files = buildAll();
       } catch (e) {
-        return message('Error', 'Settings could not be saved completely. Your edits are still open.\n\n' + e.message).then(function () { return false; });
+        return saveError(e);
       }
       return finishApply(target === 'folder' ? writeToFolder(files, names) : downloadAll(files), files);
     }).catch(function (e) {
       if (e && e.name === 'AbortError') return false;
-      return message('Error', 'Settings could not be saved completely. Your edits are still open.\n\n' + (e && e.message)).then(function () { return false; });
+      return saveError(e);
     });
+  }
+
+  function saveError(e) {
+    return message(tr('Error'), tr('Settings could not be saved completely. Your edits are still open.') + '\n\n' + (e && e.message))
+      .then(function () { return false; });
   }
 
   function editsOf(schema, values, text) {
@@ -468,7 +491,7 @@
       })).then(function () {
         rebase(map);
         dirHandle = handle;
-        setEditing(handle.name + ' (Apply writes the .lua files directly to this folder)');
+        setEditing(function () { return handle.name + ' (' + tr('Apply writes the .lua files directly to this folder') + ')'; });
         return 'folder';
       });
     });
@@ -478,10 +501,10 @@
   function chooseTarget() {
     if (dirHandle) return Promise.resolve('folder');
     if (!window.showDirectoryPicker) return Promise.resolve('zip');
-    return dialog('Apply Settings',
-      'Choose your USER_AI folder to save the .lua files directly, or download them as a zip.',
-      [['Choose USER_AI folder...', 'folder', 'btn-primary'], ['Download zip', 'zip', 'btn-secondary'],
-        ['Cancel', 'cancel', 'btn-outline-secondary']]
+    return dialog(tr('Apply Settings'),
+      tr('Choose your USER_AI folder to save the .lua files directly, or download them as a zip.'),
+      [[tr('Choose USER_AI folder...'), 'folder', 'btn-primary'], [tr('Download zip'), 'zip', 'btn-secondary'],
+        [tr('Cancel'), 'cancel', 'btn-outline-secondary']]
     ).then(function (r) { return r === 'folder' ? pickUserAiFolder() : r; });
   }
 
@@ -493,9 +516,7 @@
       renderAll();
       setDirty(false);
       return true;
-    }).catch(function (e) {
-      return message('Error', 'Settings could not be saved completely. Your edits are still open.\n\n' + e.message).then(function () { return false; });
-    });
+    }).catch(saveError);
   }
 
   function revert() {
@@ -516,11 +537,11 @@
   function quit() {
     var close = function () {
       window.close();
-      setTimeout(function () { message('AzzyAI Configuration', 'You can close this browser tab now.'); }, 200);
+      setTimeout(function () { message(tr('AzzyAI Configuration'), tr('You can close this browser tab now.')); }, 200);
     };
     if (!dirty) { close(); return; }
-    dialog('AzzyAI Configuration', 'Do you want to save your changes before quitting?', [
-      ['Yes', 'yes', 'btn-primary'], ['No', 'no', 'btn-secondary'], ['Cancel', 'cancel', 'btn-outline-secondary']
+    dialog(tr('AzzyAI Configuration'), tr('Do you want to save your changes before quitting?'), [
+      [tr('Yes'), 'yes', 'btn-primary'], [tr('No'), 'no', 'btn-secondary'], [tr('Cancel'), 'cancel', 'btn-outline-secondary']
     ]).then(function (r) {
       if (r === 'yes') apply().then(function (ok) { if (ok) close(); });
       else if (r === 'no') { setDirty(false); close(); }
@@ -570,14 +591,14 @@
         IMPORTERS[kind](text);
         changed();
       });
-    }).catch(function (e) { message('Error', e.message); });
+    }).catch(function (e) { message(tr('Error'), e.message); });
   }
 
   function exportOne(kind) {
     try {
       download(kind, buildFile(kind));
     } catch (e) {
-      message('Error', e.message);
+      message(tr('Error'), e.message);
     }
   }
 
@@ -585,7 +606,7 @@
   function adoptFiles(map, label) {
     var found = FILES.filter(function (f) { return typeof map[f] === 'string'; });
     if (!found.length) {
-      return message('AzzyAI Configuration', 'No AzzyAI configuration files (' + FILES.join(', ') + ') were found in that folder.');
+      return message(tr('AzzyAI Configuration'), tr('No AzzyAI configuration files ({0}) were found in that folder.', [FILES.join(', ')]));
     }
     saved = templateFiles();
     found.forEach(function (f) { saved[f] = map[f]; });
@@ -598,7 +619,7 @@
     setEditing(label);
     var missing = FILES.filter(function (f) { return found.indexOf(f) < 0; });
     if (missing.length) {
-      message('AzzyAI Configuration', 'Loaded ' + found.length + ' file(s). Missing files use the defaults: ' + missing.join(', '));
+      message(tr('AzzyAI Configuration'), tr('Loaded {0} file(s). Missing files use the defaults: {1}', [found.length, missing.join(', ')]));
     }
   }
 
@@ -611,9 +632,9 @@
             .then(readText).then(function (t) { map[f] = t; }).catch(function () { /* missing */ });
         })).then(function () {
           dirHandle = handle;
-          adoptFiles(map, handle.name + ' (Apply writes the files directly to this folder)');
+          adoptFiles(map, function () { return handle.name + ' (' + tr('Apply writes the files directly to this folder') + ')'; });
         });
-      }).catch(function (e) { if (e && e.name !== 'AbortError') message('Error', e.message); });
+      }).catch(function (e) { if (e && e.name !== 'AbortError') message(tr('Error'), e.message); });
       return;
     }
     pickFile('', true, true).then(function (files) {
@@ -624,13 +645,16 @@
         return readText(file).then(function (t) { map[file.name] = t; });
       })).then(function () {
         dirHandle = null;
-        adoptFiles(map, 'folder import (' + APPLY_HINT + ')');
+        adoptFiles(map, function () { return tr('folder import') + ' (' + applyHint() + ')'; });
       });
-    }).catch(function (e) { message('Error', e.message); });
+    }).catch(function (e) { message(tr('Error'), e.message); });
   }
 
+  // label: function returning the text, so it can be rebuilt when the language changes.
+  var editingLabel = function () { return ''; };
   function setEditing(label) {
-    $('editingLabel').textContent = 'Editing: ' + label;
+    if (label) editingLabel = label;
+    $('editingLabel').textContent = tr('Editing:') + ' ' + editingLabel();
   }
 
   // ---------- property grid ----------
@@ -649,7 +673,7 @@
     var input;
     if (entry.type === 'bool') {
       input = el('select', { class: 'form-select form-select-sm' },
-        [option('True', 'true', !!v), option('False', 'false', !v)]);
+        [option(tr('True'), 'true', !!v), option(tr('False'), 'false', !v)]);
       input.addEventListener('change', function () { onChange(input.value === 'true'); });
     } else if (entry.type === 'enum' || entry.type === 'serverType') {
       var opts = enumOptions(entry, enums);
@@ -657,7 +681,7 @@
       var known = false;
       opts.forEach(function (o) {
         if (Number(o[1]) === Number(v)) known = true;
-        input.appendChild(option(o[0], o[1], Number(o[1]) === Number(v)));
+        input.appendChild(option(tr(o[0]), o[1], Number(o[1]) === Number(v)));
       });
       if (!known) input.appendChild(option(String(v), v, true));
       input.addEventListener('change', function () { onChange(Number(input.value)); });
@@ -689,23 +713,27 @@
   }
 
   function defaultLabel(entry, enums) {
-    if (entry.type === 'bool') return entry.default ? 'True' : 'False';
+    if (entry.type === 'bool') return entry.default ? tr('True') : tr('False');
     if (entry.type === 'enum' || entry.type === 'serverType') {
       var match = enumOptions(entry, enums).filter(function (o) { return Number(o[1]) === Number(entry.default); })[0];
-      if (match) return match[0];
+      if (match) return tr(match[0]);
     }
     return String(entry.default);
   }
 
   function gridRow(entry, enums, values, selectedName, onSelect, rerender, applied) {
-    var nameCell = el('td', { class: 'prop-name', text: entry.name, title: entry.name });
+    var skill = enums === HOM_ENUMS && SK ? SK.forSetting(entry.name) : null;
+    var nameCell = el('td', { class: 'prop-name', title: entry.name }, [
+      skill ? skillIcon(skill.id, 'skill-mini') : null, entry.name
+    ]);
     var row = el('tr', { class: selectedName === entry.name ? 'table-active' : '' });
     var mark = function (val) {
       var mod = !isDefault(entry, val);
       var pend = !sameValue(entry, val, applied[entry.name]);
       row.classList.toggle('modified', mod);
       row.classList.toggle('pending', pend);
-      nameCell.title = entry.name + (mod ? ' (changed from default)' : '') + (pend ? ' (not applied yet)' : '');
+      nameCell.title = entry.name + (skill ? ' \u2014 ' + SK.name(skill, curLang()) : '') +
+        (mod ? ' (' + tr('changed from default') + ')' : '') + (pend ? ' (' + tr('not applied yet') + ')' : '');
     };
     var editor = makeEditor(entry, enums, values, function (val) {
       values[entry.name] = val;
@@ -721,8 +749,8 @@
     };
     var reset = el('button', {
       type: 'button', class: 'btn btn-sm btn-link btn-reset flex-shrink-0', text: '\u21BA',
-      title: 'Reset to default (' + defaultLabel(entry, enums) + ')',
-      'aria-label': 'Reset ' + entry.name + ' to default',
+      title: tr('Reset to default ({0})', [defaultLabel(entry, enums)]),
+      'aria-label': tr('Reset {0} to default', [entry.name]),
       onclick: function (ev) {
         ev.stopPropagation();
         values[entry.name] = entry.default;
@@ -743,17 +771,22 @@
     return el('tr', {
       class: 'table-secondary group-row', id: id, 'aria-expanded': open ? 'true' : 'false',
       onclick: function () { collapsed[scope][cat] = open; rerender(); }
-    }, [el('th', { colspan: '2' }, [(open ? '\u25BE ' : '\u25B8 ') + cat + ' ', el('span', { class: 'badge text-bg-secondary', text: String(count) })])]);
+    }, [el('th', { colspan: '2' }, [(open ? '\u25BE ' : '\u25B8 ') + tr(cat) + ' ', el('span', { class: 'badge text-bg-secondary', text: String(count) })])]);
   }
 
   function emptyRow(text) {
     return el('tr', {}, [el('td', { colspan: '2', class: 'text-muted text-center py-3', text: text })]);
   }
 
-  function matchesSearch(entry, q) {
+  // Name, English and translated description, and (homunculus) the skill's names in every language.
+  function matchesSearch(entry, q, scope) {
     q = q.trim().toLowerCase();
     if (!q) return true;
-    return entry.name.toLowerCase().indexOf(q) >= 0 || (entry.description || '').toLowerCase().indexOf(q) >= 0;
+    var hay = [entry.name, entry.description || ''];
+    if (I18N) hay.push(I18N.desc(scope, entry, version === 'classic') || '');
+    var skill = scope === 'hom' && SK ? SK.forSetting(entry.name) : null;
+    if (skill) hay.push(SK.name(skill, 'en'), SK.name(skill, 'pt'), SK.name(skill, 'es'), skill.name.en);
+    return hay.some(function (s) { return String(s).toLowerCase().indexOf(q) >= 0; });
   }
 
   function modifiedCount(schema, values) {
@@ -773,7 +806,11 @@
 
   function homVisible(entry) {
     if (entry.browsable === false) return false;
-    if (!matchesSearch(entry, homSearch)) return false;
+    if (homSkill) {
+      var sk = SK && SK.forSetting(entry.name);
+      if (!sk || sk.id !== homSkill) return false;
+    }
+    if (!matchesSearch(entry, homSearch, 'hom')) return false;
     if (homOnlyModified && isDefault(entry, state.hom[entry.name])) return false;
     var sSel = $('homSFilter').value;
     var bSel = $('homBaseFilter').value;
@@ -784,18 +821,134 @@
     return true;
   }
 
+  function seconds(ms) {
+    var s = ms / 1000;
+    if (s >= 60 && s % 60 === 0) return tr('{0} min', [s / 60]);
+    return tr('{0} s', [String(Math.round(s * 10) / 10).replace('.', curLang() === 'en' ? '.' : ',')]);
+  }
+
+  // In-game text with ^RRGGBB color codes (^000000 = normal text) as colored spans.
+  function roText(text) {
+    var box = el('div', { class: 'ro-desc' });
+    var color = null;
+    String(text).split(/\^([0-9a-fA-F]{6})/).forEach(function (part, i) {
+      if (i % 2 === 1) { color = part.toLowerCase() === '000000' ? null : '#' + part; return; }
+      if (!part) return;
+      var span = el('span', { text: part });
+      if (color) { span.className = 'ro-c'; span.style.setProperty('--c', color); }
+      box.appendChild(span);
+    });
+    return box;
+  }
+
+  function skillIcon(id, cls) {
+    return el('img', { class: cls, src: SK.icon(id), alt: '', loading: 'lazy',
+      onerror: function (ev) { ev.target.style.visibility = 'hidden'; } });
+  }
+
+  // Skill header shown above the description: icon, official name, the official numbers at max
+  // level and the in-game description (local copy from Divine Pride, see skilldata_sync.py).
+  function skillCard(skill) {
+    if (!skill) return null;
+    var st = skill.stats;
+    var parts = [tr('Max level {0}', [skill.maxlv]),
+      'SP ' + (st[0] === st[1] ? st[0] : st[0] + '\u2013' + st[1])];
+    if (st[2] || st[3]) parts.push(tr('Cast {0}', [seconds(st[2] + st[3])]) +
+      (st[2] && st[3] ? ' (' + tr('{0} fixed', [seconds(st[2])]) + ')' : st[2] ? ' (' + tr('fixed') + ')' : ''));
+    if (st[4]) parts.push(tr('Cooldown {0}', [seconds(st[4])]));
+    if (st[5]) parts.push(tr('Duration {0}', [seconds(st[5])]));
+    var text = SK.description(skill, curLang());
+    var details = text ? el('details', { class: 'mt-1' }, [
+      el('summary', { class: 'skill-stats', text: tr('In-game description') }),
+      roText(text),
+      el('div', { class: 'skill-stats fst-italic mt-1' }, [
+        tr('Source:') + ' ',
+        el('a', { href: SK.page(skill.id), target: '_blank', rel: 'noopener', text: 'Divine Pride' })
+      ])
+    ]) : null;
+    if (details && skillDescOpen) details.open = true;
+    if (details) details.addEventListener('toggle', function () { skillDescOpen = details.open; });
+    return el('div', { class: 'skill-card' }, [
+      skillIcon(skill.id),
+      el('div', { class: 'flex-grow-1' }, [
+        el('div', { class: 'skill-title', text: SK.name(skill, curLang()) }),
+        el('div', { class: 'skill-stats', text: parts.join(' \u00B7 ') }),
+        el('div', { class: 'skill-stats fst-italic', text: tr('Official LATAM values at max level.') }),
+        details
+      ])
+    ]);
+  }
+  var skillDescOpen = false;
+
   function setHomDescription(entry) {
     homSelected = entry ? entry.name : null;
-    $('homDescTitle').textContent = entry ? entry.name : 'Description';
+    $('homDescTitle').textContent = entry ? entry.name : tr('Description');
+    var card = $('homSkillCard');
+    card.innerHTML = '';
+    var skill = entry ? SK && SK.forSetting(entry.name) : (homSkill && SK ? SK.byId(homSkill) : null);
+    var c = skillCard(skill);
+    if (c) card.appendChild(c);
+    var text = entry ? I18N ? I18N.desc('hom', entry, version === 'classic') : entry.description : '';
     $('homDescription').textContent = entry
-      ? (entry.description ? entry.description : 'No description available for this property.')
-      : 'Select a setting to see its description here.';
+      ? (text || tr('No description available for this property.'))
+      : tr('Select a setting to see its description here.');
+  }
+
+  // The "homunculus window": skill icons of the homunculi picked in the filters (all of them when
+  // no filter is set). Clicking one shows only that skill's settings; clicking it again clears it.
+  function renderSkillBar() {
+    var bar = $('homSkillBar');
+    if (!bar || !SK) return;
+    bar.innerHTML = '';
+    var sSel = $('homSFilter').value, bSel = $('homBaseFilter').value;
+    var keys = SK.HOMUNCULI.filter(function (h) {
+      var isS = S_ORDER.indexOf(h[0]) >= 0;
+      var sel = isS ? sSel : bSel;
+      return sel === 'All Types' || sel.toLowerCase() === h[0];
+    });
+    keys.forEach(function (h) {
+      // only skills that have settings can filter the grid
+      var skills = SK.ofHomunculus(h[0]).filter(function (k) {
+        return HOM.some(function (e) { var s = SK.forSetting(e.name); return s && s.id === k.id; });
+      });
+      if (!skills.length) return;
+      var group = el('div', { class: 'skill-group' }, [el('span', { class: 'skill-group-name', text: h[1] })]);
+      skills.forEach(function (k) {
+        var name = SK.name(k, curLang());
+        group.appendChild(el('button', {
+          type: 'button', class: 'skill-btn' + (homSkill === k.id ? ' active' : ''), title: name,
+          'aria-label': name, 'aria-pressed': homSkill === k.id ? 'true' : 'false',
+          onclick: function () { setHomSkill(homSkill === k.id ? null : k.id); }
+        }, [skillIcon(k.id)]));
+      });
+      bar.appendChild(group);
+    });
+    var chip = $('homSkillChip');
+    chip.innerHTML = '';
+    if (homSkill) {
+      var cur = SK.byId(homSkill);
+      chip.appendChild(el('button', {
+        type: 'button', class: 'btn btn-sm btn-light py-0 skill-filter-chip',
+        title: tr('Show all settings'), onclick: function () { setHomSkill(null); }
+      }, [SK.name(cur, curLang()) + ' \u2715']));
+    }
+  }
+
+  function setHomSkill(id) {
+    homSkill = id;
+    if (homSelected) {
+      var s = SK && SK.forSetting(homSelected);
+      if (id && (!s || s.id !== id)) homSelected = null;
+    }
+    renderHom();
+    if (!homSelected) setHomDescription(null);
   }
 
   function renderHom() {
     var visible = HOM.filter(homVisible);
-    // While searching, show matches from every category, grouped, instead of only the current tab.
-    var searching = homSearch.trim() !== '' || homOnlyModified;
+    // While searching (or showing one skill), show matches from every category, grouped, instead of only the current tab.
+    var searching = homSearch.trim() !== '' || homOnlyModified || !!homSkill;
+    renderSkillBar();
     var tabs = $('homCategoryTabs');
     tabs.innerHTML = '';
     HOM_CATEGORIES.forEach(function (cat, i) {
@@ -809,7 +962,7 @@
           var h = $('homGroup-' + i);
           if (h) h.scrollIntoView({ block: 'start', behavior: 'smooth' });
         }
-      }, [cat + ' ', el('span', { class: 'badge text-bg-secondary', text: String(n) })]);
+      }, [tr(cat) + ' ', el('span', { class: 'badge text-bg-secondary', text: String(n) })]);
       tabs.appendChild(el('li', { class: 'nav-item' }, [btn]));
     });
 
@@ -831,30 +984,31 @@
         body.appendChild(gridRow(entry, HOM_ENUMS, state.hom, homSelected, setHomDescription, renderHom, applied));
       });
     }
-    if (!body.firstChild) body.appendChild(emptyRow(visible.length ? 'No settings in this category match the filters.' : 'No matching settings.'));
+    if (!body.firstChild) body.appendChild(emptyRow(visible.length ? tr('No settings in this category match the filters.') : tr('No matching settings.')));
     updateSummaries();
   }
 
   function updateSummaries() {
     var homCount = HOM.filter(homVisible).length;
     $('homSummary').textContent = (homCount === 0
-      ? 'No matching settings. Clear filters to see all options.'
-      : homCount + ' matching settings. Select a setting for its description.') +
-      ' ' + modifiedCount(HOM, state.hom) + ' changed from default.';
-    $('merSummary').textContent = MER.filter(merVisible).length + ' matching settings. ' +
-      modifiedCount(MER, state.mer) + ' changed from default.';
+      ? tr('No matching settings. Clear filters to see all options.')
+      : tr('{0} matching settings. Select a setting for its description.', [homCount])) +
+      ' ' + tr('{0} changed from default.', [modifiedCount(HOM, state.hom)]);
+    $('merSummary').textContent = tr('{0} matching settings.', [MER.filter(merVisible).length]) + ' ' +
+      tr('{0} changed from default.', [modifiedCount(MER, state.mer)]);
   }
 
   // ---------- Mercenary tab ----------
   function setMerDescription(entry) {
     merSelected = entry ? entry.name : null;
-    $('merDescTitle').textContent = entry ? entry.name : 'Description';
-    $('merDescText').textContent = entry ? (entry.description || 'No description available for this property.') : 'Select a setting to see its description here.';
+    $('merDescTitle').textContent = entry ? entry.name : tr('Description');
+    var text = entry ? I18N ? I18N.desc('mer', entry, false) : entry.description : '';
+    $('merDescText').textContent = entry ? (text || tr('No description available for this property.')) : tr('Select a setting to see its description here.');
   }
 
   function merVisible(entry) {
     if (entry.browsable === false) return false;
-    if (!matchesSearch(entry, merSearch)) return false;
+    if (!matchesSearch(entry, merSearch, 'mer')) return false;
     if (merOnlyModified && isDefault(entry, state.mer[entry.name])) return false;
     return true;
   }
@@ -881,7 +1035,7 @@
         });
       });
     }
-    if (!list.length) body.appendChild(emptyRow('No matching settings.'));
+    if (!list.length) body.appendChild(emptyRow(tr('No matching settings.')));
     $('merSortCategorized').classList.toggle('active', merSort === 'categorized');
     $('merSortAlphabetical').classList.toggle('active', merSort === 'alphabetical');
     updateSummaries();
@@ -891,8 +1045,10 @@
   var F = T.F;
 
   function tactLabel(kind, t) {
-    return T.LAYOUTS[kind].pvp ? t.id : (t.name || '(unnamed) #' + t.id);
+    return T.LAYOUTS[kind].pvp ? t.id : (t.name || tr('(unnamed)') + ' #' + t.id);
   }
+
+  function unsupported(cur) { return cur + ' (' + tr('not supported by the GUI') + ')'; }
 
   function selectField(values, idx, options, onChange) {
     var s = el('select', { class: 'form-select form-select-sm' });
@@ -900,9 +1056,9 @@
     var known = false;
     options.forEach(function (o) {
       if (o[1] === cur) known = true;
-      s.appendChild(option(o[0], o[1], o[1] === cur));
+      s.appendChild(option(tr(o[0]), o[1], o[1] === cur));
     });
-    if (!known) s.appendChild(option(cur + ' (not supported by the GUI)', cur, true));
+    if (!known) s.appendChild(option(unsupported(cur), cur, true));
     s.addEventListener('change', function () { values[idx] = s.value; onChange(); });
     return s;
   }
@@ -917,12 +1073,12 @@
     else { mode = 'raw'; num = 0; }
 
     var s = el('select', { class: 'form-select form-select-sm' }, [
-      option('Always', 'always', mode === 'always'),
-      option('Never', 'never', mode === 'never'),
-      option('This many times:', 'times', mode === 'times')
+      option(tr('Always'), 'always', mode === 'always'),
+      option(tr('Never'), 'never', mode === 'never'),
+      option(tr('This many times:'), 'times', mode === 'times')
     ]);
-    if (layout.onceLevel) s.appendChild(option('Once; level:', 'once', mode === 'once'));
-    if (mode === 'raw') s.appendChild(option(cur + ' (not supported by the GUI)', 'raw', true));
+    if (layout.onceLevel) s.appendChild(option(tr('Once; level:'), 'once', mode === 'once'));
+    if (mode === 'raw') s.appendChild(option(unsupported(cur), 'raw', true));
     var n = el('input', { type: 'number', class: 'form-control form-control-sm', step: '1' });
     n.value = String(num);
 
@@ -956,10 +1112,10 @@
     if (m && kinds.some(function (k) { return k[1] === m[1]; })) { kind = m[1]; phase = m[2]; known = true; }
 
     var s = el('select', { class: 'form-select form-select-sm' });
-    kinds.forEach(function (k) { s.appendChild(option(k[0], k[1] || '', known && k[1] === kind)); });
-    if (!known) s.appendChild(option(cur + ' (not supported by the GUI)', '__raw', true));
+    kinds.forEach(function (k) { s.appendChild(option(tr(k[0]), k[1] || '', known && k[1] === kind)); });
+    if (!known) s.appendChild(option(unsupported(cur), '__raw', true));
     var w = el('select', { class: 'form-select form-select-sm' }, [
-      option('Chasing', 'C', phase === 'C'), option('Attacking', 'A', phase === 'A')
+      option(tr('Chasing'), 'C', phase === 'C'), option(tr('Attacking'), 'A', phase === 'A')
     ]);
     function sync() { w.disabled = s.value === '' || s.value === '__raw'; }
     function write() {
@@ -971,7 +1127,7 @@
     s.addEventListener('change', function () { sync(); write(); });
     w.addEventListener('change', write);
     sync();
-    return el('div', { class: 'input-group input-group-sm' }, [s, el('span', { class: 'input-group-text', text: 'While' }), w]);
+    return el('div', { class: 'input-group input-group-sm' }, [s, el('span', { class: 'input-group-text', text: tr('While') }), w]);
   }
 
   function numberField(values, idx, min, max, step, decimals, onChange) {
@@ -998,12 +1154,12 @@
     if (tactSelected[kind] >= list.length) tactSelected[kind] = list.length - 1;
     var t = list[tactSelected[kind]];
 
-    var listBox = el('select', { class: 'form-select tact-list', size: '18', 'aria-label': 'Tactics' });
+    var listBox = el('select', { class: 'form-select tact-list', size: '18', 'aria-label': tr('Tactics') });
     list.forEach(function (x, i) { listBox.appendChild(option(tactLabel(kind, x), i, i === tactSelected[kind])); });
     listBox.addEventListener('change', function () { tactSelected[kind] = parseInt(listBox.value, 10); renderTact(kind); });
 
     var addBtn = el('button', {
-      type: 'button', class: 'btn btn-sm btn-outline-primary', text: 'Add',
+      type: 'button', class: 'btn btn-sm btn-outline-primary', text: tr('Add'),
       onclick: function () {
         list.push(layout.pvp ? T.newPvpTact('new') : T.newTact(1, ''));
         tactSelected[kind] = list.length - 1;
@@ -1013,7 +1169,7 @@
     });
     var isZero = t && t.id === '0';
     var removeBtn = el('button', {
-      type: 'button', class: 'btn btn-sm btn-outline-danger', text: 'Remove', disabled: !t || isZero,
+      type: 'button', class: 'btn btn-sm btn-outline-danger', text: tr('Remove'), disabled: !t || isZero,
       onclick: function () {
         if (!t || isZero) return;
         list.splice(tactSelected[kind], 1);
@@ -1040,8 +1196,8 @@
         });
         name.classList.toggle('is-invalid', !t.name.trim());
         head.appendChild(el('div', { class: 'col-sm-8' }, [
-          el('label', { class: 'form-label small mb-0', text: layout.nameLabel }), name,
-          el('div', { class: 'invalid-feedback', text: 'You must enter a monster name.' })
+          el('label', { class: 'form-label small mb-0', text: tr(layout.nameLabel) }), name,
+          el('div', { class: 'invalid-feedback', text: tr('You must enter a monster name.') })
         ]));
       }
       var id = el('input', { type: 'text', class: 'form-control form-control-sm', disabled: isZero || (layout.pvp && t.id !== 'new') && !t.editable });
@@ -1051,8 +1207,8 @@
         var dup = list.some(function (o) { return o !== t && o.id === t.id; });
         var bad = layout.pvp ? (!t.id.trim() || t.id === 'new') : !/^-?\d+$/.test(t.id);
         idFeedback.textContent = layout.pvp
-          ? (bad ? 'You must enter a name.' : 'You must enter a unique name.')
-          : 'You must enter a unique monster ID';
+          ? (bad ? tr('You must enter a name.') : tr('You must enter a unique name.'))
+          : tr('You must enter a unique monster ID');
         id.classList.toggle('is-invalid', bad || dup);
       };
       id.addEventListener('input', function () {
@@ -1063,7 +1219,7 @@
       });
       checkId();
       head.appendChild(el('div', { class: layout.pvp ? 'col-sm-8' : 'col-sm-4' }, [
-        el('label', { class: 'form-label small mb-0', text: layout.idLabel }), id, idFeedback
+        el('label', { class: 'form-label small mb-0', text: tr(layout.idLabel) }), id, idFeedback
       ]));
       right.appendChild(head);
 
@@ -1082,23 +1238,23 @@
             cb.checked = t.values[idx] !== 'SNIPE_DISABLE';
             cb.addEventListener('change', function () { t.values[idx] = cb.checked ? 'SNIPE_OK' : 'SNIPE_DISABLE'; onChange(); });
             grid.appendChild(el('div', { class: 'col-sm-6 d-flex align-items-end' }, [
-              el('div', { class: 'form-check' }, [cb, el('label', { class: 'form-check-label', for: 'snipe-' + kind, text: label })])
+              el('div', { class: 'form-check' }, [cb, el('label', { class: 'form-check-label', for: 'snipe-' + kind, text: tr(label) })])
             ]));
             return;
           }
         }
         var wide = fkind === 'skill' || fkind === 'debuff' || (fkind === 'select' && idx === F.BASIC);
         grid.appendChild(el('div', { class: wide ? 'col-12' : 'col-sm-6' }, [
-          el('label', { class: 'form-label small mb-0', text: label }), control
+          el('label', { class: 'form-label small mb-0', text: tr(label) }), control
         ]));
       });
       right.appendChild(el('fieldset', { class: 'border rounded p-2' }, [
-        el('legend', { class: 'float-none w-auto px-2 fs-6 mb-0', text: 'Overall Tactics' }), grid
+        el('legend', { class: 'float-none w-auto px-2 fs-6 mb-0', text: tr('Overall Tactics') }), grid
       ]));
     }
 
     var row = el('div', { class: 'row g-3' }, [left, right]);
-    if (layout.warning) root.appendChild(el('div', { class: 'alert alert-warning py-2 small', text: layout.warning }));
+    if (layout.warning) root.appendChild(el('div', { class: 'alert alert-warning py-2 small', text: tr(layout.warning) }));
     root.appendChild(row);
   }
 
@@ -1147,12 +1303,46 @@
     });
   }
 
+  // ---------- language ----------
+  function langButtonLabel() {
+    var cur = I18N.LANGS.filter(function (l) { return l[0] === I18N.lang; })[0];
+    return '\uD83C\uDF10 ' + (cur ? cur[1] : I18N.lang);
+  }
+
+  function initLanguage() {
+    var menu = $('langMenu');
+    if (!I18N || !menu) return;
+    I18N.LANGS.forEach(function (l) {
+      menu.appendChild(el('li', {}, [el('button', {
+        type: 'button', class: 'dropdown-item' + (l[0] === I18N.lang ? ' active' : ''), 'data-lang': l[0], text: l[1],
+        onclick: function () { I18N.setLang(l[0]); }
+      })]));
+    });
+    $('btnLang').textContent = langButtonLabel();
+    I18N.onChange(function () {
+      $('btnLang').textContent = langButtonLabel();
+      Array.prototype.forEach.call(menu.querySelectorAll('[data-lang]'), function (b) {
+        b.classList.toggle('active', b.getAttribute('data-lang') === I18N.lang);
+      });
+      applyTheme();
+      setEditing();
+      setDirty(dirty);
+      renderAll();
+      var hom = HOM.filter(function (e) { return e.name === homSelected; })[0];
+      setHomDescription(hom || null);
+      var mer = MER.filter(function (e) { return e.name === merSelected; })[0];
+      setMerDescription(mer || null);
+    });
+  }
+
   function init() {
     setupModal();
+    if (I18N) I18N.applyStatic();
+    initLanguage();
     initTheme();
 
     if (!HOM.length || !MER.length || !Object.keys(TEMPLATES).length) {
-      message('Error', 'Some data files (homSchema.js, merSchema.js, templates.js) failed to load.');
+      message(tr('Error'), tr('Some data files (homSchema.js, merSchema.js, templates.js) failed to load.'));
     }
 
     saved = loadStore() || templateFiles();
@@ -1160,7 +1350,8 @@
     try { storedVersion = localStorage.getItem(VERSION_KEY); } catch (e) { /* ignore */ }
     setVersion(storedVersion || detectVersion(saved) || 'hg');
     loadAll();
-    setEditing((loadStore() ? 'browser storage' : 'built-in defaults') + ' (' + APPLY_HINT + ')');
+    var fromStore = !!loadStore();
+    setEditing(function () { return tr(fromStore ? 'browser storage' : 'built-in defaults') + ' (' + applyHint() + ')'; });
 
     // Homunculus filters
     var filters = loadFilters();
@@ -1170,13 +1361,14 @@
     if (!$('homBaseFilter').value) $('homBaseFilter').value = 'All Types';
     $('homSearch').addEventListener('input', function () { homSearch = $('homSearch').value; renderHom(); });
     $('homOnlyModified').addEventListener('change', function () { homOnlyModified = $('homOnlyModified').checked; renderHom(); });
-    $('homSFilter').addEventListener('change', function () { saveFilters(); renderHom(); });
-    $('homBaseFilter').addEventListener('change', function () { saveFilters(); renderHom(); });
+    $('homSFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
+    $('homBaseFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
     $('homClearFilters').addEventListener('click', function () {
       $('homSearch').value = '';
       homSearch = '';
       $('homOnlyModified').checked = false;
       homOnlyModified = false;
+      homSkill = null;
       $('homSFilter').value = 'All Types';
       $('homBaseFilter').value = 'All Types';
       saveFilters();
@@ -1211,19 +1403,19 @@
       bindMenu(e.id, function () { exportOne(e.getAttribute('data-export')); });
     });
     bindMenu('menuExportAll', function () {
-      try { downloadAll(buildAll()); } catch (e) { message('Error', e.message); }
+      try { downloadAll(buildAll()); } catch (e) { message(tr('Error'), e.message); }
     });
     bindMenu('menuExit', quit);
     bindMenu('menuApply', apply);
     bindMenu('menuRevert', revert);
     bindMenu('menuReset', resetDefaults);
     bindMenu('menuDocs', openDocumentation);
-    bindMenu('menuAbout', function () { message('About', ABOUT_TEXT); });
+    bindMenu('menuAbout', function () { message(tr('About'), aboutText()); });
     $('btnApply').addEventListener('click', apply);
     $('btnQuit').addEventListener('click', quit);
     $('btnOpenFolder').addEventListener('click', openFolder);
     $('btnDownloadZip').addEventListener('click', function () {
-      try { downloadAll(buildAll()); } catch (e) { message('Error', e.message); }
+      try { downloadAll(buildAll()); } catch (e) { message(tr('Error'), e.message); }
     });
     $('btnRevert').addEventListener('click', revert);
 
