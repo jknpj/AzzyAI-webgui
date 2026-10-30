@@ -163,7 +163,11 @@ window.AzzyI18nDesc.es = {
     UseEleanorEQC: 'Activa EQC de Eleanor como continuación del combo de agarre (grappling).',
     EleanorEQCLevel: 'Nivel de EQC, 1-5.',
     AllowBloodlust: 'Permite el buff heredado Blood Lust de Amistr.',
-    AllowSBR44: 'Permite el SBR44 heredado de Filir, que consume intimidad.'
+    AllowSBR44: 'Permite el SBR44 heredado de Filir, que consume intimidad.',
+    UseMobInfo: 'Usa la base de datos de monstruos (MobInfo.lua: elemento, raza, tamaño, jefe/MVP y planta de cada monstruo) para elegir habilidades y para tratar jefes y plantas. Desactívalo para volver al comportamiento anterior.',
+    SkillElementMinRate: 'Las habilidades de ataque no se usan contra un objetivo cuyo elemento reduciría su daño por debajo de este porcentaje (0-200). Los objetivos inmunes (0% o menos) siempre se omiten.\n\nEjemplo: las habilidades de fuego hacen 90% a monstruos Agua 1 y 0% a monstruos Fuego 2.',
+    PlantSkills: 'Usa habilidades también en plantas y hongos. Reciben 1 de daño de todo, así que por defecto las habilidades se guardan para otros monstruos y las plantas no cuentan para las habilidades de área.',
+    BossAggro: 'Jefes con los que el homúnculo nunca empieza una pelea, digan lo que digan las tácticas; igual te defiende a ti y a sí mismo cuando atacan.\n\nTácticas: deciden las tácticas. Reaccionar a MVPs: MVPs. Reaccionar a jefes: MVPs y mini-jefes.'
   },
   homClassic: {
     OldHomunType: 'El tipo base original (Lif, Amistr, Filir o Vanilmirth) de tu Homúnculo S. La IA lo usa para saber qué habilidades heredadas están disponibles. Esta opción se ignora para homúnculos que no son S.'

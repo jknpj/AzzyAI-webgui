@@ -183,6 +183,8 @@ window.AzzyI18nStrings = {
     'Attack': 'Atacar',
     'Official': 'Oficial',
     'Private': 'Privado',
+    'React to MVPs': 'Reagir a MVPs',
+    'React to bosses': 'Reagir a chefes',
     'Off': 'Desligado',
     'Self': 'Si mesmo',
 
@@ -457,6 +459,8 @@ window.AzzyI18nStrings = {
     'Attack': 'Atacar',
     'Official': 'Oficial',
     'Private': 'Privado',
+    'React to MVPs': 'Reaccionar a MVPs',
+    'React to bosses': 'Reaccionar a jefes',
     'Off': 'Desactivado',
     'Self': 'Sí mismo',
 

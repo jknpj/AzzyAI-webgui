@@ -22,6 +22,7 @@ window.AzzyHomEnums = {
   UseBayeriSteinWandOptions: [['Never', 0], ['Idle', 1], ['Chase', -1], ['Idle_Low', -2], ['Berserk', 2], ['ASAP', 3]],
   StickyStandbyOptions: [['Disabled', 0], ['Enabled', 1], ['Enabled_Relog', 2]],
   ServerTypeOptions: [['Official', 0], ['Private', 1]],
+  BossAggroOptions: [['Tactics', 0], ['React to MVPs', 1], ['React to bosses', 2]],
   UseProvokeOwnerOptions: [['Never', 0], ['Idle', 1], ['Chase', -1], ['Idle_Low', -2], ['Berserk', 2], ['ASAP', 3]]
 };
 window.AzzyHomSchema = [
@@ -370,7 +371,15 @@ window.AzzyHomSchema = [
   { name: 'AllowBloodlust', category: 'Autobuff Options', type: 'bool', default: false,
     description: 'Allow the inherited Amistr Blood Lust buff.' },
   { name: 'AllowSBR44', category: 'AutoSkill Options', type: 'bool', default: false,
-    description: 'Allow inherited Filir SBR44, which consumes intimacy.' }
+    description: 'Allow inherited Filir SBR44, which consumes intimacy.' },
+  { name: 'UseMobInfo', category: 'Basic Options', type: 'bool', default: true,
+    description: 'Use the monster database (MobInfo.lua: element, race, size, boss/MVP and plant of every monster) to pick skills and to treat bosses and plants. Set to false for the old behavior.' },
+  { name: 'SkillElementMinRate', category: 'AutoSkill Options', type: 'int', default: 50, min: 0, max: 200,
+    description: 'Attack skills are left out against a target whose element would cut their damage below this percent (0-200). Immune targets (0% or less) are always skipped.\n\nExample: fire skills do 90% to Water 1 monsters and 0% to Fire 2 monsters.' },
+  { name: 'PlantSkills', category: 'AutoSkill Options', type: 'bool', default: false,
+    description: 'Use skills on plants and mushrooms too. They take 1 damage from everything, so by default skills are saved for other monsters and plants don\'t count for area skills.' },
+  { name: 'BossAggro', category: 'Basic Options', type: 'enum', enum: 'BossAggroOptions', default: 1,
+    description: 'Bosses the homunculus never starts a fight with, whatever the tactics say; it still defends you and itself when they attack.\n\nTactics: the tactics decide. React to MVPs: MVPs. React to bosses: MVPs and mini-bosses.' }
 ];
 
 // Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
@@ -383,5 +392,6 @@ window.AzzyHomHgOnly = [
   'UseBayeriGlanzenSpies', 'BayeriGlanzenSpiesLevel', 'UseBayeriHeiligePferd', 'BayeriHeiligePferdLevel',
   'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEiraLightOfRegene', 'EiraLightOfRegeneLevel',
   'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
-  'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44'
+  'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44',
+  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro'
 ];
