@@ -274,7 +274,30 @@ window.AzzyI18nStrings = {
     'Weight': 'Peso',
     'Push': 'Empurrar',
     'Use Pushback': 'Usar empurrão',
-    'WARNING: In order for non-default tactics to work, you must create a MobID file. These must be re-generated after each maintenance. If you do not know what this means, you don\'t have it.': 'AVISO: Para que táticas não padrão funcionem, você precisa criar um arquivo MobID. Ele precisa ser gerado novamente após cada manutenção. Se você não sabe o que isso significa, você não tem esse arquivo.'
+    'WARNING: In order for non-default tactics to work, you must create a MobID file. These must be re-generated after each maintenance. If you do not know what this means, you don\'t have it.': 'AVISO: Para que táticas não padrão funcionem, você precisa criar um arquivo MobID. Ele precisa ser gerado novamente após cada manutenção. Se você não sabe o que isso significa, você não tem esse arquivo.',
+    // suggested tactics (tactSuggest.js)
+    'Suggest tactics from the monster database': 'Sugerir táticas pelo banco de monstros',
+    'Monster database not available (mobdata.js).': 'Banco de monstros não disponível (mobdata.js).',
+    'map name, e.g. prt_fild08': 'nome do mapa, ex.: prt_fild08',
+    'name or ID': 'nome ou ID',
+    'Map:': 'Mapa:',
+    'Monster:': 'Monstro:',
+    'Add the monsters of this map': 'Adicionar os monstros deste mapa',
+    'Add monster': 'Adicionar monstro',
+    'Add all plants and mushrooms': 'Adicionar todas as plantas e cogumelos',
+    'Replace rows that already exist': 'Substituir linhas que já existem',
+    'Added {0} monster(s), {1} already had a row.': '{0} monstro(s) adicionado(s), {1} já tinha(m) linha.',
+    'Unknown map: {0}': 'Mapa desconhecido: {0}',
+    'Unknown monster: {0}': 'Monstro desconhecido: {0}',
+    'Suggested rows (edit them afterwards as you like):': 'Linhas sugeridas (edite depois como quiser):',
+    'Plants and mushrooms: only when they are hit, no skills, no weight': 'Plantas e cogumelos: só quando atingidos, sem habilidades, sem peso',
+    'MVPs: only when they attack, all skills': 'MVPs: só quando atacam, todas as habilidades',
+    'Other bosses: only when they attack, all skills': 'Outros chefes: só quando atacam, todas as habilidades',
+    'Aggressive monsters that can\'t move: ignored, never chased': 'Monstros agressivos que não se movem: ignorados, nunca perseguidos',
+    'Harmless monsters that can\'t move (eggs): last, no skills': 'Monstros inofensivos que não se movem (ovos): por último, sem habilidades',
+    'Aggressive monsters: attacked first, all skills': 'Monstros agressivos: atacados primeiro, todas as habilidades',
+    'Passive monsters: attacked after the aggressive ones, all skills': 'Monstros passivos: atacados depois dos agressivos, todas as habilidades',
+    'Monster and spawn data: rAthena Renewal. Spawns on your server may differ.': 'Dados de monstros e spawns: rAthena Renewal. Os spawns do seu servidor podem ser diferentes.'
   },
   es: {
     // index.new.html
@@ -550,6 +573,29 @@ window.AzzyI18nStrings = {
     'Weight': 'Peso',
     'Push': 'Empujar',
     'Use Pushback': 'Usar empuje',
-    'WARNING: In order for non-default tactics to work, you must create a MobID file. These must be re-generated after each maintenance. If you do not know what this means, you don\'t have it.': 'ADVERTENCIA: Para que las tácticas no predeterminadas funcionen, debes crear un archivo MobID. Debe volver a generarse después de cada mantenimiento. Si no sabes qué significa esto, no lo tienes.'
+    'WARNING: In order for non-default tactics to work, you must create a MobID file. These must be re-generated after each maintenance. If you do not know what this means, you don\'t have it.': 'ADVERTENCIA: Para que las tácticas no predeterminadas funcionen, debes crear un archivo MobID. Debe volver a generarse después de cada mantenimiento. Si no sabes qué significa esto, no lo tienes.',
+    // suggested tactics (tactSuggest.js)
+    'Suggest tactics from the monster database': 'Sugerir tácticas con la base de datos de monstruos',
+    'Monster database not available (mobdata.js).': 'Base de datos de monstruos no disponible (mobdata.js).',
+    'map name, e.g. prt_fild08': 'nombre del mapa, p. ej. prt_fild08',
+    'name or ID': 'nombre o ID',
+    'Map:': 'Mapa:',
+    'Monster:': 'Monstruo:',
+    'Add the monsters of this map': 'Agregar los monstruos de este mapa',
+    'Add monster': 'Agregar monstruo',
+    'Add all plants and mushrooms': 'Agregar todas las plantas y hongos',
+    'Replace rows that already exist': 'Reemplazar las filas que ya existen',
+    'Added {0} monster(s), {1} already had a row.': '{0} monstruo(s) agregado(s), {1} ya tenía(n) fila.',
+    'Unknown map: {0}': 'Mapa desconocido: {0}',
+    'Unknown monster: {0}': 'Monstruo desconocido: {0}',
+    'Suggested rows (edit them afterwards as you like):': 'Filas sugeridas (edítalas después como quieras):',
+    'Plants and mushrooms: only when they are hit, no skills, no weight': 'Plantas y hongos: solo cuando son golpeados, sin habilidades, sin peso',
+    'MVPs: only when they attack, all skills': 'MVPs: solo cuando atacan, todas las habilidades',
+    'Other bosses: only when they attack, all skills': 'Otros jefes: solo cuando atacan, todas las habilidades',
+    'Aggressive monsters that can\'t move: ignored, never chased': 'Monstruos agresivos que no se mueven: ignorados, nunca perseguidos',
+    'Harmless monsters that can\'t move (eggs): last, no skills': 'Monstruos inofensivos que no se mueven (huevos): al final, sin habilidades',
+    'Aggressive monsters: attacked first, all skills': 'Monstruos agresivos: atacados primero, todas las habilidades',
+    'Passive monsters: attacked after the aggressive ones, all skills': 'Monstruos pasivos: atacados después de los agresivos, todas las habilidades',
+    'Monster and spawn data: rAthena Renewal. Spawns on your server may differ.': 'Datos de monstruos y spawns: rAthena Renewal. Los spawns de tu servidor pueden ser distintos.'
   }
 };

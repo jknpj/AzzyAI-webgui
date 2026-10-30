@@ -9,6 +9,7 @@
   var T = window.AzzyTactics;
   var I18N = window.AzzyI18n;
   var SK = window.AzzySkills;
+  var TS = window.AzzyTactSuggest;
   // tr('English text', [args]): translated UI text. (The name t is used for tactics below.)
   var tr = I18N ? I18N.t : function (s, a) {
     return a ? s.replace(/\{(\d+)\}/g, function (m, i) { return a[i]; }) : s;
@@ -1256,6 +1257,112 @@
     var row = el('div', { class: 'row g-3' }, [left, right]);
     if (layout.warning) root.appendChild(el('div', { class: 'alert alert-warning py-2 small', text: tr(layout.warning) }));
     root.appendChild(row);
+    if (!layout.pvp) root.appendChild(suggestPanel(kind));
+  }
+
+  // ---------- Suggested tactics (tactSuggest.js + mobdata.js) ----------
+  var suggestState = { hom: {}, mer: {} };
+  var datalistsBuilt = false;
+
+  // Map and monster lists for the inputs, built once: thousands of options
+  function buildDatalists() {
+    if (datalistsBuilt || !TS || !TS.available()) return;
+    datalistsBuilt = true;
+    var maps = el('datalist', { id: 'azzyMapList' });
+    TS.maps().forEach(function (m) { maps.appendChild(el('option', { value: m })); });
+    var mobs = el('datalist', { id: 'azzyMobList' });
+    TS.allIds().forEach(function (id) { mobs.appendChild(el('option', { value: TS.label(TS.mob(id)) })); });
+    document.body.appendChild(maps);
+    document.body.appendChild(mobs);
+  }
+
+  // Adds suggested rows for these monster IDs; existing rows are kept unless "replace" is on.
+  function addSuggested(kind, ids) {
+    var list = state.tact[kind];
+    var st = suggestState[kind];
+    var added = 0, kept = 0, firstNew = -1;
+    ids.forEach(function (id) {
+      var t = TS.suggest(id);
+      if (!t) return;
+      var at = -1;
+      list.forEach(function (x, i) { if (x.id === t.id) at = i; });
+      if (at >= 0 && !st.replace) { kept++; return; }
+      if (at >= 0) list[at] = t;
+      else { list.push(t); if (firstNew < 0) firstNew = list.length - 1; }
+      added++;
+    });
+    st.result = tr('Added {0} monster(s), {1} already had a row.', [added, kept]);
+    if (added) {
+      if (firstNew >= 0) tactSelected[kind] = firstNew;
+      changed();
+    }
+    renderTact(kind);
+  }
+
+  function suggestPanel(kind) {
+    var st = suggestState[kind];
+    var body = el('div', { class: 'card-body py-2' });
+    var card = el('details', { class: 'card mt-3' }, [
+      el('summary', { class: 'card-header py-1 small fw-semibold', text: tr('Suggest tactics from the monster database') }), body
+    ]);
+    if (st.open) card.open = true;
+    card.addEventListener('toggle', function () { st.open = card.open; if (card.open) buildDatalists(); });
+    if (!TS || !TS.available()) {
+      body.appendChild(el('div', { class: 'small text-muted', text: tr('Monster database not available (mobdata.js).') }));
+      return card;
+    }
+    if (st.open) buildDatalists();
+
+    var mapInput = el('input', { type: 'text', class: 'form-control form-control-sm', list: 'azzyMapList',
+      placeholder: tr('map name, e.g. prt_fild08'), 'aria-label': tr('Map:') });
+    mapInput.value = st.map || '';
+    mapInput.addEventListener('input', function () { st.map = mapInput.value; });
+    var mobInput = el('input', { type: 'text', class: 'form-control form-control-sm', list: 'azzyMobList',
+      placeholder: tr('name or ID'), 'aria-label': tr('Monster:') });
+    mobInput.value = st.mob || '';
+    mobInput.addEventListener('input', function () { st.mob = mobInput.value; });
+    var replace = el('input', { type: 'checkbox', class: 'form-check-input', id: 'suggestReplace-' + kind });
+    replace.checked = !!st.replace;
+    replace.addEventListener('change', function () { st.replace = replace.checked; });
+
+    body.appendChild(el('div', { class: 'row g-2 align-items-end' }, [
+      el('div', { class: 'col-md-6' }, [
+        el('label', { class: 'form-label small mb-0', text: tr('Map:') }),
+        el('div', { class: 'input-group input-group-sm' }, [mapInput, el('button', {
+          type: 'button', class: 'btn btn-outline-primary', text: tr('Add the monsters of this map'),
+          onclick: function () {
+            var ids = TS.mapMobs(mapInput.value.trim());
+            if (!ids) { st.result = tr('Unknown map: {0}', [mapInput.value.trim()]); renderTact(kind); return; }
+            addSuggested(kind, ids);
+          }
+        })])
+      ]),
+      el('div', { class: 'col-md-6' }, [
+        el('label', { class: 'form-label small mb-0', text: tr('Monster:') }),
+        el('div', { class: 'input-group input-group-sm' }, [mobInput, el('button', {
+          type: 'button', class: 'btn btn-outline-primary', text: tr('Add monster'),
+          onclick: function () {
+            var id = TS.parseMob(mobInput.value);
+            if (id === null || !TS.mob(id)) { st.result = tr('Unknown monster: {0}', [mobInput.value.trim()]); renderTact(kind); return; }
+            addSuggested(kind, [id]);
+          }
+        })])
+      ]),
+      el('div', { class: 'col-12 d-flex flex-wrap align-items-center gap-3' }, [
+        el('button', { type: 'button', class: 'btn btn-sm btn-outline-secondary', text: tr('Add all plants and mushrooms'),
+          onclick: function () { addSuggested(kind, TS.plants()); } }),
+        el('div', { class: 'form-check mb-0' }, [replace,
+          el('label', { class: 'form-check-label small', for: 'suggestReplace-' + kind, text: tr('Replace rows that already exist') })]),
+        st.result ? el('span', { class: 'small fw-semibold', role: 'status', text: st.result }) : null
+      ])
+    ]));
+    var rules = el('ul', { class: 'small text-muted mb-0 mt-2' });
+    TS.rules().forEach(function (r) { rules.appendChild(el('li', { text: tr(r) })); });
+    body.appendChild(el('div', { class: 'small mt-2', text: tr('Suggested rows (edit them afterwards as you like):') }));
+    body.appendChild(rules);
+    body.appendChild(el('div', { class: 'small text-muted fst-italic mt-1',
+      text: tr('Monster and spawn data: rAthena Renewal. Spawns on your server may differ.') }));
+    return card;
   }
 
   // ---------- Extra ----------
