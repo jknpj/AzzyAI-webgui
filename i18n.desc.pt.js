@@ -2,6 +2,9 @@
 window.AzzyI18nDesc = window.AzzyI18nDesc || {};
 window.AzzyI18nDesc.pt = {
   hom: {
+    CastInterruptUnconfirmed: 'Contar também falhas ofensivas sem conjuração visível ou conclusão confirmada, com alvo vivo e no alcance e SP suficiente. Pode incluir recusas do servidor. Usa o mesmo limite e pausa. Desligado por padrão; H_Extra.lua tem prioridade.',
+    CastInterruptLimit: 'Interrupções confirmadas de conjuração ofensiva antes de pausar temporariamente aquela habilidade. Padrão: 3. 0 desativa. Um cast concluído zera o contador. Buffs, combos e recusas sem confirmação de interrupção não contam.',
+    CastInterruptPause: 'Tempo em milissegundos para ignorar a habilidade após CastInterruptLimit interrupções confirmadas. Padrão: 5000. Outras habilidades utilizáveis ou ataques normais continuam disponíveis. Valor positivo; não altera o cooldown do servidor.',
     AggroHP: 'Seu homúnculo vai procurar e atacar monstros sempre que a porcentagem de HP dele (em relação ao HP máximo; um número de 0 a 100) for maior que este valor. Quando estiver com pouco HP, ele só vai lutar contra monstros se for atacado.\n\nDefina este valor como 100 se você não quiser que o homúnculo ataque, a não ser que ele, o dono ou um amigo seja atacado.',
     AggroSP: 'Seu homúnculo vai procurar e atacar monstros sempre que a porcentagem de SP dele (em relação ao SP máximo; um número de 0 a 100) for maior que este valor. Quando estiver com pouco SP, ele só vai lutar contra monstros se for atacado.',
     KiteMonsters: 'Defina como true se você quiser que o homúnculo mantenha distância dos monstros (kitar) enquanto ataca.',

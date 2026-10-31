@@ -81,6 +81,12 @@ window.AzzyHomSchema = [
     description: 'If you want your homunculus to use skills while attacking and while chasing if their skill has a longer range than their normal attack, set this to Chasing. If you want it to use skills only while in melee range, set this to Attacking. If you want it to only use skills and not attack normally, set this to SkillOnly.' },
   { name: 'AutoSkillDelay', category: 'AutoSkill Options', type: 'int', default: 400, min: 0, max: 600,
     description: 'Extra AI delay in milliseconds; 0 removes this margin, not server cooldowns. If you are having problems with the homunculus "double casting" skills, increase this value. Otherwise, leave it be.' },
+  { name: 'CastInterruptLimit', category: 'AutoSkill Options', type: 'int', default: 3, min: 0, max: 2147483647,
+    description: 'Offensive cast interruptions before temporarily skipping that skill. 0 disables the protection. Success resets the counter. Buffs and combos are excluded; unconfirmed failures count only with CastInterruptUnconfirmed enabled.' },
+  { name: 'CastInterruptUnconfirmed', category: 'AutoSkill Options', type: 'bool', default: false,
+    description: 'Also count failed offensive casts with no visible casting motion or confirmed completion, when the target is alive and in range and SP is sufficient. May include server refusals, not just interruptions. Uses CastInterruptLimit/Pause. Disabled by default; H_Extra.lua overrides take precedence.' },
+  { name: 'CastInterruptPause', category: 'AutoSkill Options', type: 'int', default: 5000, min: 1, max: 2147483647,
+    description: 'Milliseconds to skip an offensive skill after CastInterruptLimit confirmed interruptions. Other usable skills or normal attacks remain available. Positive integer; default 5000 ms. Does not change server cooldowns.' },
   { name: 'AoEReserveSP', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'Enable this to not use non-AoE skill attacks unless doing so would leave enough SP to cast the homun\'s AoE attack. ' },
   { name: 'AoEFixedLevel', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -387,6 +393,7 @@ window.AzzyHomSchema = [
 // Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
 // never written in Classic mode.
 window.AzzyHomHgOnly = [
+  'CastInterruptLimit', 'CastInterruptPause', 'CastInterruptUnconfirmed',
   'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'UseDieterBlastForge', 'UseDieterTempering',
   'UseEiraTwisterCutter', 'EiraTwisterCutterLevel', 'UseEiraAbsoluteZephyr', 'EiraAbsoluteZephyrLevel',
   'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',

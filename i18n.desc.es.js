@@ -2,6 +2,9 @@
 window.AzzyI18nDesc = window.AzzyI18nDesc || {};
 window.AzzyI18nDesc.es = {
   hom: {
+    CastInterruptUnconfirmed: 'Contar también fallos ofensivos sin lanzamiento visible o finalización confirmada, con objetivo vivo y en alcance y SP suficiente. Puede incluir rechazos del servidor. Usa el mismo límite y pausa. Desactivado por defecto; H_Extra.lua tiene prioridad.',
+    CastInterruptLimit: 'Interrupciones confirmadas de lanzamiento ofensivo antes de pausar temporalmente esa habilidad. Predeterminado: 3. 0 desactiva. Un lanzamiento completado reinicia el contador. Buffs, combos y rechazos sin interrupción confirmada no cuentan.',
+    CastInterruptPause: 'Milisegundos para omitir la habilidad después de CastInterruptLimit interrupciones confirmadas. Predeterminado: 5000. Otras habilidades utilizables o ataques normales siguen disponibles. Valor positivo; no cambia el cooldown del servidor.',
     AggroHP: 'Tu homúnculo buscará y atacará monstruos siempre que su porcentaje de HP (como porcentaje del HP máximo; un número de 0 a 100) sea mayor que este valor. Cuando le falte HP, solo peleará contra monstruos si lo atacan.\n\nPon este valor en 100 si no quieres que el homúnculo ataque a menos que lo ataquen a él, a su dueño o a un amigo.',
     AggroSP: 'Tu homúnculo buscará y atacará monstruos siempre que su porcentaje de SP (como porcentaje del SP máximo; un número de 0 a 100) sea mayor que este valor. Cuando le falte SP, solo peleará contra monstruos si lo atacan.',
     KiteMonsters: 'Ponlo en true si quieres que tu homúnculo mantenga distancia de los monstruos mientras ataca (kitear).',

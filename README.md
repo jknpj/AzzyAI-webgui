@@ -28,6 +28,15 @@ When you open a `USER_AI` folder, the version is detected automatically: HG defi
 
 ## Usage
 
+HG **AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
+**CastInterruptPause** (default 5000 ms) configure a temporary per-skill pause
+after confirmed offensive cast interruptions. Successful casts reset the count;
+buffs, combos and unconfirmed refusals are excluded. This is AI selection
+backoff, not a change to skill mechanics or server cooldowns.
+`CastInterruptUnconfirmed` is disabled by default. Enable it to also count
+failures without visible casting or confirmed completion when the target is
+alive/in range and SP is sufficient; these may include server refusals.
+
 For HG Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
 milliseconds between attack attempts counted toward the fighting-style sphere
 estimate (positive integer, default 800). It is not a skill cooldown; use shorter
