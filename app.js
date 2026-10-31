@@ -1,7 +1,7 @@
 // app.js
 // AzzyAI configuration web GUI. Mirrors the WinForms GUI (GUI/AzzyAIConfig):
 // Homunculus/Mercenary settings, Homunculus/Mercenary tactics, PVP tactics,
-// Extra options, Apply/Revert/Reset to Defaults, Import/Export, Help.
+// Extra options, Apply/Revert, Import/Export, Help.
 (function () {
   'use strict';
 
@@ -525,14 +525,6 @@
     renderHom();
     renderMer();
     setDirty(false);
-  }
-
-  function resetDefaults() {
-    state.hom = L.defaults(HOM);
-    state.mer = L.defaults(MER);
-    renderHom();
-    renderMer();
-    changed();
   }
 
   function quit() {
@@ -1515,7 +1507,6 @@
     bindMenu('menuExit', quit);
     bindMenu('menuApply', apply);
     bindMenu('menuRevert', revert);
-    bindMenu('menuReset', resetDefaults);
     bindMenu('menuDocs', openDocumentation);
     bindMenu('menuAbout', function () { message(tr('About'), aboutText()); });
     $('btnApply').addEventListener('click', apply);

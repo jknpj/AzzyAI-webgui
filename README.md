@@ -10,7 +10,7 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 - **Tactics** (`H_Tactics.lua`, `M_Tactics.lua`): add, edit and remove per-monster tactics. **Suggest tactics** fills in rows from the monster database: pick a map to add every monster that spawns there, add single monsters by name or ID, or add all plants and mushrooms. Each row follows what the monster is: plants are only hit back without skills, MVPs and other bosses only when they attack, aggressive monsters first, passive ones after, aggressive monsters that can't move are ignored. Row names include the element ("Dimik (Earth 2)"), since several monsters share a name.
 - **PVP tactics** (`H_PVP_Tact.lua`, `M_PVP_Tact.lua`).
 - **Extra options** (`H_Extra.lua`, `M_Extra.lua`): free-text editor.
-- **Apply / Revert / Reset to Defaults**, import and export of individual files or all files at once.
+- **Apply / Revert**, import and export of individual files or all files at once.
 - Official / private server selection (`ServerType`).
 - **Three languages**: English, Português (BR) and Español (LatAm). The 🌐 menu switches the whole interface, the option descriptions, the list labels and the tactics; the choice is remembered and the first visit follows the browser language. Setting names stay in English, since they are the names in the `.lua` files.
 - **Homunculus skills**: a skill window with the icons of the selected homunculi (click one to see only its settings), a skill icon next to each setting that controls a skill, and a skill card with the official LATAM numbers at max level and the in-game description in the chosen language. Icons, official names and descriptions are a local copy (`skilldata.js`, `img/skills/`), so the page works offline and loads nothing from third-party sites except Bootstrap/JSZip.
@@ -69,7 +69,7 @@ git submodule add https://github.com/jknpj/AzzyAI-webgui.git webgui
 
 Things specific to a fork:
 
-- `templates.js`: default contents of the `.lua` files, used by *Reset to Defaults* and when no folder is open. Keep it in sync with your fork's `USER_AI`.
+- `templates.js`: default contents of the `.lua` files, used when no folder is open. Keep it in sync with your fork's `USER_AI`.
 - `homSchema.js` / `merSchema.js`: the options shown in each tab, with their types, ranges and descriptions. Add entries here when your fork adds new config options, and their translations to `i18n.desc.pt.js` / `i18n.desc.es.js` (untranslated ones show in English).
 - `skills.js`: which settings belong to which skill, and the skill numbers shown on the skill card (official values from `USER_AI/H_SkillList.lua`).
 - `app.js`: `aboutText()` (Help > About) and `DOC_ONLINE_URL`.
@@ -94,7 +94,7 @@ The skills it fetches are the ones listed in `skills.js`. API answers are cached
 | File | Purpose |
 |---|---|
 | `index.html` | Page layout and the Ragnarok light/dark look (Bootstrap 5, JSZip from CDN) |
-| `app.js` | UI, Apply/Revert/Reset, import/export, folder access |
+| `app.js` | UI, Apply/Revert, import/export, folder access |
 | `luaConfig.js` | Reads and writes `H_Config.lua` / `M_Config.lua`, keeping unknown lines |
 | `tactics.js` | Reads and writes tactics and PVP tactics files |
 | `homSchema.js`, `merSchema.js` | Option definitions |
