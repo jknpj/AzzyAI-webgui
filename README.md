@@ -7,12 +7,14 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 - **Homunculus settings** (`H_Config.lua`): every option, grouped in the same categories as the desktop GUI, with search across all categories, Homunculus S / base type filters and a description for each option.
 - **Mercenary settings** (`M_Config.lua`): categorized (collapsible groups) or alphabetical view, with search.
 - **Changes at a glance**: options that differ from the default are marked and have a ↺ button to restore the default; "Only changed from default" lists just those. The footer and the tabs show what has not been applied yet.
-- **Tactics** (`H_Tactics.lua`, `M_Tactics.lua`): add, edit and remove per-monster tactics.
+- **Tactics** (`H_Tactics.lua`, `M_Tactics.lua`): add, edit and remove per-monster tactics. **Suggest tactics** fills in rows from the monster database: pick a map to add every monster that spawns there, add single monsters by name or ID, or add all plants and mushrooms. Each row follows what the monster is: plants are only hit back without skills, MVPs and other bosses only when they attack, aggressive monsters first, passive ones after, aggressive monsters that can't move are ignored. Row names include the element ("Dimik (Earth 2)"), since several monsters share a name.
 - **PVP tactics** (`H_PVP_Tact.lua`, `M_PVP_Tact.lua`).
 - **Extra options** (`H_Extra.lua`, `M_Extra.lua`): free-text editor.
 - **Apply / Revert / Reset to Defaults**, import and export of individual files or all files at once.
 - Official / private server selection (`ServerType`).
-- Light / dark theme (follows the system by default) and a layout that works on phones.
+- **Three languages**: English, Português (BR) and Español (LatAm). The 🌐 menu switches the whole interface, the option descriptions, the list labels and the tactics; the choice is remembered and the first visit follows the browser language. Setting names stay in English, since they are the names in the `.lua` files.
+- **Homunculus skills**: a skill window with the icons of the selected homunculi (click one to see only its settings), a skill icon next to each setting that controls a skill, and a skill card with the official LATAM numbers at max level and the in-game description in the chosen language. Icons, official names and descriptions are a local copy (`skilldata.js`, `img/skills/`), so the page works offline and loads nothing from third-party sites except Bootstrap/JSZip.
+- **Ragnarok look** in both themes: blue title bars and framed panels like the in-game windows, in a light and a dark version (or following the system), plus a layout that works on phones.
 - Works with **AzzyAI HG** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
 
 ## AzzyAI versions
@@ -59,22 +61,45 @@ git submodule add https://github.com/jknpj/AzzyAI-webgui.git webgui
 Things specific to a fork:
 
 - `templates.js`: default contents of the `.lua` files, used by *Reset to Defaults* and when no folder is open. Keep it in sync with your fork's `USER_AI`.
-- `homSchema.js` / `merSchema.js`: the options shown in each tab, with their types, ranges and descriptions. Add entries here when your fork adds new config options.
-- `app.js`: `ABOUT_TEXT` (Help > About) and `DOC_ONLINE_URL`.
+- `homSchema.js` / `merSchema.js`: the options shown in each tab, with their types, ranges and descriptions. Add entries here when your fork adds new config options, and their translations to `i18n.desc.pt.js` / `i18n.desc.es.js` (untranslated ones show in English).
+- `skills.js`: which settings belong to which skill, and the skill numbers shown on the skill card (official values from `USER_AI/H_SkillList.lua`).
+- `app.js`: `aboutText()` (Help > About) and `DOC_ONLINE_URL`.
+
+## Translations
+
+UI text is written in English in the code and translated through `tr('English text')` (`app.js`) or `data-i18n="English text"` attributes (`index.html`). `i18n.strings.js` maps each English text to its Portuguese and Spanish version; setting descriptions are in `i18n.desc.pt.js` and `i18n.desc.es.js`, keyed by setting name. Anything without a translation falls back to English, so a new string can be added to the code first and translated later.
+
+## Skill data
+
+`skilldata.js` (official names and in-game descriptions) and `img/skills/<id>.png` are generated from the [Divine Pride API](https://www.divine-pride.net/tools/api-doc) by `skilldata_sync.py`: English from the iRO client, Portuguese from the LATAM client. Divine Pride has no Spanish LATAM text (the LATAM server always answers in Portuguese), so in Spanish the page shows the Spanish names from `skills.js` and the English in-game descriptions. It needs a free API key from your Divine Pride profile and only the Python standard library:
+
+```
+set DIVINEPRIDE_API_KEY=<your key>
+python skilldata_sync.py
+```
+
+The skills it fetches are the ones listed in `skills.js`. API answers are cached in `.cache/` (git-ignored), so running it again only asks for new skills; `--refresh` fetches everything again. Behind a proxy, set `HTTPS_PROXY` first. Until it has been run, the page uses the built-in names in `skills.js` and shows no descriptions.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `index.html` | Page layout (Bootstrap 5, JSZip from CDN) |
+| `index.html` | Page layout and the Ragnarok light/dark look (Bootstrap 5, JSZip from CDN) |
 | `app.js` | UI, Apply/Revert/Reset, import/export, folder access |
 | `luaConfig.js` | Reads and writes `H_Config.lua` / `M_Config.lua`, keeping unknown lines |
 | `tactics.js` | Reads and writes tactics and PVP tactics files |
 | `homSchema.js`, `merSchema.js` | Option definitions |
+| `skills.js` | Homunculus skills: related settings, numbers, built-in names |
+| `skilldata.js`, `img/skills/` | Official skill names, descriptions and icons (generated by `skilldata_sync.py`) |
+| `tactSuggest.js` | Suggested tactics rows from the monster database |
+| `mobdata.js` | Monsters (name, level, element, boss/MVP/plant/aggressive) and the maps they spawn on, from rAthena Renewal; generated by `tools/harness/rathena_sync.py` in the AzzyAI repository |
+| `i18n.js` | Language selection and lookup |
+| `i18n.strings.js` | UI text in Portuguese and Spanish |
+| `i18n.desc.pt.js`, `i18n.desc.es.js` | Option descriptions in Portuguese and Spanish |
 | `templates.js` | Default `.lua` files |
 | `azzyai.ico` | Icon (by Kami Kali) |
 
-All scripts are plain classic scripts (no modules, no build), so the page also works from `file://`.
+All scripts are plain classic scripts (no modules, no build), so the page also works from `file://`, also without a connection once Bootstrap and JSZip are in the browser cache.
 
 ## Development
 
@@ -88,4 +113,4 @@ for %f in (*.js) do node --check %f
 
 ## Credits
 
-AzzyAI by Dr. Azzy. Desktop GUI by Machiavellian and contributors. Icon by Kami Kali.
+AzzyAI by Dr. Azzy. Desktop GUI by Machiavellian and contributors. Icon by Kami Kali. Skill icons, names and descriptions from [Divine Pride](https://www.divine-pride.net). Ragnarok Online is property of Gravity Co.

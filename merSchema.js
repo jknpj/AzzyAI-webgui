@@ -140,7 +140,7 @@ window.AzzyMerSchema = [
     note: 'DefaultValue attr says Never (0)',
     description: 'Use the buff skill Blessing on owner in this situation ' + ' '.repeat(62) },
   { name: 'UseBlessingSelf', category: 'Autobuff Options', type: 'enum', enum: 'UseBlessingSelfOptions', default: 0,
-    description: 'Use the buff skill Blessing on owner in this situation ' + ' '.repeat(62) },
+    description: 'Use the buff skill Blessing on the mercenary itself in this situation ' + ' '.repeat(62) },
   { name: 'UseKyrieOwner', category: 'Autobuff Options', type: 'enum', enum: 'UseKyrieOwnerOptions', default: 1,
     note: 'DefaultValue attr says Never (0)',
     description: 'Use the buff skill Kyrie Eleison on owner in this situation Use DefensiveBuffOwnerMobbed and DefensiveBuffOwnerHP to onlyuse this skill when the owner is under attack' },

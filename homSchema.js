@@ -22,6 +22,7 @@ window.AzzyHomEnums = {
   UseBayeriSteinWandOptions: [['Never', 0], ['Idle', 1], ['Chase', -1], ['Idle_Low', -2], ['Berserk', 2], ['ASAP', 3]],
   StickyStandbyOptions: [['Disabled', 0], ['Enabled', 1], ['Enabled_Relog', 2]],
   ServerTypeOptions: [['Official', 0], ['Private', 1]],
+  BossAggroOptions: [['Tactics', 0], ['React to MVPs', 1], ['React to bosses', 2]],
   UseProvokeOwnerOptions: [['Never', 0], ['Idle', 1], ['Chase', -1], ['Idle_Low', -2], ['Berserk', 2], ['ASAP', 3]]
 };
 window.AzzyHomSchema = [
@@ -212,11 +213,11 @@ window.AzzyHomSchema = [
   { name: 'DefensiveBuffOwnerMobbed', category: 'Autobuff Options', type: 'int', default: 0, min: 0, max: 20,
     description: 'Do not use use a defensive buff (Painkiller) on the owner unlessthey have at least this many monsters attacking them, and thethe owner\'s HP as a percentage is below DefensiveBuffOwnerHP' },
   { name: 'UseBayeriAngriffModus', category: 'Autobuff Options', type: 'enum', enum: 'UseBayeriAngriffModusOptions', default: 0,
-    description: 'Use the Dieter buff Magma Flow in the following states.                                                              ' },
+    description: 'Use the Bayeri buff Angriffs Modus in the following states.' },
   { name: 'UseBayeriGoldenPherze', category: 'Autobuff Options', type: 'enum', enum: 'UseBayeriGoldenPherzeOptions', default: 0,
     description: 'Use the buff skill Golden Pherze in the following states                                                              ' },
   { name: 'UseDieterMagmaFlow', category: 'Autobuff Options', type: 'enum', enum: 'UseDieterMagmaFlowOptions', default: 0,
-    description: 'Use the buff skill Angriff Modus in the following states                                                              ' },
+    description: 'Use the Dieter buff Magma Flow in the following states.' },
   { name: 'UseDieterGraniticArmor', category: 'Autobuff Options', type: 'enum', enum: 'UseDieterGraniticArmorOptions', default: 0,
     description: 'Use the Dieter buff Granitic Armor in the following states. Be aware that this skill drains HP when it wears off.' },
   { name: 'UseDieterPyroclastic', category: 'Autobuff Options', type: 'enum', enum: 'UseDieterPyroclasticOptions', default: 0,
@@ -286,7 +287,7 @@ window.AzzyHomSchema = [
   { name: 'Berserk_Dance', category: 'Berserk Options', type: 'bool', default: false,
     description: 'Set this to true if you want your homunculus to use dance attack while in berzerk mode.' },
   { name: 'Berserk_IgnoreMinSP', category: 'Berserk Options', type: 'bool', default: false,
-    description: 'Set this to true if you want your homunculus to use dance attack while in berzerk mode.' },
+    description: 'Set this to true if you want your homunculus to ignore AttackSkillReserveSP when in berserk mode.' },
   { name: 'Berserk_ComboAlways', category: 'Berserk Options', type: 'bool', default: false,
     description: 'Enable this to use full combos while in berserk mode.                                                              ' },
   { name: 'PVPmode', category: 'PVP Options', type: 'bool', default: false,
@@ -372,7 +373,15 @@ window.AzzyHomSchema = [
   { name: 'AllowBloodlust', category: 'Autobuff Options', type: 'bool', default: false,
     description: 'Allow the inherited Amistr Blood Lust buff.' },
   { name: 'AllowSBR44', category: 'AutoSkill Options', type: 'bool', default: false,
-    description: 'Allow inherited Filir SBR44, which consumes intimacy.' }
+    description: 'Allow inherited Filir SBR44, which consumes intimacy.' },
+  { name: 'UseMobInfo', category: 'Basic Options', type: 'bool', default: true,
+    description: 'Use the monster database (MobInfo.lua: element, race, size, boss/MVP and plant of every monster) to pick skills and to treat bosses and plants. Set to false for the old behavior.' },
+  { name: 'SkillElementMinRate', category: 'AutoSkill Options', type: 'int', default: 50, min: 0, max: 200,
+    description: 'Attack skills are left out against a target whose element would cut their damage below this percent (0-200). Immune targets (0% or less) are always skipped.\n\nExample: fire skills do 90% to Water 1 monsters and 0% to Fire 2 monsters.' },
+  { name: 'PlantSkills', category: 'AutoSkill Options', type: 'bool', default: false,
+    description: 'Use skills on plants and mushrooms too. They take 1 damage from everything, so by default skills are saved for other monsters and plants don\'t count for area skills.' },
+  { name: 'BossAggro', category: 'Basic Options', type: 'enum', enum: 'BossAggroOptions', default: 1,
+    description: 'Bosses the homunculus never starts a fight with, whatever the tactics say; it still defends you and itself when they attack.\n\nTactics: the tactics decide. React to MVPs: MVPs. React to bosses: MVPs and mini-bosses.' }
 ];
 
 // Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
@@ -385,5 +394,6 @@ window.AzzyHomHgOnly = [
   'UseBayeriGlanzenSpies', 'BayeriGlanzenSpiesLevel', 'UseBayeriHeiligePferd', 'BayeriHeiligePferdLevel',
   'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEiraLightOfRegene', 'EiraLightOfRegeneLevel',
   'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
-  'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44'
+  'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44',
+  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro'
 ];
