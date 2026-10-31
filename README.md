@@ -107,6 +107,7 @@ The skills it fetches are the ones listed in `skills.js`. API answers are cached
 | `i18n.desc.pt.js`, `i18n.desc.es.js` | Option descriptions in Portuguese and Spanish |
 | `templates.js` | Default `.lua` files |
 | `azzyai.ico` | Icon (by Kami Kali) |
+| `LICENSE` | GNU General Public License v3.0 |
 
 All scripts are plain classic scripts (no modules, no build), so the page also works from `file://`, also without a connection once Bootstrap and JSZip are in the browser cache.
 
@@ -119,6 +120,10 @@ Syntax check (Windows `cmd`):
 ```
 for %f in (*.js) do node --check %f
 ```
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3.0). Third-party material keeps its own terms: Bootstrap and JSZip are loaded from their CDNs, and skill names, descriptions and icons come from Divine Pride. Ragnarok Online is property of Gravity Co.
 
 ## Credits
 
