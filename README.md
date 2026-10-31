@@ -26,6 +26,14 @@ When you open a `USER_AI` folder, the version is detected automatically: HG defi
 
 ## Usage
 
+For HG Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
+milliseconds between attack attempts counted toward the fighting-style sphere
+estimate (positive integer, default 800). It is not a skill cooldown; use shorter
+intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
+an `H_Extra.lua` override takes precedence. `AutoComboSpheres` controls the
+start of automatic combos, not each follow-up. `AutoSkillDelay=0` removes
+the extra AI margin but does not remove server cooldowns (default remains 400).
+
 Open `index.html` in a browser. A local file (`file://`) works, as does any static host.
 
 Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**

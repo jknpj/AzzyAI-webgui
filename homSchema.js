@@ -78,8 +78,8 @@ window.AzzyHomSchema = [
     description: 'If the homunculus has an anto-mob skill, the skill will be automatically used if the number of monsters in close proximity to the homunculus or owner is equal to or greater than this value.' },
   { name: 'UseSkillOnly', category: 'AutoSkill Options', type: 'enum', enum: 'UseSkillOnlyOptions', default: -1,
     description: 'If you want your homunculus to use skills while attacking and while chasing if their skill has a longer range than their normal attack, set this to Chasing. If you want it to use skills only while in melee range, set this to Attacking. If you want it to only use skills and not attack normally, set this to SkillOnly.' },
-  { name: 'AutoSkillDelay', category: 'AutoSkill Options', type: 'int', default: 400, min: 100, max: 600,
-    description: 'This value is the delay (in ms) between uses of a skill. If you are having problems with the homunculus "double casting" skills, increase this value. Otherwise, leave it be.' },
+  { name: 'AutoSkillDelay', category: 'AutoSkill Options', type: 'int', default: 400, min: 0, max: 600,
+    description: 'Extra AI delay in milliseconds; 0 removes this margin, not server cooldowns. If you are having problems with the homunculus "double casting" skills, increase this value. Otherwise, leave it be.' },
   { name: 'AoEReserveSP', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'Enable this to not use non-AoE skill attacks unless doing so would leave enough SP to cast the homun\'s AoE attack. ' },
   { name: 'AoEFixedLevel', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -89,7 +89,9 @@ window.AzzyHomSchema = [
   { name: 'AutoComboMode', category: 'AutoSkill Options', type: 'enum', enum: 'AutoComboModeOptions', default: 0,
     description: 'Set whether to use combo skills other than Sonic Claw either never, per tactics, or always regardless of tactics' },
   { name: 'AutoComboSpheres', category: 'AutoSkill Options', type: 'int', default: 10, min: 1, max: 10,
-    description: 'If AutoComboMode is enabled, combo skills may be used if the homun has at least this many spheres. Sphere counts are not exact' },
+    description: 'When automatic combos are enabled, Eleanor waits for this many spheres before starting Sonic Claw or Tinder Breaker. Follow-ups require their own sphere costs and a confirmed previous cast. With combos disabled, starters only require their normal sphere cost. Sphere counts are estimates.' },
+  { name: 'SphereTrackInterval', category: 'AutoSkill Options', type: 'int', default: 800, min: 1, max: 2147483647,
+    description: 'Advanced Eleanor option: minimum milliseconds between fighting-style attack attempts counted toward the sphere estimate. This is not the skill cooldown or the real sphere count. Use a shorter interval only for a homunculus that actually attacks faster; too short can cause refused skills. Positive integer; default 800 ms. An H_Extra.lua override takes precedence.' },
   { name: 'UseHomunSSkillChase', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'If enabled, homun S skills will be used when chasing. ' },
   { name: 'UseHomunSSkillAttack', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -376,7 +378,7 @@ window.AzzyHomSchema = [
 // Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
 // never written in Classic mode.
 window.AzzyHomHgOnly = [
-  'ServerType', 'AutoDetectServerType', 'UseDieterBlastForge', 'UseDieterTempering',
+  'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'UseDieterBlastForge', 'UseDieterTempering',
   'UseEiraTwisterCutter', 'EiraTwisterCutterLevel', 'UseEiraAbsoluteZephyr', 'EiraAbsoluteZephyrLevel',
   'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',
   'UseSeraToxinOfMandara', 'SeraToxinOfMandaraLevel', 'UseSeraNeedleStinger', 'SeraNeedleStingerLevel',

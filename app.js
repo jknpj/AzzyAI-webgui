@@ -31,7 +31,7 @@
   var S_TYPES = {
     sera: ['paralyze', 'poisonmist', 'painkiller', 'calllegion'],
     eira: ['silentbreeze', 'healownerbreeze', 'xenoslasher', 'erasercutter', 'overedboost', 'regene'],
-    eleanor: ['sonicclaw', 'silvervein', 'midnight', 'tinderbreaker', 'switchmode'],
+    eleanor: ['sonicclaw', 'silvervein', 'midnight', 'tinderbreaker', 'switchmode', 'spheretrackinterval'],
     bayeri: ['stahlhorn', 'hailege', 'goldene', 'steinwand', 'angriffs'],
     dieter: ['lavaslide', 'magmaflow', 'granitic', 'pyroclastic', 'volcanic']
   };
