@@ -234,7 +234,7 @@ window.AzzyI18nDesc.pt = {
     UseOffensiveBuff: 'Define quando o mercenário deve usar Weapon Quicken ou outros buffs ofensivos.',
     UseDefensiveBuff: 'Define quando o mercenário deve usar Guard Parrying ou outros buffs defensivos.',
     UseProvokeOwner: 'Usa a habilidade de buff Provoke no dono nos estados abaixo.',
-    UseAutoMag: 'Ative se você quiser que o seu mercenário arqueiro de nível 4 use Magnificat. Funciona como todos os outros buffs.',
+    UseAutoMag: 'Use Magnificat nos perfis de mercenário que possuem essa habilidade, incluindo Wicked Nymph e Papa Oficial/Casual. Funciona como os outros buffs do mercenário.',
     DefensiveBuffOwnerMobbed: 'Não usa buff defensivo (Kyrie) no dono, a menos que ele tenha pelo menos esta quantidade de monstros o atacando e a porcentagem de HP do dono esteja abaixo de DefensiveBuffOwnerHP.',
     UseAutoSight: 'Defina como true se você quiser que o seu mercenário arqueiro de nível 2 use Sight.',
     UseSacrificeOwner: 'Defina como true se você quiser que o mercenário use Sacrifice em você. Observe que você precisa estar a até 10 níveis de diferença do seu mercenário e que a habilidade é bugada.',

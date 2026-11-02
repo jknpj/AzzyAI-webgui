@@ -129,7 +129,7 @@ window.AzzyMerSchema = [
     note: 'C# Save() assigns M_Config.UseProvokeOwner twice (same value); harmless.',
     description: 'Use the buff skill Provoke on owner in the following states' + ' '.repeat(62) },
   { name: 'UseAutoMag', category: 'Autobuff Options', type: 'enum', enum: 'UseAutoMagOptions', default: 1,
-    description: 'Enable this if you want your level 4 archer mercenaryto use magnificat. This works like all other buffs' },
+    description: 'Use Magnificat on mercenary profiles that have the skill, including Wicked Nymph and Official/Casual Pope. This works like the other mercenary buffs.' },
   { name: 'DefensiveBuffOwnerMobbed', category: 'Autobuff Options', type: 'int', default: 0, min: 0, max: 10,
     description: 'Do not use use a defensive buff (Kyrie) on the owner unlessthey have at least this many monsters attacking them, and thethe owner\'s HP as a percentage is below DefensiveBuffOwnerHP' },
   { name: 'UseAutoSight', category: 'Autobuff Options', type: 'bool', default: false,
