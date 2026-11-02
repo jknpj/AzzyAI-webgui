@@ -103,6 +103,8 @@ window.AzzyHomSchema = [
     description: 'If enabled, homun S skills will be used when chasing. ' },
   { name: 'UseHomunSSkillAttack', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'If enabled, homun S skills will be used when attackingIt may be useful to turn this off if your homun getsinterrupted when trying to cast at short range, andyou would prefer it use caprice or moonlight then' },
+  { name: 'UseVanilCaprice', category: 'AutoSkill Options', type: 'bool', default: true,
+    description: 'Enable the inherited Vanilmirth attack skill Caprice for Vanilmirth-based homunculi.' },
   { name: 'AoEMaximizeTargets', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'If enabled, we will try to hit as many targets as possible withan AoE skill, even if that means we don\'t hit the target we werecurrently attacking' },
   { name: 'UseEiraXenoSlasher', category: 'AutoSkill Options', type: 'bool', default: true,

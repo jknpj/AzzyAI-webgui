@@ -40,6 +40,7 @@ window.AzzyI18nDesc.es = {
     AutoComboSpheres: 'Con combos automáticos activados, Eleanor espera esta cantidad de esferas antes de iniciar Sonic Claw o Tinder Breaker. Los pasos siguientes exigen su propio costo de esferas y la confirmación del lanzamiento anterior. Con combos desactivados, los iniciadores solo exigen su costo normal de esferas. El conteo de esferas es una estimación.',
     UseHomunSSkillChase: 'Si está activado, las habilidades de homúnculo S se usarán al perseguir.',
     UseHomunSSkillAttack: 'Si está activado, las habilidades de homúnculo S se usarán al atacar.\nPuede ser útil desactivarlo si tu homúnculo es interrumpido al intentar lanzar habilidades a corta distancia y prefieres que en ese caso use Caprice o Moonlight.',
+    UseVanilCaprice: 'Actívalo para usar la habilidad de ataque Caprice heredada de Vanilmirth en homúnculos con esa base.',
     AoEMaximizeTargets: 'Si está activado, intentaremos golpear a la mayor cantidad posible de objetivos con una habilidad AoE, aunque eso signifique no golpear al objetivo que estábamos atacando.',
     UseEiraXenoSlasher: 'Actívalo para usar la habilidad ofensiva de área Xeno Slasher.',
     UseEiraSilentBreeze: 'Actívalo para usar la habilidad de debuff Silent Breeze en los monstruos que tengan configuradas las tácticas correspondientes.',
