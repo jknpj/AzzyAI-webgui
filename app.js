@@ -195,7 +195,7 @@
 
   function saveFilters() {
     try {
-      localStorage.setItem(FILTER_KEY, JSON.stringify({ s: $('homSFilter').value, base: $('homBaseFilter').value }));
+      localStorage.setItem(FILTER_KEY, JSON.stringify({ scope: scope }));
     } catch (e) { /* ignore */ }
   }
 
@@ -883,6 +883,14 @@
     return null;
   }
 
+  // The selected scope decides which type-specific settings are listed: a Homunculus S shows its own
+  // skills (all base skills stay visible), a base homunculus shows only its own and hides every S skill.
+  function scopeFilters() {
+    if (!scope) return { s: 'All Types', base: 'All Types' };
+    if (S_ORDER.indexOf(scope.toLowerCase()) >= 0) return { s: scope, base: 'All Types' };
+    return { s: 'None', base: scope };
+  }
+
   function homVisible(entry) {
     if (entry.browsable === false) return false;
     if (homSkill) {
@@ -890,9 +898,9 @@
       if (!sk || sk.id !== homSkill) return false;
     }
     if (!matchesSearch(entry, homSearch, 'hom')) return false;
-    if (homOnlyModified && isDefault(entry, state.hom[entry.name])) return false;
-    var sSel = $('homSFilter').value;
-    var bSel = $('homBaseFilter').value;
+    if (homOnlyModified && isDefault(entry, homValues()[entry.name])) return false;
+    var sel = scopeFilters();
+    var sSel = sel.s, bSel = sel.base;
     var sType = classify(entry.name, S_TYPES, S_ORDER);
     var bType = sType ? null : classify(entry.name, BASE_TYPES, BASE_ORDER);
     if (sSel !== 'All Types' && sType && sType !== sSel.toLowerCase()) return false;
@@ -979,7 +987,8 @@
     var bar = $('homSkillBar');
     if (!bar || !SK) return;
     bar.innerHTML = '';
-    var sSel = $('homSFilter').value, bSel = $('homBaseFilter').value;
+    var sel0 = scopeFilters();
+    var sSel = sel0.s, bSel = sel0.base;
     var keys = SK.HOMUNCULI.filter(function (h) {
       var isS = S_ORDER.indexOf(h[0]) >= 0;
       var sel = isS ? sSel : bSel;
@@ -1545,16 +1554,18 @@
     var fromStore = !!loadStore();
     setEditing(function () { return tr(fromStore ? 'browser storage' : 'built-in defaults') + ' (' + applyHint() + ')'; });
 
-    // Homunculus filters
+    // Homunculus scope (remembered between visits)
     var filters = loadFilters();
-    if (filters.s) $('homSFilter').value = filters.s;
-    if (filters.base) $('homBaseFilter').value = filters.base;
-    if (!$('homSFilter').value) $('homSFilter').value = 'All Types';
-    if (!$('homBaseFilter').value) $('homBaseFilter').value = 'All Types';
+    if (filters.scope && TYPE_NAMES.indexOf(filters.scope) >= 0) {
+      scope = filters.scope;
+      $('homScope').value = scope;
+    }
     $('homSearch').addEventListener('input', function () { homSearch = $('homSearch').value; renderHom(); });
     $('homOnlyModified').addEventListener('change', function () { homOnlyModified = $('homOnlyModified').checked; renderHom(); });
     $('homScope').addEventListener('change', function () {
       scope = $('homScope').value;
+      homSkill = null;
+      saveFilters();
       renderHom();
     });
     $('homScopeReset').addEventListener('click', function () {
@@ -1564,17 +1575,12 @@
       changed();
       renderHom();
     });
-    $('homSFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
-    $('homBaseFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
     $('homClearFilters').addEventListener('click', function () {
       $('homSearch').value = '';
       homSearch = '';
       $('homOnlyModified').checked = false;
       homOnlyModified = false;
       homSkill = null;
-      $('homSFilter').value = 'All Types';
-      $('homBaseFilter').value = 'All Types';
-      saveFilters();
       renderHom();
     });
 
