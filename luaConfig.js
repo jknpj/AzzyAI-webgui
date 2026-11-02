@@ -142,9 +142,39 @@
     return out;
   }
 
+  // Values explicitly assigned in a per-type preset file (Types/<Name>.lua), keyed by entry name.
+  function loadPresent(text, schema) {
+    var out = {};
+    schema.forEach(function (e) {
+      var token = readToken(text || '', luaName(e));
+      if (token === null) return;
+      var v = fromToken(e, token);
+      if (v !== undefined) out[e.name] = v;
+    });
+    return out;
+  }
+
+  // Builds a type preset file holding only the overrides; keeps the old leading comment header.
+  function saveOverrides(oldText, schema, overrides, fallbackHeader) {
+    var eol = eolOf(oldText || fallbackHeader || '');
+    var header = [];
+    (oldText || fallbackHeader || '').split(/\r?\n/).some(function (line) {
+      if (/^\s*--/.test(line)) { header.push(line); return false; }
+      return true;
+    });
+    var lines = header.slice();
+    schema.forEach(function (e) {
+      if (overrides[e.name] === undefined) return;
+      lines.push(padName(luaName(e)) + '= ' + toToken(e, overrides[e.name]));
+    });
+    return lines.join(eol) + eol;
+  }
+
   window.AzzyLuaConfig = {
     load: load,
     save: save,
+    loadPresent: loadPresent,
+    saveOverrides: saveOverrides,
     sameValue: sameValue,
     defaults: defaults,
     clamp: clamp,

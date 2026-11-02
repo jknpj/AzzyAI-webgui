@@ -25,6 +25,18 @@
 
   var FILES = ['H_Config.lua', 'M_Config.lua', 'H_Tactics.lua', 'M_Tactics.lua',
     'H_PVP_Tact.lua', 'M_PVP_Tact.lua', 'H_Extra.lua', 'M_Extra.lua'];
+  // Per-homunculus-type presets: Types/<Name>.lua overrides H_Config.lua values for that type only.
+  var TYPE_NAMES = ['Lif', 'Amistr', 'Filir', 'Vanilmirth', 'Eira', 'Bayeri', 'Sera', 'Dieter', 'Eleanor'];
+  var TYPE_FILES = TYPE_NAMES.map(function (n) { return 'Types/' + n + '.lua'; });
+  var OUT_FILES = FILES.concat(TYPE_FILES);
+  var TYPE_BUILTIN = { Dieter: { AutoMobCount: 1 } };
+  function typePath(name) { return 'Types/' + name + '.lua'; }
+  function typeTemplate(name) {
+    var text = '-- ' + name + ' preset. Loaded after H_Config.lua: only options that differ for ' + name + ' are listed.\n' +
+      '-- Delete a line to use the global H_Config.lua value, or delete this file to disable the preset.\n';
+    var o = TYPE_BUILTIN[name] || {};
+    return text + Object.keys(o).map(function (k) { return L.padName(k) + '= ' + o[k] + '\n'; }).join('');
+  }
   var STORE_KEY = 'azzyai.webgui.files';
   function applyHint() {
     return window.showDirectoryPicker
@@ -156,6 +168,7 @@
   function templateFiles() {
     var files = {};
     FILES.forEach(function (f) { files[f] = TEMPLATES[f] || ''; });
+    TYPE_NAMES.forEach(function (n) { files[typePath(n)] = typeTemplate(n); });
     return files;
   }
 
@@ -165,7 +178,7 @@
       if (!raw) return null;
       var data = JSON.parse(raw);
       var files = templateFiles();
-      FILES.forEach(function (f) { if (typeof data[f] === 'string') files[f] = data[f]; });
+      OUT_FILES.forEach(function (f) { if (typeof data[f] === 'string') files[f] = data[f]; });
       return files;
     } catch (e) {
       return null;
@@ -217,6 +230,53 @@
   function loadConfigs() {
     state.hom = L.load(saved['H_Config.lua'], HOM);
     state.mer = L.load(saved['M_Config.lua'], MER);
+    state.over = {};
+    TYPE_NAMES.forEach(function (n) { state.over[n] = savedOver(n); });
+  }
+
+  // ---------- per-type presets ----------
+  var scope = '';          // '' = global H_Config.lua, otherwise a homunculus type name
+  var typeView = null;     // global values with the selected type's overrides applied
+
+  function savedOver(name) { return L.loadPresent(saved[typePath(name)], HOM_ALL); }
+
+  function mergeView(base, over) {
+    var v = {};
+    Object.keys(base).forEach(function (k) { v[k] = base[k]; });
+    Object.keys(over || {}).forEach(function (k) { v[k] = over[k]; });
+    return v;
+  }
+
+  function homValues() { return scope && typeView ? typeView : state.hom; }
+
+  function homApplied() {
+    var g = L.load(saved['H_Config.lua'], HOM);
+    return scope ? mergeView(g, savedOver(scope)) : g;
+  }
+
+  function buildTypeView() { typeView = mergeView(state.hom, state.over[scope]); }
+
+  // Keeps only the values of the edited type that differ from the global ones.
+  function syncOver() {
+    if (!scope || !typeView) return;
+    var o = {};
+    var old = state.over[scope] || {};
+    Object.keys(old).forEach(function (k) { if (!HOM.some(function (e) { return e.name === k; })) o[k] = old[k]; });
+    HOM.forEach(function (e) {
+      if (!sameValue(e, typeView[e.name], state.hom[e.name])) o[e.name] = typeView[e.name];
+    });
+    state.over[scope] = o;
+  }
+
+  function typeChanged(name) {
+    var cur = state.over[name] || {};
+    var base = savedOver(name);
+    var keys = Object.keys(cur).concat(Object.keys(base));
+    return keys.some(function (k) {
+      if ((cur[k] === undefined) !== (base[k] === undefined)) return true;
+      var entry = HOM_ALL.filter(function (e) { return e.name === k; })[0];
+      return entry ? !sameValue(entry, cur[k], base[k]) : cur[k] !== base[k];
+    });
   }
 
   function loadAll() {
@@ -230,6 +290,10 @@
   }
 
   function buildFile(name) {
+    if (name.indexOf('Types/') === 0) {
+      if (!typeChanged(name.slice(6, -4))) return saved[name] || '';
+      return L.saveOverrides(saved[name], HOM_ALL, state.over[name.slice(6, -4)], typeTemplate(name.slice(6, -4)));
+    }
     // Unchanged files are written back exactly as they were.
     if (!fileChanged(name)) return saved[name] || '';
     switch (name) {
@@ -245,7 +309,7 @@
 
   function buildAll() {
     var files = {};
-    FILES.forEach(function (f) { files[f] = buildFile(f); });
+    OUT_FILES.forEach(function (f) { files[f] = buildFile(f); });
     return files;
   }
 
@@ -262,7 +326,7 @@
     scheduleChanges();
   }
 
-  function changed() { setDirty(true); }
+  function changed() { syncOver(); setDirty(true); }
 
   // ---------- unapplied changes ----------
   function sameValue(entry, a, b) {
@@ -279,6 +343,7 @@
 
   // True when the editor's content for a file differs from the applied file.
   function fileChanged(name) {
+    if (name.indexOf('Types/') === 0) return typeChanged(name.slice(6, -4));
     switch (name) {
       case 'H_Config.lua': return countDiff(HOM, state.hom, saved[name]) > 0;
       case 'M_Config.lua': return countDiff(MER, state.mer, saved[name]) > 0;
@@ -308,6 +373,8 @@
       if (fileChanged(p[0])) out.push([p[1], tr(p[2]), null]);
     });
     if (fileChanged('H_Extra.lua') || fileChanged('M_Extra.lua')) out.push(['tab-extra', tr('Extra options'), null]);
+    var types = TYPE_NAMES.filter(typeChanged);
+    if (types.length) out.push(['tab-hom', tr('Homunculus presets') + ' (' + types.join(', ') + ')', null]);
     return out;
   }
 
@@ -407,9 +474,18 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
+  // Resolves a path like "Types/Dieter.lua" inside the chosen folder.
+  function folderFile(root, path, create) {
+    var parts = path.split('/');
+    var name = parts.pop();
+    return parts.reduce(function (p, dir) {
+      return p.then(function (h) { return h.getDirectoryHandle(dir, { create: !!create }); });
+    }, Promise.resolve(root)).then(function (d) { return d.getFileHandle(name, { create: !!create }); });
+  }
+
   function writeToFolder(files, names) {
     return Promise.all(names.map(function (f) {
-      return dirHandle.getFileHandle(f, { create: true }).then(function (h) {
+      return folderFile(dirHandle, f, true).then(function (h) {
         return h.createWritable();
       }).then(function (w) {
         return w.write(files[f]).then(function () { return w.close(); });
@@ -418,12 +494,13 @@
   }
 
   function downloadAll(files) {
+    var names = OUT_FILES.filter(function (f) { return FILES.indexOf(f) >= 0 || files[f]; });
     if (window.JSZip) {
       var zip = new window.JSZip();
-      FILES.forEach(function (f) { zip.file(f, files[f]); });
+      names.forEach(function (f) { zip.file(f, files[f]); });
       return zip.generateAsync({ type: 'blob' }).then(function (blob) { download('AzzyAI_config.zip', blob); });
     }
-    FILES.forEach(function (f) { download(f, files[f]); });
+    names.forEach(function (f) { download(f.replace('/', '_'), files[f]); });
     return Promise.resolve();
   }
 
@@ -438,7 +515,7 @@
       var files, names;
       try {
         // Only files with edits are written to the folder; the zip always has every file.
-        names = FILES.filter(fileChanged);
+        names = OUT_FILES.filter(fileChanged);
         files = buildAll();
       } catch (e) {
         return saveError(e);
@@ -467,12 +544,17 @@
   // from the folder, so Apply never overwrites settings the user did not touch.
   function rebase(map) {
     var was = {};
-    FILES.forEach(function (f) { was[f] = fileChanged(f); });
+    OUT_FILES.forEach(function (f) { was[f] = fileChanged(f); });
     var homEdits = editsOf(HOM, state.hom, saved['H_Config.lua']);
     var merEdits = editsOf(MER, state.mer, saved['M_Config.lua']);
-    FILES.forEach(function (f) { if (typeof map[f] === 'string') saved[f] = map[f]; });
+    var overEdits = {};
+    TYPE_NAMES.forEach(function (n) { if (was[typePath(n)]) overEdits[n] = state.over[n]; });
+    OUT_FILES.forEach(function (f) { if (typeof map[f] === 'string') saved[f] = map[f]; });
+    TYPE_FILES.forEach(function (f) { if (typeof map[f] !== 'string') saved[f] = ''; });
     state.hom = L.load(saved['H_Config.lua'], HOM);
     Object.keys(homEdits).forEach(function (k) { state.hom[k] = homEdits[k]; });
+    state.over = {};
+    TYPE_NAMES.forEach(function (n) { state.over[n] = overEdits[n] || savedOver(n); });
     state.mer = L.load(saved['M_Config.lua'], MER);
     Object.keys(merEdits).forEach(function (k) { state.mer[k] = merEdits[k]; });
     if (!was['H_Tactics.lua']) state.tact.hom = T.parseTactics(saved['H_Tactics.lua']);
@@ -486,8 +568,8 @@
   function pickUserAiFolder() {
     return window.showDirectoryPicker({ id: 'azzyai-user-ai', mode: 'readwrite' }).then(function (handle) {
       var map = {};
-      return Promise.all(FILES.map(function (f) {
-        return handle.getFileHandle(f).then(function (h) { return h.getFile(); })
+      return Promise.all(OUT_FILES.map(function (f) {
+        return folderFile(handle, f).then(function (h) { return h.getFile(); })
           .then(readText).then(function (t) { map[f] = t; }).catch(function () { /* missing: keep base */ });
       })).then(function () {
         rebase(map);
@@ -602,7 +684,9 @@
       return message(tr('AzzyAI Configuration'), tr('No AzzyAI configuration files ({0}) were found in that folder.', [FILES.join(', ')]));
     }
     saved = templateFiles();
+    TYPE_FILES.forEach(function (f) { saved[f] = ''; });
     found.forEach(function (f) { saved[f] = map[f]; });
+    TYPE_FILES.forEach(function (f) { if (typeof map[f] === 'string') saved[f] = map[f]; });
     try { writeStore(saved); } catch (e) { /* ignore */ }
     var detected = detectVersion(map);
     if (detected) setVersion(detected);
@@ -620,8 +704,8 @@
     if (window.showDirectoryPicker) {
       window.showDirectoryPicker({ mode: 'readwrite' }).then(function (handle) {
         var map = {};
-        return Promise.all(FILES.concat(['Defaults.lua']).map(function (f) {
-          return handle.getFileHandle(f).then(function (h) { return h.getFile(); })
+        return Promise.all(OUT_FILES.concat(['Defaults.lua']).map(function (f) {
+          return folderFile(handle, f).then(function (h) { return h.getFile(); })
             .then(readText).then(function (t) { map[f] = t; }).catch(function () { /* missing */ });
         })).then(function () {
           dirHandle = handle;
@@ -634,8 +718,10 @@
       if (!files.length) return;
       var map = {};
       return Promise.all(files.map(function (file) {
-        if (FILES.indexOf(file.name) < 0 && file.name !== 'Defaults.lua') return null;
-        return readText(file).then(function (t) { map[file.name] = t; });
+        var key = file.name;
+        if (/(^|\/)Types\/[^/]+$/.test(file.webkitRelativePath || '')) key = 'Types/' + file.name;
+        if (OUT_FILES.indexOf(key) < 0 && key !== 'Defaults.lua') return null;
+        return readText(file).then(function (t) { map[key] = t; });
       })).then(function () {
         dirHandle = null;
         adoptFiles(map, function () { return tr('folder import') + ' (' + applyHint() + ')'; });
@@ -961,7 +1047,14 @@
 
     var body = $('homGridBody');
     body.innerHTML = '';
-    var applied = L.load(saved['H_Config.lua'], HOM);
+    if (scope) buildTypeView();
+    var vals = homValues();
+    var applied = homApplied();
+    var scopeNote = $('homScopeNote');
+    if (scopeNote) {
+      scopeNote.textContent = scope ? tr('Only values that differ from the global settings are saved, in Types/{0}.lua.', [scope]) : '';
+      $('homScopeReset').classList.toggle('d-none', !scope);
+    }
     if (searching) {
       HOM_CATEGORIES.forEach(function (cat, i) {
         var items = sortByName(visible.filter(function (e) { return e.category === cat; }));
@@ -969,12 +1062,12 @@
         body.appendChild(groupRow('hom', cat, items.length, renderHom, 'homGroup-' + i));
         if (collapsed.hom[cat]) return;
         items.forEach(function (entry) {
-          body.appendChild(gridRow(entry, HOM_ENUMS, state.hom, homSelected, setHomDescription, renderHom, applied));
+          body.appendChild(gridRow(entry, HOM_ENUMS, vals, homSelected, setHomDescription, renderHom, applied));
         });
       });
     } else {
       sortByName(visible.filter(function (e) { return e.category === homCategory; })).forEach(function (entry) {
-        body.appendChild(gridRow(entry, HOM_ENUMS, state.hom, homSelected, setHomDescription, renderHom, applied));
+        body.appendChild(gridRow(entry, HOM_ENUMS, vals, homSelected, setHomDescription, renderHom, applied));
       });
     }
     if (!body.firstChild) body.appendChild(emptyRow(visible.length ? tr('No settings in this category match the filters.') : tr('No matching settings.')));
@@ -986,7 +1079,7 @@
     $('homSummary').textContent = (homCount === 0
       ? tr('No matching settings. Clear filters to see all options.')
       : tr('{0} matching settings. Select a setting for its description.', [homCount])) +
-      ' ' + tr('{0} changed from default.', [modifiedCount(HOM, state.hom)]);
+      ' ' + tr('{0} changed from default.', [modifiedCount(HOM, homValues())]);
     $('merSummary').textContent = tr('{0} matching settings.', [MER.filter(merVisible).length]) + ' ' +
       tr('{0} changed from default.', [modifiedCount(MER, state.mer)]);
   }
@@ -1460,6 +1553,17 @@
     if (!$('homBaseFilter').value) $('homBaseFilter').value = 'All Types';
     $('homSearch').addEventListener('input', function () { homSearch = $('homSearch').value; renderHom(); });
     $('homOnlyModified').addEventListener('change', function () { homOnlyModified = $('homOnlyModified').checked; renderHom(); });
+    $('homScope').addEventListener('change', function () {
+      scope = $('homScope').value;
+      renderHom();
+    });
+    $('homScopeReset').addEventListener('click', function () {
+      if (!scope) return;
+      state.over[scope] = {};
+      typeView = null;
+      changed();
+      renderHom();
+    });
     $('homSFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
     $('homBaseFilter').addEventListener('change', function () { homSkill = null; saveFilters(); renderHom(); });
     $('homClearFilters').addEventListener('click', function () {

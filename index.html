@@ -262,6 +262,16 @@
           <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-secondary" id="homClearFilters" data-i18n="Clear filters">Clear filters</button></div>
         </div>
         <div class="row g-2 align-items-center mb-2">
+          <div class="col-auto"><label for="homScope" class="col-form-label" data-i18n="Settings for:">Settings for:</label></div>
+          <div class="col-auto">
+            <select class="form-select form-select-sm" id="homScope" aria-label="Edit global settings or the overrides of one homunculus type" data-i18n-aria-label="Edit global settings or the overrides of one homunculus type">
+              <option value="" data-i18n="Global (all homunculi)">Global (all homunculi)</option><option value="Lif">Lif</option><option value="Amistr">Amistr</option><option value="Filir">Filir</option><option value="Vanilmirth">Vanilmirth</option><option value="Eira">Eira</option><option value="Bayeri">Bayeri</option><option value="Sera">Sera</option><option value="Dieter">Dieter</option><option value="Eleanor">Eleanor</option>
+            </select>
+          </div>
+          <div class="col-auto"><button type="button" class="btn btn-sm btn-outline-secondary d-none" id="homScopeReset" data-i18n="Use global values">Use global values</button></div>
+          <div class="col small text-muted" id="homScopeNote"></div>
+        </div>
+        <div class="row g-2 align-items-center mb-2">
           <div class="col-auto"><label for="homSFilter" class="col-form-label" data-i18n="Homunculus S:">Homunculus S:</label></div>
           <div class="col-auto">
             <select class="form-select form-select-sm" id="homSFilter" aria-label="Filter Homunculus S settings" data-i18n-aria-label="Filter Homunculus S settings">
