@@ -99,6 +99,10 @@ window.AzzyHomSchema = [
     description: 'When automatic combos are enabled, Eleanor waits for this many spheres before starting Sonic Claw or Tinder Breaker. Follow-ups (Silvervein Rush, Midnight Frenzy, CBC, EQC) ignore the sphere estimate and only need the previous cast to be confirmed. Official-server default: 1. With combos disabled, starters only require their normal sphere cost. Sphere counts are estimates.' },
   { name: 'SphereTrackInterval', category: 'AutoSkill Options', type: 'int', default: 800, min: 1, max: 2147483647,
     description: 'Advanced Eleanor option: minimum milliseconds between fighting-style attack attempts counted toward the sphere estimate. This is not the skill cooldown or the real sphere count. Use a shorter interval only for a homunculus that actually attacks faster; too short can cause refused skills. Positive integer; default 800 ms. An H_Extra.lua override takes precedence.' },
+  { name: 'EleanorComboGap', category: 'AutoSkill Options', type: 'int', default: 500, min: 0, max: 5000,
+    description: 'Eleanor: milliseconds to wait before sending each combo follow-up (Silvervein Rush, Midnight Frenzy, CBC, EQC) after the previous combo skill. 0 sends it immediately. Too low can cause refused skills; about 800 is safer. Default 500 ms. An H_Extra.lua override takes precedence.' },
+  { name: 'EleanorComboDance', category: 'AutoSkill Options', type: 'bool', default: true,
+    description: 'Eleanor: keep the dance attack running between combo skills, which cancels part of the attack animation and shortens chains by about 10%. Turn off (and raise EleanorComboGap to about 800) if skills get refused. Has no effect when UseDanceAttack is off. An H_Extra.lua override takes precedence.' },
   { name: 'UseHomunSSkillChase', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'If enabled, homun S skills will be used when chasing. ' },
   { name: 'UseHomunSSkillAttack', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -412,7 +416,7 @@ window.AzzyHomSchema = [
 // never written in Classic mode.
 window.AzzyHomHgOnly = [
   'CastInterruptLimit', 'CastInterruptPause', 'CastInterruptUnconfirmed',
-  'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'UseDieterBlastForge', 'UseDieterTempering',
+  'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'EleanorComboGap', 'EleanorComboDance', 'UseDieterBlastForge', 'UseDieterTempering',
   'UseEiraTwisterCutter', 'EiraTwisterCutterLevel', 'UseEiraAbsoluteZephyr', 'EiraAbsoluteZephyrLevel',
   'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',
   'UseSeraToxinOfMandara', 'SeraToxinOfMandaraLevel', 'UseSeraNeedleStinger', 'SeraNeedleStingerLevel',
