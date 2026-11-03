@@ -411,8 +411,12 @@ window.AzzyHomSchema = [
   { name: 'PlantSkills', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'Use skills on plants and mushrooms too. They take 1 damage from everything, so by default skills are saved for other monsters and plants don\'t count for area skills.' },
   { name: 'BossAggro', category: 'Basic Options', type: 'enum', enum: 'BossAggroOptions', default: 1,
-    description: 'Bosses the homunculus never starts a fight with, whatever the tactics say; it still defends you and itself when they attack.\n\nTactics: the tactics decide. React to MVPs: MVPs. React to bosses: MVPs and mini-bosses.' }
-];
+    description: 'Bosses the homunculus never starts a fight with, whatever the tactics say; it still defends you and itself when they attack.\n\nTactics: the tactics decide.     React to MVPs: MVPs. React to bosses: MVPs and mini-bosses.' },
+      { name: 'TargetPriority', category: 'Basic Options', type: 'bool', default: false,
+        description: 'Choose the next target by more than distance. Among targets with the same tactics priority: monsters attacking you or a friend first, plants last, targets your skills can hurt (element), the center of the biggest cluster when an area skill is available, then the closest.' },
+      { name: 'KiteByRange', category: 'Kiting Options', type: 'bool', default: false,
+        description: 'Kite by the monster\'s real attack range (monster database). Ranged monsters make the homunculus kite earlier and with a longer step, a monster that never chases only matters inside its range, and none is kited when its range reaches KiteBounds (there would be no way out). Melee monsters keep KiteThreshold. Needs UseMobInfo.' }
+    ];
 
 // Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
 // never written in Classic mode.
@@ -426,5 +430,5 @@ window.AzzyHomHgOnly = [
   'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEiraLightOfRegene', 'EiraLightOfRegeneLevel',
   'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
   'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44',
-  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro'
+  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro', 'TargetPriority', 'KiteByRange'
 ];
