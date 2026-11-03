@@ -103,6 +103,8 @@ window.AzzyHomSchema = [
     description: 'Eleanor: milliseconds to wait before sending each combo follow-up (Silvervein Rush, Midnight Frenzy, CBC, EQC) after the previous combo skill. 0 sends it immediately. Too low can cause refused skills; about 800 is safer. Default 500 ms. An H_Extra.lua override takes precedence.' },
   { name: 'EleanorComboDance', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'Eleanor: keep the dance attack running between combo skills, which cancels part of the attack animation and shortens chains by about 10%. Turn off (and raise EleanorComboGap to about 800) if skills get refused. Has no effect when UseDanceAttack is off. An H_Extra.lua override takes precedence.' },
+  { name: 'CommandedFightStay', category: 'Basic Options', type: 'bool', default: true,
+    description: 'Keep fighting a monster you ordered the homunculus to attack until it dies or you give another order, even if you walk away. Turn off to let it give up and return when the target leaves the move bounds or AttackTimeLimit passes. An H_Extra.lua override takes precedence.' },
   { name: 'UseHomunSSkillChase', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'If enabled, homun S skills will be used when chasing. ' },
   { name: 'UseHomunSSkillAttack', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -416,7 +418,7 @@ window.AzzyHomSchema = [
 // never written in Classic mode.
 window.AzzyHomHgOnly = [
   'CastInterruptLimit', 'CastInterruptPause', 'CastInterruptUnconfirmed',
-  'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'EleanorComboGap', 'EleanorComboDance', 'UseDieterBlastForge', 'UseDieterTempering',
+  'ServerType', 'AutoDetectServerType', 'SphereTrackInterval', 'EleanorComboGap', 'EleanorComboDance', 'CommandedFightStay', 'UseDieterBlastForge', 'UseDieterTempering',
   'UseEiraTwisterCutter', 'EiraTwisterCutterLevel', 'UseEiraAbsoluteZephyr', 'EiraAbsoluteZephyrLevel',
   'UseEleanorBlazingAndFurious', 'EleanorBlazingAndFuriousLevel', 'UseEleanorTheOneFighterRises', 'EleanorTheOneFighterRisesLevel',
   'UseSeraToxinOfMandara', 'SeraToxinOfMandaraLevel', 'UseSeraNeedleStinger', 'SeraNeedleStingerLevel',
