@@ -96,7 +96,7 @@ window.AzzyHomSchema = [
   { name: 'AutoComboMode', category: 'AutoSkill Options', type: 'enum', enum: 'AutoComboModeOptions', default: 0,
     description: 'Set whether to use combo skills other than Sonic Claw either never, per tactics, or always regardless of tactics' },
   { name: 'AutoComboSpheres', category: 'AutoSkill Options', type: 'int', default: 10, min: 1, max: 10,
-    description: 'When automatic combos are enabled, Eleanor waits for this many spheres before starting Sonic Claw or Tinder Breaker. Follow-ups require their own sphere costs and a confirmed previous cast. With combos disabled, starters only require their normal sphere cost. Sphere counts are estimates.' },
+    description: 'When automatic combos are enabled, Eleanor waits for this many spheres before starting Sonic Claw or Tinder Breaker. Follow-ups (Silvervein Rush, Midnight Frenzy, CBC, EQC) ignore the sphere estimate and only need the previous cast to be confirmed. Official-server default: 1. With combos disabled, starters only require their normal sphere cost. Sphere counts are estimates.' },
   { name: 'SphereTrackInterval', category: 'AutoSkill Options', type: 'int', default: 800, min: 1, max: 2147483647,
     description: 'Advanced Eleanor option: minimum milliseconds between fighting-style attack attempts counted toward the sphere estimate. This is not the skill cooldown or the real sphere count. Use a shorter interval only for a homunculus that actually attacks faster; too short can cause refused skills. Positive integer; default 800 ms. An H_Extra.lua override takes precedence.' },
   { name: 'UseHomunSSkillChase', category: 'AutoSkill Options', type: 'bool', default: true,

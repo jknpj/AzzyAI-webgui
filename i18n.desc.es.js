@@ -37,7 +37,7 @@ window.AzzyI18nDesc.es = {
     AoEFixedLevel: 'Actívalo para ignorar las tácticas de nivel de habilidad al usar ataques AoE.',
     AutoMobMode: 'Elige si se usan automáticamente las habilidades anti-mob y si esa decisión se basa en la cantidad de monstruos agresivos dentro del área (AoE) o en la cantidad de TODOS los monstruos, agresivos o no.',
     AutoComboMode: 'Define si se usan habilidades de combo distintas de Sonic Claw: nunca, según las tácticas, o siempre sin importar las tácticas.',
-    AutoComboSpheres: 'Con combos automáticos activados, Eleanor espera esta cantidad de esferas antes de iniciar Sonic Claw o Tinder Breaker. Los pasos siguientes exigen su propio costo de esferas y la confirmación del lanzamiento anterior. Con combos desactivados, los iniciadores solo exigen su costo normal de esferas. El conteo de esferas es una estimación.',
+    AutoComboSpheres: 'Con combos automáticos activados, Eleanor espera esta cantidad de esferas antes de iniciar Sonic Claw o Tinder Breaker. Los pasos siguientes ignoran la estimación de esferas y solo exigen la confirmación del lanzamiento anterior. Valor por defecto en el servidor oficial: 1. Con combos desactivados, los iniciadores solo exigen su costo normal de esferas. El conteo de esferas es una estimación.',
     UseHomunSSkillChase: 'Si está activado, las habilidades de homúnculo S se usarán al perseguir.',
     UseHomunSSkillAttack: 'Si está activado, las habilidades de homúnculo S se usarán al atacar.\nPuede ser útil desactivarlo si tu homúnculo es interrumpido al intentar lanzar habilidades a corta distancia y prefieres que en ese caso use Caprice o Moonlight.',
     UseVanilCaprice: 'Actívalo para usar la habilidad de ataque Caprice heredada de Vanilmirth en homúnculos con esa base.',
