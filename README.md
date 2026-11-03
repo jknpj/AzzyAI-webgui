@@ -2,6 +2,19 @@
 
 Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/AzzyAI), the Ragnarok Online homunculus and mercenary AI. It has the same features as the Windows `AzzyAIConfig.exe` GUI, but runs in any modern browser and needs no installation or build step.
 
+## Quick start
+
+Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**. You can also open `index.html` from a download (a local `file://` page works, as does any static host).
+
+1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded and your installed settings are **not** being read.
+2. Edit the settings. Use the 🌐 menu to switch between English, Português and Español.
+3. Click **Apply**:
+   - **Chrome / Edge**: the `.lua` files are written directly into the `USER_AI` folder (File System Access API). The browser asks for permission the first time.
+   - **Firefox / Safari**: these browsers cannot write to folders, so Apply downloads `AzzyAI_config.zip`. Extract it into `USER_AI`.
+4. In the game, reload the AI so it reads the new files.
+
+The last applied configuration is kept in the browser's local storage and reloaded next time. The page warns before closing if there are unapplied edits.
+
 ## Features
 
 - **Homunculus settings** (`H_Config.lua`): every option, grouped in the same categories as the desktop GUI, with search across all categories, Homunculus S / base type filters and a description for each option.
@@ -26,7 +39,7 @@ The selector at the bottom left chooses which AzzyAI the files are for:
 
 When you open a `USER_AI` folder, the version is detected automatically: HG defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of HG-only options is `AzzyHomHgOnly` in `homSchema.js`.
 
-## Usage
+## Notes on some HG options
 
 HG **AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
 **CastInterruptPause** (default 5000 ms) configure a temporary per-skill pause
@@ -44,18 +57,6 @@ intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
 an `H_Extra.lua` override takes precedence. `AutoComboSpheres` controls the
 start of automatic combos, not each follow-up. `AutoSkillDelay=0` removes
 the extra AI margin but does not remove server cooldowns (default remains 400).
-
-Open `index.html` in a browser. A local file (`file://`) works, as does any static host.
-
-Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**
-
-1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded.
-2. Edit the settings.
-3. Click **Apply**:
-   - **Chrome / Edge**: the `.lua` files are written directly into the `USER_AI` folder (File System Access API). The browser asks for permission the first time.
-   - **Firefox / Safari**: these browsers cannot write to folders, so Apply downloads `AzzyAI_config.zip`. Extract it into `USER_AI`.
-
-The last applied configuration is kept in the browser's local storage and reloaded next time. The page warns before closing if there are unapplied edits.
 
 ## Using it in an AzzyAI fork
 
