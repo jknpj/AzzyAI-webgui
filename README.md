@@ -28,20 +28,20 @@ The last applied configuration is kept in the browser's local storage and reload
 - **Three languages**: English, Português (BR) and Español (LatAm). The 🌐 menu switches the whole interface, the option descriptions, the list labels and the tactics; the choice is remembered and the first visit follows the browser language. Setting names stay in English, since they are the names in the `.lua` files.
 - **Homunculus skills**: a skill window with the icons of the selected homunculi (click one to see only its settings), a skill icon next to each setting that controls a skill, and a skill card with the official LATAM numbers at max level and the in-game description in the chosen language. Icons, official names and descriptions are a local copy (`skilldata.js`, `img/skills/`), so the page works offline and loads nothing from third-party sites except Bootstrap/JSZip.
 - **Ragnarok look** in both themes: blue title bars and framed panels like the in-game windows, in a light and a dark version (or following the system), plus a layout that works on phones.
-- Works with **AzzyAI HG** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
+- Works with the current **AzzyAI** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
 
 ## AzzyAI versions
 
 The selector at the bottom left chooses which AzzyAI the files are for:
 
-- **AzzyAI HG**: every option.
+- **AzzyAI**: every option.
 - **AzzyAI Classic**: hides the options the classic AI does not use (server type, the newer Homunculus S skills, Dieter Tempering/Blast Forge, Eira Light of Regenerate, inherited Bloodlust/SBR44) and does not write them to `H_Config.lua`.
 
-When you open a `USER_AI` folder, the version is detected automatically: HG defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of HG-only options is `AzzyHomHgOnly` in `homSchema.js`.
+When you open a `USER_AI` folder, the version is detected automatically: the current AI defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of options the classic AI lacks is `AzzyHomHgOnly` in `homSchema.js`.
 
-## Notes on some HG options
+## Notes on some newer options
 
-HG **AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
+**AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
 **CastInterruptPause** (default 5000 ms) configure a temporary per-skill pause
 after confirmed offensive cast interruptions. Successful casts reset the count;
 buffs, combos and unconfirmed refusals are excluded. This is AI selection
@@ -50,7 +50,7 @@ backoff, not a change to skill mechanics or server cooldowns.
 failures without visible casting or confirmed completion when the target is
 alive/in range and SP is sufficient; these may include server refusals.
 
-For HG Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
+For Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
 milliseconds between attack attempts counted toward the fighting-style sphere
 estimate (positive integer, default 800). It is not a skill cooldown; use shorter
 intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
