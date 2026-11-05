@@ -190,6 +190,9 @@ window.AzzyI18nStrings = {
     'Private': 'Privado',
     'React to MVPs': 'Reagir a MVPs',
     'React to bosses': 'Reagir a chefes',
+    'Automatic': 'Automático',
+    'Distrust': 'Não confiar',
+    'Trust': 'Confiar',
     'Off': 'Desligado',
     'Self': 'Si mesmo',
 
@@ -494,6 +497,9 @@ window.AzzyI18nStrings = {
     'Private': 'Privado',
     'React to MVPs': 'Reaccionar a MVPs',
     'React to bosses': 'Reaccionar a jefes',
+    'Automatic': 'Automático',
+    'Distrust': 'No confiar',
+    'Trust': 'Confiar',
     'Off': 'Desactivado',
     'Self': 'Sí mismo',
 
