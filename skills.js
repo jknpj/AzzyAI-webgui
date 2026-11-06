@@ -59,7 +59,7 @@
     s(8031, 'bayeri', 'Stahl Horn', 'Impacto Preciso', 'Cuerno de Acero', 10, [43, 70, 0, 500, 0, 0], ['stahlhorn']),
     s(8032, 'bayeri', 'Goldene Ferse', 'Fúria Iluminada', 'Talón Dorado', 5, [60, 80, 0, 1800, 0, 90000], ['goldenpherze']),
     s(8033, 'bayeri', 'Stein Wand', 'Luz Salvadora', 'Muro de Piedra', 5, [80, 120, 0, 1000, 20000, 600000], ['steinwand']),
-    s(8034, 'bayeri', 'Heilige Stange', 'Illuminatus', 'Pilar Sagrado', 10, [48, 102, 0, 1500, 0, 0], ['hailegestar', 'heiligestange']),
+    s(8034, 'bayeri', 'Heilige Stange', 'Illuminatus', 'Pilar Sagrado', 10, [48, 102, 0, 1500, 0, 0], ['hailegestar']),
     s(8035, 'bayeri', 'Angriffs Modus', 'Raiva Iluminada', 'Modo de Ataque', 5, [60, 80, 0, 1000, 0, 90000], ['angriffmodus']),
     s(8056, 'bayeri', 'Glanzen Spies', 'Glanzen Spies', 'Lanza Brillante', 10, [60, 105, 700, 0, 250, 0], ['glanzenspies']),
     s(8057, 'bayeri', 'Heilige Pferd', 'Heilige Pferd', 'Corcel Sagrado', 10, [122, 185, 300, 1000, 500, 0], ['heiligepferd']),
