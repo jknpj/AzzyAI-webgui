@@ -2,6 +2,19 @@
 
 Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/AzzyAI), the Ragnarok Online homunculus and mercenary AI. It has the same features as the Windows `AzzyAIConfig.exe` GUI, but runs in any modern browser and needs no installation or build step.
 
+## Quick start
+
+Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**. You can also open `index.html` from a download (a local `file://` page works, as does any static host).
+
+1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded and your installed settings are **not** being read.
+2. Edit the settings. Use the 🌐 menu to switch between English, Português and Español.
+3. Click **Apply**:
+   - **Chrome / Edge**: the `.lua` files are written directly into the `USER_AI` folder (File System Access API). The browser asks for permission the first time.
+   - **Firefox / Safari**: these browsers cannot write to folders, so Apply downloads `AzzyAI_config.zip`. Extract it into `USER_AI`.
+4. In the game, reload the AI so it reads the new files.
+
+The last applied configuration is kept in the browser's local storage and reloaded next time. The page warns before closing if there are unapplied edits.
+
 ## Features
 
 - **Homunculus settings** (`H_Config.lua`): every option, grouped in the same categories as the desktop GUI, with search across all categories, Homunculus S / base type filters and a description for each option.
@@ -15,20 +28,20 @@ Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/Azz
 - **Three languages**: English, Português (BR) and Español (LatAm). The 🌐 menu switches the whole interface, the option descriptions, the list labels and the tactics; the choice is remembered and the first visit follows the browser language. Setting names stay in English, since they are the names in the `.lua` files.
 - **Homunculus skills**: a skill window with the icons of the selected homunculi (click one to see only its settings), a skill icon next to each setting that controls a skill, and a skill card with the official LATAM numbers at max level and the in-game description in the chosen language. Icons, official names and descriptions are a local copy (`skilldata.js`, `img/skills/`), so the page works offline and loads nothing from third-party sites except Bootstrap/JSZip.
 - **Ragnarok look** in both themes: blue title bars and framed panels like the in-game windows, in a light and a dark version (or following the system), plus a layout that works on phones.
-- Works with **AzzyAI HG** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
+- Works with the current **AzzyAI** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
 
 ## AzzyAI versions
 
 The selector at the bottom left chooses which AzzyAI the files are for:
 
-- **AzzyAI HG**: every option.
+- **AzzyAI**: every option.
 - **AzzyAI Classic**: hides the options the classic AI does not use (server type, the newer Homunculus S skills, Dieter Tempering/Blast Forge, Eira Light of Regenerate, inherited Bloodlust/SBR44) and does not write them to `H_Config.lua`.
 
-When you open a `USER_AI` folder, the version is detected automatically: HG defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of HG-only options is `AzzyHomHgOnly` in `homSchema.js`.
+When you open a `USER_AI` folder, the version is detected automatically: the current AI defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of options the classic AI lacks is `AzzyHomHgOnly` in `homSchema.js`.
 
-## Usage
+## Notes on some newer options
 
-HG **AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
+**AutoSkill Options > CastInterruptLimit** (default 3, 0 disables) and
 **CastInterruptPause** (default 5000 ms) configure a temporary per-skill pause
 after confirmed offensive cast interruptions. Successful casts reset the count;
 buffs, combos and unconfirmed refusals are excluded. This is AI selection
@@ -37,25 +50,13 @@ backoff, not a change to skill mechanics or server cooldowns.
 failures without visible casting or confirmed completion when the target is
 alive/in range and SP is sufficient; these may include server refusals.
 
-For HG Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
+For Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
 milliseconds between attack attempts counted toward the fighting-style sphere
 estimate (positive integer, default 800). It is not a skill cooldown; use shorter
 intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
 an `H_Extra.lua` override takes precedence. `AutoComboSpheres` controls the
 start of automatic combos, not each follow-up. `AutoSkillDelay=0` removes
 the extra AI margin but does not remove server cooldowns (default remains 400).
-
-Open `index.html` in a browser. A local file (`file://`) works, as does any static host.
-
-Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**
-
-1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded.
-2. Edit the settings.
-3. Click **Apply**:
-   - **Chrome / Edge**: the `.lua` files are written directly into the `USER_AI` folder (File System Access API). The browser asks for permission the first time.
-   - **Firefox / Safari**: these browsers cannot write to folders, so Apply downloads `AzzyAI_config.zip`. Extract it into `USER_AI`.
-
-The last applied configuration is kept in the browser's local storage and reloaded next time. The page warns before closing if there are unapplied edits.
 
 ## Using it in an AzzyAI fork
 

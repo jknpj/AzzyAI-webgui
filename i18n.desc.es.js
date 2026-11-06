@@ -199,9 +199,12 @@ window.AzzyI18nDesc.es = {
     UseMobInfo: 'Usa la base de datos de monstruos (MobInfo.lua: elemento, raza, tamaño, jefe/MVP y planta de cada monstruo) para elegir habilidades y para tratar jefes y plantas. Desactívalo para volver al comportamiento anterior.',
     SkillElementMinRate: 'Las habilidades de ataque no se usan contra un objetivo cuyo elemento reduciría su daño por debajo de este porcentaje (0-200). Los objetivos inmunes (0% o menos) siempre se omiten.\n\nEjemplo: las habilidades de fuego hacen 90% a monstruos Agua 1 y 0% a monstruos Fuego 2.',
     PlantSkills: 'Usa habilidades también en plantas y hongos. Reciben 1 de daño de todo, así que por defecto las habilidades se guardan para otros monstruos y las plantas no cuentan para las habilidades de área.',
-    BossAggro: 'Jefes con los que el homúnculo nunca empieza una pelea, digan lo que digan las tácticas; igual te defiende a ti y a sí mismo cuando atacan.\n\nTácticas: deciden las tácticas. Reaccionar a MVPs: MVPs. Reaccionar a jefes: MVPs y mini-jefes.'
-  },
-  homClassic: {
+    BossAggro: 'Jefes con los que el homúnculo nunca empieza una pelea, digan lo que digan las tácticas; igual te defiende a ti y a sí mismo cuando atacan.\n\n    Tácticas: deciden las tácticas. Reaccionar a MVPs: MVPs. Reaccionar a jefes: MVPs y mini-jefes.',
+        TargetPriority: 'Elige el siguiente objetivo por algo más que la distancia. Entre objetivos con la misma prioridad de táctica: primero los monstruos que te atacan a ti o a un amigo, las plantas al final, los objetivos que tus habilidades pueden dañar (elemento), el centro del grupo más grande cuando hay una habilidad de área disponible y, por último, el más cercano.',
+        KiteByRange: 'Kitea según el alcance de ataque real del monstruo (base de datos de monstruos). Los monstruos a distancia hacen que el homúnculo kitee antes y con un paso más largo, un monstruo que nunca persigue solo importa dentro de su alcance, y ninguno se kitea cuando su alcance llega a KiteBounds (no habría escapatoria).         Los monstruos cuerpo a cuerpo mantienen KiteThreshold. Requiere UseMobInfo.',
+        TrustSkillProbe: 'Si se debe creer la respuesta del cliente a la sonda de alcance que indica qué habilidades se han aprendido. Automático: desconfía de ella en el servidor oficial y confía en los servidores privados (rAthena). No confiar / Confiar fuerzan una u otra. Con la sonda desacreditada, una habilidad se prueba aunque la sonda diga que no se ha aprendido, y nunca se reduce tras un rechazo. Un override en H_Extra.lua tiene precedencia.'
+      },
+      homClassic: {
     OldHomunType: 'El tipo base original (Lif, Amistr, Filir o Vanilmirth) de tu Homúnculo S. La IA lo usa para saber qué habilidades heredadas están disponibles. Esta opción se ignora para homúnculos que no son S.'
   },
   mer: {
