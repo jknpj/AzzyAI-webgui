@@ -2,6 +2,22 @@
 window.AzzyI18nDesc = window.AzzyI18nDesc || {};
 window.AzzyI18nDesc.es = {
   hom: {
+    SeraNeedleOfParalyzeDance: 'Baile tras Needle of Paralyze. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    SeraPoisonMistDance: 'Baile tras Poison Mist. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    SeraToxinOfMandaraDance: 'Baile tras Toxin of Mandara. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    SeraNeedleStingerDance: 'Baile tras Needle Stinger. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EiraEraserCutterDance: 'Baile tras Eraser Cutter. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EiraXenoSlasherDance: 'Baile tras Xeno Slasher. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EiraTwisterCutterDance: 'Baile tras Twister Cutter. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EiraAbsoluteZephyrDance: 'Baile tras Absolute Zephyr. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    BayeriStahlHornDance: 'Baile tras Stahl Horn. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    BayeriHeiligeStangeDance: 'Baile tras Heilige Stange. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    BayeriGlanzenSpiesDance: 'Baile tras Glanzen Spies. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    BayeriHeiligePferdDance: 'Baile tras Heilige Pferd. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    DieterLavaSlideDance: 'Baile tras Lava Slide. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    DieterBlastForgeDance: 'Baile tras Blast Forge. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EleanorBlazingAndFuriousDance: 'Baile tras Blazing and Furious, separado de EleanorComboDance. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
+    EleanorTheOneFighterRisesDance: 'Baile tras The One Fighter Rises, separado de EleanorComboDance. Requiere UseDanceAttack y alcance de ataque normal; no activa la habilidad ni reduce cast/cooldown. SkillAnimationDance en H_Extra.lua tiene prioridad.',
     CastInterruptUnconfirmed: 'Contar también fallos ofensivos sin lanzamiento visible o finalización confirmada, con objetivo vivo y en alcance y SP suficiente. Puede incluir rechazos del servidor. Usa el mismo límite y pausa. Desactivado por defecto; H_Extra.lua tiene prioridad.',
     CastInterruptLimit: 'Interrupciones confirmadas de lanzamiento ofensivo antes de pausar temporalmente esa habilidad. Predeterminado: 3. 0 desactiva. Un lanzamiento completado reinicia el contador. Buffs, combos y rechazos sin interrupción confirmada no cuentan.',
     CastInterruptPause: 'Milisegundos para omitir la habilidad después de CastInterruptLimit interrupciones confirmadas. Predeterminado: 5000. Otras habilidades utilizables o ataques normales siguen disponibles. Valor positivo; no cambia el cooldown del servidor.',

@@ -2,6 +2,22 @@
 window.AzzyI18nDesc = window.AzzyI18nDesc || {};
 window.AzzyI18nDesc.pt = {
   hom: {
+    SeraNeedleOfParalyzeDance: 'Dança após Needle of Paralyze. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    SeraPoisonMistDance: 'Dança após Poison Mist. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    SeraToxinOfMandaraDance: 'Dança após Toxin of Mandara. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    SeraNeedleStingerDance: 'Dança após Needle Stinger. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EiraEraserCutterDance: 'Dança após Eraser Cutter. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EiraXenoSlasherDance: 'Dança após Xeno Slasher. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EiraTwisterCutterDance: 'Dança após Twister Cutter. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EiraAbsoluteZephyrDance: 'Dança após Absolute Zephyr. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    BayeriStahlHornDance: 'Dança após Stahl Horn. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    BayeriHeiligeStangeDance: 'Dança após Heilige Stange. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    BayeriGlanzenSpiesDance: 'Dança após Glanzen Spies. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    BayeriHeiligePferdDance: 'Dança após Heilige Pferd. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    DieterLavaSlideDance: 'Dança após Lava Slide. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    DieterBlastForgeDance: 'Dança após Blast Forge. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EleanorBlazingAndFuriousDance: 'Dança após Blazing and Furious, separada de EleanorComboDance. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
+    EleanorTheOneFighterRisesDance: 'Dança após The One Fighter Rises, separada de EleanorComboDance. Exige UseDanceAttack e alcance de ataque normal; não ativa a skill nem reduz cast/cooldown. SkillAnimationDance em H_Extra.lua tem prioridade.',
     CastInterruptUnconfirmed: 'Contar também falhas ofensivas sem conjuração visível ou conclusão confirmada, com alvo vivo e no alcance e SP suficiente. Pode incluir recusas do servidor. Usa o mesmo limite e pausa. Desligado por padrão; H_Extra.lua tem prioridade.',
     CastInterruptLimit: 'Interrupções confirmadas de conjuração ofensiva antes de pausar temporariamente aquela habilidade. Padrão: 3. 0 desativa. Um cast concluído zera o contador. Buffs, combos e recusas sem confirmação de interrupção não contam.',
     CastInterruptPause: 'Tempo em milissegundos para ignorar a habilidade após CastInterruptLimit interrupções confirmadas. Padrão: 5000. Outras habilidades utilizáveis ou ataques normais continuam disponíveis. Valor positivo; não altera o cooldown do servidor.',
