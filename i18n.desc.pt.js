@@ -60,7 +60,7 @@ window.AzzyI18nDesc.pt = {
     UseSeraPoisonMist: 'Ative para habilitar o uso de Névoa Venenosa. Para definir se Névoa Venenosa será conjurada nos monstros como ataque em área (AoE) ou aos pés do dono, veja PoisonMistMode.',
     SeraPoisonMistLevel: 'Usa este nível de Névoa Venenosa. Substituído pelas táticas de habilidade, a menos que MobSkillFixedLevel esteja ativado.',
     UseEleanorSonicClaw: 'Ative para usar a habilidade de ataque Garra Supersônica.',
-    EleanorDoNotSwitchMode: 'Se for true, o homúnculo nunca vai usar Estilo de Luta automaticamente.',
+    EleanorDoNotSwitchMode: 'Se for true, o homúnculo nunca vai usar Estilo de Luta automaticamente: ela mantém o estilo escolhido, mesmo no estilo de agarrar sem esferas e sem ninguém batendo nela.',
     EleanorSonicClawLevel: 'Usa este nível de Garra Supersônica. Substituído pelas táticas de habilidade.',
     EleanorSilverveinLevel: 'Usa este nível de Rastro Brilhante. Substituído pelas táticas de habilidade.',
     EleanorMidnightLevel: 'Usa este nível de Delírio Noturno. Substituído pelas táticas de habilidade.',

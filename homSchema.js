@@ -146,7 +146,7 @@ window.AzzyHomSchema = [
   { name: 'UseEleanorSonicClaw', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'Enable this to use the attack skill Sonic Claw.                                                              ' },
   { name: 'EleanorDoNotSwitchMode', category: 'AutoSkill Options', type: 'bool', default: false,
-    description: 'If this is true, the homun will never automatically use style change.                                                              ' },
+    description: 'If this is true, the homun will never automatically use style change: she keeps the style you chose, even in grappling style without spheres while nothing hits her.                                                              ' },
   { name: 'EleanorSonicClawLevel', category: 'AutoSkill Options', type: 'int', default: 5, min: 1, max: 5,
     description: 'Use this level of Sonic Claw. Overridden by skill tactics.                                                              ' },
   { name: 'EleanorSilverveinLevel', category: 'AutoSkill Options', type: 'int', default: 5, min: 1, max: 10,

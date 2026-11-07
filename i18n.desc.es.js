@@ -60,7 +60,7 @@ window.AzzyI18nDesc.es = {
     UseSeraPoisonMist: 'Actívalo para habilitar el uso de Neblina Venenosa. Para controlar si Neblina Venenosa se lanza sobre los monstruos como ataque de área o a los pies de su dueño, consulta PoisonMistMode.',
     SeraPoisonMistLevel: 'Usa este nivel de Neblina Venenosa. Las tácticas de habilidad lo reemplazan, a menos que MobSkillFixedLevel esté activado.',
     UseEleanorSonicClaw: 'Actívalo para usar la habilidad de ataque Garra Sónica.',
-    EleanorDoNotSwitchMode: 'Si está en true, el homúnculo nunca usará automáticamente Cambio de Estilo.',
+    EleanorDoNotSwitchMode: 'Si está en true, el homúnculo nunca usará automáticamente Cambio de Estilo: mantiene el estilo elegido, incluso en estilo de agarre sin esferas y sin que nadie la golpee.',
     EleanorSonicClawLevel: 'Usa este nivel de Garra Sónica. Las tácticas de habilidad lo reemplazan.',
     EleanorSilverveinLevel: 'Usa este nivel de Ráfaga Trepadora. Las tácticas de habilidad lo reemplazan.',
     EleanorMidnightLevel: 'Usa este nivel de Frenesí de Medianoche. Las tácticas de habilidad lo reemplazan.',
