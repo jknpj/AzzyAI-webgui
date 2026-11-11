@@ -1,0 +1,13 @@
+# Normalize line endings: LF inside the repository, native in the working tree.
+# Without this, saving a file on Windows (CRLF) makes dozens of files look modified
+# in this repository and in the parent AzzyAI checkout.
+* text=auto
+
+# Binary assets: never convert, never diff as text
+*.png binary
+*.ico binary
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.bmp binary
+*.webp binary
