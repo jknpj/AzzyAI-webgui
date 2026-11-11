@@ -421,7 +421,7 @@ window.AzzyHomSchema = [
     description: 'Whether to believe the client\'s answer to the skill-range probe that tells which skills are learned. Automatic: distrust it on the official server and trust it on private servers (rAthena). Distrust / Trust force either. Distrusted, a skill is tried even when the probe says it is not learned, and never lowered after a refusal. An H_Extra.lua override takes precedence.' }
 ];
 
-// Options the classic AzzyAI (master branch, GUI 1.56) does not know; hidden and
+// Options the classic AzzyAI (classic branch, GUI 1.56) does not know; hidden and
 // never written in Classic mode.
 window.AzzyHomHgOnly = [
   'CastInterruptLimit', 'CastInterruptPause', 'CastInterruptUnconfirmed',

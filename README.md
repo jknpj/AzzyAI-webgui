@@ -28,7 +28,7 @@ The last applied configuration is kept in the browser's local storage and reload
 - **Three languages**: English, Português (BR) and Español (LatAm). The 🌐 menu switches the whole interface, the option descriptions, the list labels and the tactics; the choice is remembered and the first visit follows the browser language. Setting names stay in English, since they are the names in the `.lua` files.
 - **Homunculus skills**: a skill window with the icons of the selected homunculi (click one to see only its settings), a skill icon next to each setting that controls a skill, and a skill card with the official LATAM numbers at max level and the in-game description in the chosen language. Icons, official names and descriptions are a local copy (`skilldata.js`, `img/skills/`), so the page works offline and loads nothing from third-party sites except Bootstrap/JSZip.
 - **Ragnarok look** in both themes: blue title bars and framed panels like the in-game windows, in a light and a dark version (or following the system), plus a layout that works on phones.
-- Works with the current **AzzyAI** and with the **classic AzzyAI** (master branch, config GUI 1.56). See below.
+- Works with the current **AzzyAI** and with the **classic AzzyAI** (classic branch, config GUI 1.56). See below.
 
 ## AzzyAI versions
 
