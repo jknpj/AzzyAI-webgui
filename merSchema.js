@@ -115,8 +115,8 @@ window.AzzyMerSchema = [
     description: 'If clever-chase is used, it will delay movement if it expectsan sp regen tick within this many milliseconds' },
   { name: 'StationaryMoveBounds', category: 'Walk/Follow Options', type: 'int', default: 12, min: 1, max: 15,
     description: 'This is the farthest from the owner that the merc will be allowed to get before dropping all targets and moving back to the owner. This value is used while the owner is NOT moving (see also MobileMoveBounds) To control aggro range of merc, use the AggroDist options, not MoveBounds. To set distance from owner that merc should return to after killing use FollowStayBack, not MoveBounds. ' },
-  { name: 'MobileMoveBounds', category: 'Walk/Follow Options', type: 'int', default: 5, min: 1, max: 15,
-    description: 'This is the farthest from the owner that the merc will be allowed to get before dropping all targets and moving back to the owner. This value is used while the owner IS moving (see also StationaryMoveBounds) To control aggro range of merc, use the AggroDist options, not MoveBounds. This should probably be lower than StationaryMoveBounds to help keep merc from being left behind.' },
+  { name: 'MobileMoveBounds', category: 'Walk/Follow Options', type: 'int', default: 14, min: 1, max: 15,
+    description: 'This is the farthest from the owner that the merc will be allowed to get before dropping all targets and moving back to the owner. This value is used while the owner IS moving (see also StationaryMoveBounds) To control aggro range of merc, use the AggroDist options, not MoveBounds. It matches StationaryMoveBounds by default; lower it if the mercenary gets left behind while you walk.' },
 
   // Autobuff Options
   { name: 'UseOffensiveBuff', category: 'Autobuff Options', type: 'enum', enum: 'UseOffensiveBuffOptions', default: 0,
