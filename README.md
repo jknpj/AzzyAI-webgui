@@ -1,6 +1,6 @@
 # AzzyAI Web Configuration
 
-Browser-based configuration tool for [AzzyAI](https://github.com/SpenceKonde/AzzyAI), the Ragnarok Online homunculus and mercenary AI. It has the same features as the Windows `AzzyAIConfig.exe` GUI, but runs in any modern browser and needs no installation or build step.
+Browser-based configuration tool for [AzzyAI](https://github.com/jknpj/AzzyAI), the Ragnarok Online homunculus and mercenary AI. It has the same features as the Windows `AzzyAIConfig.exe` GUI, but runs in any modern browser and needs no installation or build step.
 
 ## Quick start
 
@@ -56,7 +56,8 @@ estimate (positive integer, default 800). It is not a skill cooldown; use shorte
 intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
 an `H_Extra.lua` override takes precedence. `AutoComboSpheres` controls the
 start of automatic combos, not each follow-up. `AutoSkillDelay=0` removes
-the extra AI margin but does not remove server cooldowns (default remains 400).
+the extra AI margin but does not remove server cooldowns (the shipped
+`H_Config.lua` uses 200, the built-in default and `M_Config.lua` use 400).
 
 ## Using it in an AzzyAI fork
 
@@ -129,3 +130,5 @@ This project is licensed under the [GNU General Public License v3.0](LICENSE) (G
 ## Credits
 
 AzzyAI by Dr. Azzy. Desktop GUI by Machiavellian and contributors. Icon by Kami Kali. Skill icons, names and descriptions from [Divine Pride](https://www.divine-pride.net). Ragnarok Online is property of Gravity Co.
+
+This page is part of the community continuation at [jknpj/AzzyAI](https://github.com/jknpj/AzzyAI): the AI, the manuals and this tool ship together in each release ZIP.
