@@ -1494,6 +1494,46 @@
     });
   }
 
+  // When the page is served by tools/azzy-gui (not from GitHub Pages) the host can update the
+  // local install: /api/version advertises it and /api/update does the work.
+  function hostTools() {
+    if (!window.fetch) return;
+    fetch('api/version', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (info) {
+        if (!info || !info.update) return;
+        var row = document.getElementById('menuUpdateRow');
+        if (row) row.style.display = '';
+        bindMenu('menuUpdate', function () { runUpdate(); });
+      })
+      .catch(function () { /* served from GitHub Pages or file://: no host */ });
+  }
+
+  function runUpdate() {
+    dialog(tr('Update AI from GitHub...'),
+      tr('Download the latest AI from GitHub and apply it here? Files you edited (H_Config.lua, tactics, extra, A_Friends) are kept and the replaced ones are copied to backup/.'),
+      [[tr('Update'), 'update', 'btn-primary'], [tr('Cancel'), 'cancel']])
+      .then(function (choice) {
+        if (choice !== 'update') return;
+        message(tr('Update'), tr('Downloading and applying... the page may look frozen for a moment.'));
+        fetch('api/update', { method: 'POST' })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+          .then(function (result) {
+            if (!result.ok || result.body.error) {
+              return message(tr('Update failed'), String(result.body.error || 'unknown error'));
+            }
+            var b = result.body;
+            var text = tr('Updated {0}, added {1}, kept {2}.', [b.updated, b.added, b.kept]);
+            if (b.staged && b.staged.length) {
+              text += '\n' + tr('Close this program and start it again to use the new {0}.', [b.staged.join(', ')]);
+            }
+            if (b.backup) text += '\n' + tr('Backup of the replaced files: {0}', [b.backup]);
+            return message(tr('Update finished'), text).then(function () { window.location.reload(); });
+          })
+          .catch(function (e) { message(tr('Update failed'), String(e)); });
+      });
+  }
+
   function bindMenu(id, fn) {
     var e = $(id);
     if (!e) return;
@@ -1617,6 +1657,7 @@
     bindMenu('menuExit', quit);
     bindMenu('menuApply', apply);
     bindMenu('menuRevert', revert);
+    hostTools();
     bindMenu('menuDocs', openDocumentation);
     bindMenu('menuReport', function () {
       if (window.AzzyReport) window.AzzyReport.run(window.AzzyUI);
