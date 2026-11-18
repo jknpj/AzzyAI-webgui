@@ -1618,6 +1618,9 @@
     bindMenu('menuApply', apply);
     bindMenu('menuRevert', revert);
     bindMenu('menuDocs', openDocumentation);
+    bindMenu('menuReport', function () {
+      if (window.AzzyReport) window.AzzyReport.run(window.AzzyUI);
+    });
     bindMenu('menuAbout', function () { message(tr('About'), aboutText()); });
     $('btnApply').addEventListener('click', apply);
     $('btnQuit').addEventListener('click', quit);
@@ -1653,6 +1656,9 @@
     setMerDescription(null);
     setDirty(false);
   }
+
+  // Used by report.js: the same queued modal and the same download helper as the rest of the page.
+  window.AzzyUI = { dialog: dialog, message: message, download: download };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
