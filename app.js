@@ -520,7 +520,10 @@
       } catch (e) {
         return saveError(e);
       }
-      return finishApply(target === 'folder' ? writeToFolder(files, names) : downloadAll(files), files);
+      var write;
+      if (target === 'host') write = hostSave(names);
+      else write = target === 'folder' ? writeToFolder(files, names) : downloadAll(files);
+      return finishApply(write, files);
     }).catch(function (e) {
       if (e && e.name === 'AbortError') return false;
       return saveError(e);
@@ -582,6 +585,7 @@
 
   // Resolves to 'folder', 'zip' or 'cancel'.
   function chooseTarget() {
+    if (hostFiles) return Promise.resolve('host');
     if (dirHandle) return Promise.resolve('folder');
     if (!window.showDirectoryPicker) return Promise.resolve('zip');
     return dialog(tr('Apply Settings'),
@@ -594,7 +598,9 @@
   function finishApply(out, files) {
     return out.then(function () {
       saved = files;
-      try { writeStore(saved); } catch (e) { /* browser storage full: files were still written */ }
+      if (!hostFiles) {
+        try { writeStore(saved); } catch (e) { /* browser storage full: files were still written */ }
+      }
       loadAll();
       renderAll();
       setDirty(false);
@@ -603,6 +609,9 @@
   }
 
   function revert() {
+    if (hostFiles) {
+      return hostLoad().catch(function (e) { return message(tr('Error'), String(e.message || e)); });
+    }
     loadConfigs();
     renderHom();
     renderMer();
@@ -1496,15 +1505,77 @@
 
   // When the page is served by tools/azzy-gui (not from GitHub Pages) the host can update the
   // local install: /api/version advertises it and /api/update does the work.
+  // ---------- host mode (tools/azzy-gui) ----------
+  // Served from the local host the page reads and writes USER_AI through /api/*, so there is no
+  // folder picker and no copy in localStorage: the files on disk are the only truth.
+  var host = null;      // { token } when the page is hosted, null otherwise
+  var hostFiles = false;
+
+  function hostToken() {
+    var meta = document.querySelector('meta[name="azzy-host-token"]');
+    if (meta) return meta.getAttribute('content');
+    var m = /[?&]t=([^&]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  function hostApi(path, options) {
+    var opts = options || {};
+    opts.headers = Object.assign({ 'X-Azzy-Token': host.token }, opts.headers || {});
+    opts.credentials = 'omit';
+    return fetch(path, opts).then(function (r) {
+      return r.json().then(function (body) {
+        if (!r.ok || body.error) throw new Error(body.error || ('HTTP ' + r.status));
+        return body;
+      });
+    });
+  }
+
+  function hostLoad() {
+    return hostApi('api/files').then(function (body) {
+      rebase(body.files || {});
+      setDirty(false);
+      setEditing(function () { return 'USER_AI (' + tr('Apply writes the .lua files directly to this folder') + ')'; });
+      return true;
+    });
+  }
+
+  function hostSave(names) {
+    var files = buildAll();
+    var chain = Promise.resolve();
+    names.forEach(function (name) {
+      chain = chain.then(function () {
+        return hostApi('api/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: name, content: files[name] })
+        });
+      });
+    });
+    return chain;
+  }
+
   function hostTools() {
     if (!window.fetch) return;
     fetch('api/version', { headers: { Accept: 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (info) {
-        if (!info || !info.update) return;
-        var row = document.getElementById('menuUpdateRow');
-        if (row) row.style.display = '';
-        bindMenu('menuUpdate', function () { runUpdate(); });
+        if (!info) return;
+        if (info.update) {
+          var row = document.getElementById('menuUpdateRow');
+          if (row) row.style.display = '';
+          bindMenu('menuUpdate', function () { runUpdate(); });
+        }
+        var token = hostToken();
+        if (!info.files || !token) return;
+        host = { token: token };
+        hostFiles = true;
+        return hostLoad().then(function () {
+          // the host owns the folder: hide the picker, keep the export
+          ['btnOpenFolder', 'menuOpenFolder'].forEach(function (id) {
+            var e = document.getElementById(id);
+            if (e) e.style.display = 'none';
+          });
+        });
       })
       .catch(function () { /* served from GitHub Pages or file://: no host */ });
   }
