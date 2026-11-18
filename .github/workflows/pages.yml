@@ -13,6 +13,7 @@ jobs:
   check:
     name: node --check
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,20 +26,32 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       pages: write
       id-token: write
+    # a deployment is not safe to cancel halfway: the run ends red and Pages can be left without
+    # the new site, so a newer push waits for the running deployment instead of killing it
     concurrency:
       group: pages
-      cancel-in-progress: true
+      cancel-in-progress: false
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.retry.outputs.page_url || steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
-      - id: deployment
+      # Pages answers "Deployment failed, try again later" every now and then for a commit that is
+      # fine (run 35 on 6fb3261). A second attempt in the same run covers that; the retry has no
+      # continue-on-error, so a real failure still turns the job red.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Deploy to GitHub Pages (retry)
+        id: retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
