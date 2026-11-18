@@ -523,7 +523,7 @@
       var write;
       if (target === 'host') write = hostSave(names);
       else write = target === 'folder' ? writeToFolder(files, names) : downloadAll(files);
-      return finishApply(write, files);
+      return finishApply(write, files, names);
     }).catch(function (e) {
       if (e && e.name === 'AbortError') return false;
       return saveError(e);
@@ -595,7 +595,16 @@
     ).then(function (r) { return r === 'folder' ? pickUserAiFolder() : r; });
   }
 
-  function finishApply(out, files) {
+  function toast(text) {
+    var e = el('div', { class: 'azzy-toast', role: 'status', text: text });
+    document.body.appendChild(e);
+    setTimeout(function () {
+      e.classList.add('azzy-toast-out');
+      setTimeout(function () { if (e.parentNode) e.parentNode.removeChild(e); }, 400);
+    }, 5000);
+  }
+
+  function finishApply(out, files, names) {
     return out.then(function () {
       saved = files;
       if (!hostFiles) {
@@ -604,6 +613,10 @@
       loadAll();
       renderAll();
       setDirty(false);
+      var written = (names && names.length) ? names.join(', ') : tr('no changes');
+      toast(hostFiles
+        ? tr('Saved to USER_AI: {0}', [written])
+        : tr('Saved: {0}', [written]));
       return true;
     }).catch(saveError);
   }
