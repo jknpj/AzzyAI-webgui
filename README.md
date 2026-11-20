@@ -82,6 +82,8 @@ UI text is written in English in the code and translated through `tr('English te
 
 ## Skill data
 
+`data/` (see below) is generated from these files by `tools/dump-data.js` and consumed by the native desktop app.
+
 `skilldata.js` (official names and in-game descriptions) and `img/skills/<id>.png` are generated from the [Divine Pride API](https://www.divine-pride.net/tools/api-doc) by `skilldata_sync.py`: English from the iRO client, Portuguese from the LATAM client. Divine Pride has no Spanish LATAM text (the LATAM server always answers in Portuguese), so in Spanish the page shows the Spanish names from `skills.js` and the English in-game descriptions. It needs a free API key from your Divine Pride profile and only the Python standard library:
 
 ```
