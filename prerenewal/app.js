@@ -27,6 +27,8 @@
     'H_PVP_Tact.lua', 'M_PVP_Tact.lua', 'H_Extra.lua', 'M_Extra.lua'];
   // Per-homunculus-type presets: Types/<Name>.lua overrides H_Config.lua values for that type only.
   var TYPE_NAMES = ['Lif', 'Amistr', 'Filir', 'Vanilmirth'];
+  // Per-type built-in overrides (none in this build: the four base presets ship empty).
+  var TYPE_BUILTIN = {};
   var TYPE_FILES = TYPE_NAMES.map(function (n) { return 'Types/' + n + '.lua'; });
   var OUT_FILES = FILES.concat(TYPE_FILES);
   function typePath(name) { return 'Types/' + name + '.lua'; }
