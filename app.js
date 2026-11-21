@@ -894,8 +894,13 @@
   function homVisible(entry) {
     if (entry.browsable === false) return false;
     if (homSkill) {
-      var sk = SK && SK.forSetting(entry.name);
-      if (!sk || sk.id !== homSkill) return false;
+      var names = SK && SK.settingsOf ? SK.settingsOf(homSkill) : [];
+      if (names.length) {
+        if (names.indexOf(entry.name) < 0) return false;
+      } else if (skillHasSetting(homSkill)) {
+        var sk = SK && SK.forSetting(entry.name);
+        if (!sk || sk.id !== homSkill) return false;
+      }
     }
     if (!matchesSearch(entry, homSearch, 'hom')) return false;
     if (homOnlyModified && isDefault(entry, homValues()[entry.name])) return false;
@@ -995,10 +1000,9 @@
       return sel === 'All Types' || sel.toLowerCase() === h[0];
     });
     keys.forEach(function (h) {
-      // only skills that have settings can filter the grid
-      var skills = SK.ofHomunculus(h[0]).filter(function (k) {
-        return HOM.some(function (e) { var s = SK.forSetting(e.name); return s && s.id === k.id; });
-      });
+      // every skill of the type: the card (name, numbers, description and icon) is
+      // worth browsing even when the skill has no setting of its own
+      var skills = SK.ofHomunculus(h[0]);
       if (!skills.length) return;
       var group = el('div', { class: 'skill-group' }, [el('span', { class: 'skill-group-name', text: h[1] })]);
       skills.forEach(function (k) {
@@ -1020,6 +1024,15 @@
         title: tr('Show all settings'), onclick: function () { setHomSkill(null); }
       }, [SK.name(cur, curLang()) + ' \u2715']));
     }
+  }
+
+  // True when at least one setting is linked to this skill (skills.json match).
+  function skillHasSetting(id) {
+    for (var i = 0; i < HOM.length; i++) {
+      var s = SK && SK.forSetting(HOM[i].name);
+      if (s && s.id === id) return true;
+    }
+    return false;
   }
 
   function setHomSkill(id) {
