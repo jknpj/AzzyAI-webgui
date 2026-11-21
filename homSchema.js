@@ -113,6 +113,10 @@ window.AzzyHomSchema = [
     description: 'If enabled, homun S skills will be used when attackingIt may be useful to turn this off if your homun getsinterrupted when trying to cast at short range, andyou would prefer it use caprice or moonlight then' },
   { name: 'UseVanilCaprice', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'Enable the inherited Vanilmirth attack skill Caprice for Vanilmirth-based homunculi.' },
+  { name: 'UseFilirMoon', category: 'AutoSkill Options', type: 'bool', default: true,
+    description: 'Filir attacks with Moonlight. Off = normal attacks only.' },
+  { name: 'UseVanilSelfDestruct', category: 'AutoSkill Options', type: 'bool', default: false,
+    description: 'Vanilmirth may use Self Destruct, which damages a 9x9 area and kills the homunculus. Off by default.' },
   { name: 'AoEMaximizeTargets', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'If enabled, we will try to hit as many targets as possible withan AoE skill, even if that means we don\'t hit the target we werecurrently attacking' },
   { name: 'UseEiraXenoSlasher', category: 'AutoSkill Options', type: 'bool', default: true,
@@ -437,5 +441,6 @@ window.AzzyHomHgOnly = [
   'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
   'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44',
   'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro', 'TargetPriority', 'KiteByRange', 'TrustSkillProbe',
-  'SkillLevelProbing'
+  'SkillLevelProbing',
+  'UseFilirMoon', 'UseVanilSelfDestruct'
 ];

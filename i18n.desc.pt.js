@@ -44,6 +44,8 @@ window.AzzyI18nDesc.pt = {
     UseHomunSSkillChase: 'Se ativado, as habilidades de Homúnculo S serão usadas durante a perseguição.',
     UseHomunSSkillAttack: 'Se ativado, as habilidades de Homúnculo S serão usadas ao atacar. Pode ser útil desativar isto se o seu homúnculo for interrompido ao tentar conjurar a curta distância e você preferir que ele use Capricho ou Pica-Pau nesse caso.',
     UseVanilCaprice: 'Ative para usar a habilidade de ataque Capricho herdada do Vanilmirth em homúnculos com essa base.',
+    UseFilirMoon: 'O Filir ataca com Moonlight. Desligado, só ataca normalmente.',
+    UseVanilSelfDestruct: 'O Vanilmirth pode usar Self Destruct: dano em área 9x9, mas mata o homúnculo. Desligado por padrão.',
     AoEMaximizeTargets: 'Se ativado, a IA tenta atingir o máximo possível de alvos com uma habilidade em área (AoE), mesmo que isso signifique não atingir o alvo que estava sendo atacado.',
     UseEiraXenoSlasher: 'Ative para usar a habilidade ofensiva em área Onda Supersônica.',
     UseEiraSilentBreeze: 'Ative para usar a habilidade de debuff Brisa da Calmaria nos monstros que tenham as táticas apropriadas configuradas.',
