@@ -992,10 +992,9 @@
       return sel === 'All Types' || sel.toLowerCase() === h[0];
     });
     keys.forEach(function (h) {
-      // only skills that have settings can filter the grid
-      var skills = SK.ofHomunculus(h[0]).filter(function (k) {
-        return HOM.some(function (e) { var s = SK.forSetting(e.name); return s && s.id === k.id; });
-      });
+      // every skill of the type: some have no setting of their own, but their card
+      // (name, numbers, description and icon) is still worth browsing
+      var skills = SK.ofHomunculus(h[0]);
       if (!skills.length) return;
       var group = el('div', { class: 'skill-group' }, [el('span', { class: 'skill-group-name', text: h[1] })]);
       skills.forEach(function (k) {
