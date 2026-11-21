@@ -4,7 +4,7 @@ Browser-based configuration tool for [AzzyAI](https://github.com/jknpj/AzzyAI), 
 
 ## Quick start
 
-Hosted version: **https://jknpj.github.io/AzzyAI-webgui/**. You can also open `index.html` from a download (a local `file://` page works, as does any static host).
+Hosted version: **https://jknpj.github.io/AzzyAI-webgui/** (Renewal). The Pre-Renewal build has its own page: **https://jknpj.github.io/AzzyAI-webgui/prerenewal/**. You can also open `index.html` from a download (a local `file://` page works, as does any static host).
 
 1. **File > Open USER_AI folder** and select your client's `AI\USER_AI` folder. Without a folder, the defaults are loaded and your installed settings are **not** being read.
 2. Edit the settings. Use the 🌐 menu to switch between English, Português and Español.
