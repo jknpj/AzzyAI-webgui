@@ -890,7 +890,7 @@
 
   function homVisible(entry) {
     if (entry.browsable === false) return false;
-    if (homSkill) {
+    if (homSkill && skillHasSetting(homSkill)) {
       var sk = SK && SK.forSetting(entry.name);
       if (!sk || sk.id !== homSkill) return false;
     }
@@ -1016,6 +1016,15 @@
         title: tr('Show all settings'), onclick: function () { setHomSkill(null); }
       }, [SK.name(cur, curLang()) + ' \u2715']));
     }
+  }
+
+  // True when at least one setting is linked to this skill (skills.json match).
+  function skillHasSetting(id) {
+    for (var i = 0; i < HOM.length; i++) {
+      var s = SK && SK.forSetting(HOM[i].name);
+      if (s && s.id === id) return true;
+    }
+    return false;
   }
 
   function setHomSkill(id) {
