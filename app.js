@@ -26,10 +26,9 @@
   var FILES = ['H_Config.lua', 'M_Config.lua', 'H_Tactics.lua', 'M_Tactics.lua',
     'H_PVP_Tact.lua', 'M_PVP_Tact.lua', 'H_Extra.lua', 'M_Extra.lua'];
   // Per-homunculus-type presets: Types/<Name>.lua overrides H_Config.lua values for that type only.
-  var TYPE_NAMES = ['Lif', 'Amistr', 'Filir', 'Vanilmirth', 'Eira', 'Bayeri', 'Sera', 'Dieter', 'Eleanor'];
+  var TYPE_NAMES = ['Lif', 'Amistr', 'Filir', 'Vanilmirth'];
   var TYPE_FILES = TYPE_NAMES.map(function (n) { return 'Types/' + n + '.lua'; });
   var OUT_FILES = FILES.concat(TYPE_FILES);
-  var TYPE_BUILTIN = { Dieter: { AutoMobCount: 1 } };
   function typePath(name) { return 'Types/' + name + '.lua'; }
   function typeTemplate(name) {
     var text = '-- ' + name + ' preset. Loaded after H_Config.lua: only options that differ for ' + name + ' are listed.\n' +
@@ -51,11 +50,6 @@
     'Berserk Options', 'Friending Options', 'PVP Options', 'Standby Options', 'Kiting Options'];
 
   var S_TYPES = {
-    sera: ['paralyze', 'poisonmist', 'painkiller', 'calllegion'],
-    eira: ['silentbreeze', 'healownerbreeze', 'xenoslasher', 'erasercutter', 'overedboost', 'regene'],
-    eleanor: ['sonicclaw', 'silvervein', 'midnight', 'tinderbreaker', 'switchmode', 'spheretrackinterval'],
-    bayeri: ['stahlhorn', 'hailege', 'goldene', 'steinwand', 'angriffs'],
-    dieter: ['lavaslide', 'magmaflow', 'granitic', 'pyroclastic', 'volcanic']
   };
   var BASE_TYPES = {
     lif: ['escape'],
@@ -63,7 +57,6 @@
     filir: ['flit', 'accel', 'moon', 'speed', 'sbr44'],
     vanilmirth: ['caprice', 'chaotic', 'selfdestruct']
   };
-  var S_ORDER = ['sera', 'eira', 'eleanor', 'bayeri', 'dieter'];
   var BASE_ORDER = ['lif', 'amistr', 'filir', 'vanilmirth'];
 
   function aboutText() {
