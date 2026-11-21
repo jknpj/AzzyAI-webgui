@@ -37,7 +37,7 @@
     s(8011, 'filir', 'Accelerated Flight', 'Voo Acelerado', 'Vuelo Acelerado', 5, [30, 70, 0, 0, 120000, 40000], ['filiraccel']),
     s(8012, 'filir', 'S.B.R.44', 'S.B.R.44', 'S.B.R.44', 3, [1, 1, 0, 0, 1000, 0], ['sbr44']),
     // Vanilmirth
-    s(8013, 'vanilmirth', 'Caprice', 'Capricho', 'Capricho', 5, [22, 30, 0, 0, 2800, 0], []),
+    s(8013, 'vanilmirth', 'Caprice', 'Capricho', 'Capricho', 5, [22, 30, 0, 0, 2800, 0], ['vanilcaprice']),
     s(8014, 'vanilmirth', 'Chaotic Blessings', 'Bênção Caótica', 'Bendiciones Caóticas', 5, [40, 40, 0, 0, 3000, 0], []),
     s(8016, 'vanilmirth', 'Self-Destruction', 'Bioexplosão', 'Autodestrucción', 3, [1, 1, 0, 0, 1000, 0], []),
   ];
