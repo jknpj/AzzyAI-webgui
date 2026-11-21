@@ -170,6 +170,7 @@
         "UseEleanorSonicClaw": "Actívalo para usar la habilidad de ataque Garra Sónica.",
         "UseEleanorTheOneFighterRises": "Activa el ataque Luchadora Ascendente de Eleanor.",
         "UseEleanorTinderBreaker": "Activa Rompepiernas de Eleanor en modo de agarre (grappling).",
+        "UseFilirMoon": "El Filir ataca con Moonlight. Desactivado, solo ataca normalmente.",
         "UseHomunSSkillAttack": "Si está activado, las habilidades de homúnculo S se usarán al atacar.\nPuede ser útil desactivarlo si tu homúnculo es interrumpido al intentar lanzar habilidades a corta distancia y prefieres que en ese caso use Capricho o Luz de Luna.",
         "UseHomunSSkillChase": "Si está activado, las habilidades de homúnculo S se usarán al perseguir.",
         "UseIdleWalk": "Cuando tenga el HP completo y no tenga nada mejor que hacer, elige en esta opción el patrón por el que debe caminar. Consulta la documentación para más información antes de usar la caminata por ruta (Route).",
@@ -187,7 +188,8 @@
         "UseSteinWandOwnerMob": "Si UseBayeriSteinWand está activado, úsala cuando haya esta cantidad de monstruos sobre el dueño.",
         "UseSteinWandSelfMob": "Si UseBayeriSteinWand está activado, úsala cuando haya esta cantidad de monstruos sobre el homúnculo.",
         "UseSteinWandTele": "Actívalo para usar Báculo de Stein después de teletransportarte o al aparecer, una vez que termine SpawnDelay. Después, el homúnculo hará una breve pausa, definida por SteinWandTelePause, antes de actuar normalmente. La idea es que te teletransportes buscando grupos de monstruos; al llegar, el Bayeri lanza Báculo de Stein, espera a que los monstruos se acerquen y luego los mata con Cetro Sagrado.",
-        "UseVanilCaprice": "Actívalo para usar la habilidad de ataque Capricho heredada de Vanilmirth en homúnculos con esa base."
+        "UseVanilCaprice": "Actívalo para usar la habilidad de ataque Capricho heredada de Vanilmirth en homúnculos con esa base.",
+        "UseVanilSelfDestruct": "El Vanilmirth puede usar Self Destruct: daño en área 9x9, pero mata al homúnculo. Desactivado por defecto."
       },
       "homClassic": {
         "OldHomunType": "El tipo base original (Lif, Amistr, Filir o Vanilmirth) de tu Homúnculo S. La IA lo usa para saber qué habilidades heredadas están disponibles. Esta opción se ignora para homúnculos que no son S."
@@ -443,6 +445,7 @@
         "UseEleanorSonicClaw": "Ative para usar a habilidade de ataque Garra Supersônica.",
         "UseEleanorTheOneFighterRises": "Ativa o ataque Lutadora Ascendente da Eleanor.",
         "UseEleanorTinderBreaker": "Ativa Quebra-Costelas da Eleanor no modo de agarrão (Grappler).",
+        "UseFilirMoon": "O Filir ataca com Moonlight. Desligado, só ataca normalmente.",
         "UseHomunSSkillAttack": "Se ativado, as habilidades de Homúnculo S serão usadas ao atacar. Pode ser útil desativar isto se o seu homúnculo for interrompido ao tentar conjurar a curta distância e você preferir que ele use Capricho ou Pica-Pau nesse caso.",
         "UseHomunSSkillChase": "Se ativado, as habilidades de Homúnculo S serão usadas durante a perseguição.",
         "UseIdleWalk": "Quando estiver com o HP cheio e sem nada melhor para fazer, o homúnculo caminha no padrão escolhido aqui. Consulte a documentação para mais informações antes de usar a caminhada por rota (Route).",
@@ -460,7 +463,8 @@
         "UseSteinWandOwnerMob": "Se UseBayeriSteinWand estiver ativado, usa a habilidade quando houver esta quantidade de monstros em cima do dono.",
         "UseSteinWandSelfMob": "Se UseBayeriSteinWand estiver ativado, usa a habilidade quando houver esta quantidade de monstros em cima do homúnculo.",
         "UseSteinWandTele": "Ative para usar Luz Salvadora depois de teleportar ou ser invocado, após o fim do SpawnDelay. Depois disso, o homúnculo pausa por um curto tempo, definido por SteinWandTelePause, antes de agir normalmente. A ideia é você teleportar procurando grupos de monstros; ao chegar, o Bayeri conjura Luz Salvadora, espera os monstros se aproximarem e então os mata com Illuminatus.",
-        "UseVanilCaprice": "Ative para usar a habilidade de ataque Capricho herdada do Vanilmirth em homúnculos com essa base."
+        "UseVanilCaprice": "Ative para usar a habilidade de ataque Capricho herdada do Vanilmirth em homúnculos com essa base.",
+        "UseVanilSelfDestruct": "O Vanilmirth pode usar Self Destruct: dano em área 9x9, mas mata o homúnculo. Desligado por padrão."
       },
       "homClassic": {
         "OldHomunType": "O tipo base original (Lif, Amistr, Filir ou Vanilmirth) do seu Homúnculo S. A IA usa isso para saber quais habilidades herdadas estão disponíveis. Esta opção é ignorada para homúnculos que não são S."

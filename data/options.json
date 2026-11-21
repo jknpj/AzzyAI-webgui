@@ -874,6 +874,20 @@
       },
       {
         "category": "AutoSkill Options",
+        "default": true,
+        "description": "Filir attacks with Moonlight. Off = normal attacks only.",
+        "name": "UseFilirMoon",
+        "type": "bool"
+      },
+      {
+        "category": "AutoSkill Options",
+        "default": false,
+        "description": "Vanilmirth may use Self Destruct, which damages a 9x9 area and kills the homunculus. Off by default.",
+        "name": "UseVanilSelfDestruct",
+        "type": "bool"
+      },
+      {
+        "category": "AutoSkill Options",
         "default": false,
         "description": "If enabled, we will try to hit as many targets as possible withan AoE skill, even if that means we don't hit the target we werecurrently attacking",
         "name": "AoEMaximizeTargets",
