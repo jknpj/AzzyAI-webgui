@@ -201,6 +201,8 @@ window.AzzyI18nStrings = {
     'Automatic': 'Automático',
     'Distrust': 'Não confiar',
     'Trust': 'Confiar',
+    'Probe': 'Sondar',
+    'Never probe': 'Nunca sondar',
     'Off': 'Desligado',
     'Self': 'Si mesmo',
 
@@ -516,6 +518,8 @@ window.AzzyI18nStrings = {
     'Automatic': 'Automático',
     'Distrust': 'No confiar',
     'Trust': 'Confiar',
+    'Probe': 'Sondear',
+    'Never probe': 'Nunca sondear',
     'Off': 'Desactivado',
     'Self': 'Sí mismo',
 

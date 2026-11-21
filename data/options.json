@@ -125,6 +125,16 @@
           1
         ]
       ],
+      "SkillLevelProbingOptions": [
+        [
+          "Probe",
+          1
+        ],
+        [
+          "Never probe",
+          0
+        ]
+      ],
       "StickyStandbyOptions": [
         [
           "Disabled",
@@ -2029,6 +2039,14 @@
         "description": "Whether to believe the client's answer to the skill-range probe that tells which skills are learned. Automatic: distrust it on the official server and trust it on private servers (rAthena). Distrust / Trust force either. Distrusted, a skill is tried even when the probe says it is not learned, and never lowered after a refusal. An H_Extra.lua override takes precedence.",
         "enum": "TrustSkillProbeOptions",
         "name": "TrustSkillProbe",
+        "type": "enum"
+      },
+      {
+        "category": "AutoSkill Options",
+        "default": 1,
+        "description": "Ask the client which skill levels are learned and adapt (Probe). Never probe requests exactly the level set in the options, capped to the skill's maximum, and never lowers it when the server refuses; use it on a server whose probe answers cannot be trusted.",
+        "enum": "SkillLevelProbingOptions",
+        "name": "SkillLevelProbing",
         "type": "enum"
       }
     ]

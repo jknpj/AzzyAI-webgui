@@ -24,6 +24,7 @@ window.AzzyHomEnums = {
   ServerTypeOptions: [['Official', 0], ['Private', 1]],
   BossAggroOptions: [['Tactics', 0], ['React to MVPs', 1], ['React to bosses', 2]],
   TrustSkillProbeOptions: [['Automatic', -1], ['Distrust', 0], ['Trust', 1]],
+  SkillLevelProbingOptions: [['Probe', 1], ['Never probe', 0]],
   UseProvokeOwnerOptions: [['Never', 0], ['Idle', 1], ['Chase', -1], ['Idle_Low', -2], ['Berserk', 2], ['ASAP', 3]]
 };
 window.AzzyHomSchema = [
@@ -418,7 +419,9 @@ window.AzzyHomSchema = [
   { name: 'KiteByRange', category: 'Kiting Options', type: 'bool', default: false,
     description: 'Kite by the monster\'s real attack range (monster database). Ranged monsters make the homunculus kite earlier and with a longer step, a monster that never chases only matters inside its range, and none is kited when its range reaches KiteBounds (there would be no way out). Melee monsters keep KiteThreshold. Needs UseMobInfo.' },
   { name: 'TrustSkillProbe', category: 'AutoSkill Options', type: 'enum', enum: 'TrustSkillProbeOptions', default: -1,
-    description: 'Whether to believe the client\'s answer to the skill-range probe that tells which skills are learned. Automatic: distrust it on the official server and trust it on private servers (rAthena). Distrust / Trust force either. Distrusted, a skill is tried even when the probe says it is not learned, and never lowered after a refusal. An H_Extra.lua override takes precedence.' }
+    description: 'Whether to believe the client\'s answer to the skill-range probe that tells which skills are learned. Automatic: distrust it on the official server and trust it on private servers (rAthena). Distrust / Trust force either. Distrusted, a skill is tried even when the probe says it is not learned, and never lowered after a refusal. An H_Extra.lua override takes precedence.' },
+  { name: 'SkillLevelProbing', category: 'AutoSkill Options', type: 'enum', enum: 'SkillLevelProbingOptions', default: 1,
+    description: 'Ask the client which skill levels are learned and adapt (Probe). Never probe requests exactly the level set in the options, capped to the skill\'s maximum, and never lowers it when the server refuses; use it on a server whose probe answers cannot be trusted.' }
 ];
 
 // Options the classic AzzyAI (classic branch, GUI 1.56) does not know; hidden and
@@ -433,5 +436,6 @@ window.AzzyHomHgOnly = [
   'UseBayeriGoldeneTone', 'BayeriGoldeneToneLevel', 'UseEiraLightOfRegene', 'EiraLightOfRegeneLevel',
   'EiraLightOfRegeneOwnerHP', 'UseEleanorTinderBreaker', 'EleanorTinderBreakerLevel',
   'UseEleanorCBC', 'EleanorCBCLevel', 'UseEleanorEQC', 'EleanorEQCLevel', 'AllowBloodlust', 'AllowSBR44',
-  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro', 'TargetPriority', 'KiteByRange', 'TrustSkillProbe'
+  'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro', 'TargetPriority', 'KiteByRange', 'TrustSkillProbe',
+  'SkillLevelProbing'
 ];
