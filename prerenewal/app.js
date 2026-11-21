@@ -29,6 +29,8 @@
   var TYPE_NAMES = ['Lif', 'Amistr', 'Filir', 'Vanilmirth'];
   // Per-type built-in overrides (none in this build: the four base presets ship empty).
   var TYPE_BUILTIN = {};
+  // Homunculus S ordering: the keystroke order is irrelevant here, the group is empty.
+  var S_ORDER = [];
   var TYPE_FILES = TYPE_NAMES.map(function (n) { return 'Types/' + n + '.lua'; });
   var OUT_FILES = FILES.concat(TYPE_FILES);
   function typePath(name) { return 'Types/' + name + '.lua'; }
