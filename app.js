@@ -890,9 +890,14 @@
 
   function homVisible(entry) {
     if (entry.browsable === false) return false;
-    if (homSkill && skillHasSetting(homSkill)) {
-      var sk = SK && SK.forSetting(entry.name);
-      if (!sk || sk.id !== homSkill) return false;
+    if (homSkill) {
+      var names = SK && SK.settingsOf ? SK.settingsOf(homSkill) : [];
+      if (names.length) {
+        if (names.indexOf(entry.name) < 0) return false;
+      } else if (skillHasSetting(homSkill)) {
+        var sk = SK && SK.forSetting(entry.name);
+        if (!sk || sk.id !== homSkill) return false;
+      }
     }
     if (!matchesSearch(entry, homSearch, 'hom')) return false;
     if (homOnlyModified && isDefault(entry, homValues()[entry.name])) return false;

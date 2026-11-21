@@ -42,6 +42,9 @@
     s(8016, 'vanilmirth', 'Self-Destruction', 'Bioexplosão', 'Autodestrucción', 3, [1, 1, 0, 0, 1000, 0], []),
   ];
 
+
+  // Settings that drive each skill (a setting can drive more than one skill).
+  var SKILL_SETTINGS = {"8001": ["UseAutoHeal"], "8004": ["UseOffensiveBuff"], "8014": ["UseAutoHeal"]};
   var BY_ID = {};
   LIST.forEach(function (k) { BY_ID[k.id] = k; });
 
@@ -58,6 +61,7 @@
   window.AzzySkills = {
     HOMUNCULI: HOMUNCULI,
     list: LIST,
+    settingsOf: function (id) { return SKILL_SETTINGS[String(id)] || []; },
     byId: function (id) { return BY_ID[id] || null; },
     ofHomunculus: function (key) { return LIST.filter(function (k) { return k.homun === key; }); },
     forSetting: forSetting,
