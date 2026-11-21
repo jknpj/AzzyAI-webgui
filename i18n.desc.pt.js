@@ -79,7 +79,7 @@ window.AzzyI18nDesc.pt = {
     KiteBounds: 'Ao kitar, não ultrapassa esta distância do dono.',
     ForceKite: 'Defina como true se você quiser que o homúnculo kite os monstros mesmo sem ter ataque à distância. Isso pode causar comportamentos estranhos.',
     FleeHP: 'Se for diferente de zero e o kite estiver ativado, só kita quando o HP estiver abaixo desta porcentagem.',
-    UseDamageDanger: 'Reage ao dano recebido: se o homúnculo perder DamageDangerDrop% do HP máximo em 3 segundos com HP abaixo de DamageDangerHP%, ele kita (mesmo sem KiteMonsters) e o Bayeri usa Luz Salvadora.',
+    UseDamageDanger: 'Reage ao dano recebido: se o homúnculo perder DamageDangerDrop% do HP máximo em 3 segundos com HP abaixo de DamageDangerHP%, ele kita (mesmo sem KiteMonsters).',
     DamageDangerDrop: 'Porcentagem do HP máximo perdida em 3 segundos que conta como perigo (UseDamageDanger).',
     DamageDangerHP: 'O perigo só conta enquanto o HP estiver abaixo desta porcentagem (UseDamageDanger).',
     StandbyFriending: '',

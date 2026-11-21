@@ -172,7 +172,7 @@ window.AzzyHomSchema = [
   { name: 'FleeHP', category: 'Kiting Options', type: 'int', default: 0, min: 0, max: 100,
     description: 'If non-zero and kiting is enabled, only kite below this percent HP' },
   { name: 'UseDamageDanger', category: 'Kiting Options', type: 'bool', default: false,
-    description: 'React to damage taken: when the homunculus loses DamageDangerDrop percent of its max HP within 3 seconds while below DamageDangerHP percent HP, it kites away (even without KiteMonsters) and Bayeri casts Stein Wand.' },
+    description: 'React to damage taken: when the homunculus loses DamageDangerDrop percent of its max HP within 3 seconds while below DamageDangerHP percent HP, it kites away (even without KiteMonsters).' },
   { name: 'DamageDangerDrop', category: 'Kiting Options', type: 'int', default: 30, min: 1, max: 100,
     description: 'Percent of max HP lost within 3 seconds that counts as danger (UseDamageDanger).' },
   { name: 'DamageDangerHP', category: 'Kiting Options', type: 'int', default: 60, min: 1, max: 100,

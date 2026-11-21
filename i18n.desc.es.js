@@ -79,7 +79,7 @@ window.AzzyI18nDesc.es = {
     KiteBounds: 'Al kitear, no superes esta distancia del dueño.',
     ForceKite: 'Ponlo en true si quieres que tu homúnculo kitee a los monstruos aunque no tenga ataque a distancia. Esto puede causar un comportamiento extraño.',
     FleeHP: 'Si no es cero y el kiteo está activado, solo kitea cuando el HP esté por debajo de este porcentaje.',
-    UseDamageDanger: 'Reacciona al daño recibido: si el homúnculo pierde DamageDangerDrop% de su HP máximo en 3 segundos con HP por debajo de DamageDangerHP%, kitea (incluso sin KiteMonsters) y Bayeri usa Báculo de Stein.',
+    UseDamageDanger: 'Reacciona al daño recibido: si el homúnculo pierde DamageDangerDrop% de su HP máximo en 3 segundos con HP por debajo de DamageDangerHP%, kitea (incluso sin KiteMonsters).',
     DamageDangerDrop: 'Porcentaje del HP máximo perdido en 3 segundos que cuenta como peligro (UseDamageDanger).',
     DamageDangerHP: 'El peligro solo cuenta mientras el HP esté por debajo de este porcentaje (UseDamageDanger).',
     StandbyFriending: '',

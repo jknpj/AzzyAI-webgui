@@ -862,7 +862,7 @@
       {
         "category": "Kiting Options",
         "default": false,
-        "description": "React to damage taken: when the homunculus loses DamageDangerDrop percent of its max HP within 3 seconds while below DamageDangerHP percent HP, it kites away (even without KiteMonsters) and Bayeri casts Stein Wand.",
+        "description": "React to damage taken: when the homunculus loses DamageDangerDrop percent of its max HP within 3 seconds while below DamageDangerHP percent HP, it kites away (even without KiteMonsters).",
         "name": "UseDamageDanger",
         "type": "bool"
       },

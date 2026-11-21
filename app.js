@@ -467,7 +467,7 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  // Resolves a path like "Types/Dieter.lua" inside the chosen folder.
+  // Resolves a path like "Types/Amistr.lua" inside the chosen folder.
   function folderFile(root, path, create) {
     var parts = path.split('/');
     var name = parts.pop();
