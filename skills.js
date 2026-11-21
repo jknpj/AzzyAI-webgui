@@ -15,7 +15,7 @@
 
   var HOMUNCULI = [
     ['lif', 'Lif'], ['amistr', 'Amistr'], ['filir', 'Filir'], ['vanilmirth', 'Vanilmirth'],
-    ['eira', 'Eira'], ['bayeri', 'Bayeri'], ['sera', 'Sera'], ['dieter', 'Dieter'], ['eleanor', 'Eleanor']
+    ['lif', 'Lif'], ['amistr', 'Amistr'], ['filir', 'Filir'], ['vanilmirth', 'Vanilmirth']
   ];
 
   function s(id, homun, en, pt, es, maxlv, stats, match) {
@@ -40,48 +40,6 @@
     s(8013, 'vanilmirth', 'Caprice', 'Capricho', 'Capricho', 5, [22, 30, 0, 0, 2800, 0], []),
     s(8014, 'vanilmirth', 'Chaotic Blessings', 'Bênção Caótica', 'Bendiciones Caóticas', 5, [40, 40, 0, 0, 3000, 0], []),
     s(8016, 'vanilmirth', 'Self-Destruction', 'Bioexplosão', 'Autodestrucción', 3, [1, 1, 0, 0, 1000, 0], []),
-    // Sera
-    s(8018, 'sera', 'Summon Legion', 'Convocação', 'Invocar a Legión', 5, [60, 140, 1200, 800, 60000, 60000], ['calllegion']),
-    s(8019, 'sera', 'Needle of Paralysis', 'Ponto de Paralisia', 'Aguja de Parálisis', 10, [42, 96, 0, 1000, 0, 7500], ['paralyze']),
-    s(8020, 'sera', 'Poison Mist', 'Névoa Venenosa', 'Neblina Venenosa', 5, [65, 105, 0, 1000, 10000, 15000], ['poisonmist']),
-    s(8021, 'sera', 'Pain Killer', 'Analgésico', 'Analgésico', 10, [48, 84, 0, 2500, 0, 600000], ['painkiller']),
-    s(8053, 'sera', 'Toxin Of Mandara', 'Toxina de Mandara', 'Toxina de Mandara', 10, [60, 105, 700, 0, 2000, 7000], ['toxinofmandara']),
-    s(8054, 'sera', 'Needle Stinger', 'Ferroada', 'Aguijonazo', 10, [74, 146, 300, 0, 250, 0], ['needlestinger']),
-    // Eira
-    s(8022, 'eira', 'Light of Regeneration', 'Luz da Vida', 'Luz de Regeneración', 5, [40, 80, 800, 0, 0, 600000], ['lightofregene']),
-    s(8023, 'eira', 'Over Boost', 'Superestimular', 'Sobreimpulso', 5, [70, 150, 600, 400, 0, 90000], ['overedboost']),
-    s(8024, 'eira', 'Eraser Cutter', 'Choque Supersônico', 'Cúter Borrador', 10, [25, 70, 0, 1500, 0, 0], ['erasecutter', 'erasercutter']),
-    s(8025, 'eira', 'Xeno Slasher', 'Onda Supersônica', 'Xenotajo', 10, [85, 130, 0, 1500, 0, 0], ['xenoslasher']),
-    s(8026, 'eira', 'Silent Breeze', 'Brisa da Calmaria', 'Brisa Silenciosa', 5, [45, 81, 200, 1800, 0, 21000], ['silentbreeze', 'healownerbreeze']),
-    s(8047, 'eira', 'Twister Cutter', 'Corte Supersônico', 'Tajo Supersónico', 10, [106, 160, 0, 1500, 200, 0], ['twistercutter']),
-    s(8048, 'eira', 'Absolute Zephyr', 'Zéfiro Absoluto', 'Céfiro Absoluto', 10, [122, 185, 300, 1000, 300, 0], ['absolutezephyr']),
-    // Bayeri
-    s(8031, 'bayeri', 'Stahl Horn', 'Impacto Preciso', 'Cuerno de Acero', 10, [43, 70, 0, 500, 0, 0], ['stahlhorn']),
-    s(8032, 'bayeri', 'Goldene Ferse', 'Fúria Iluminada', 'Furia Iluminada', 5, [60, 80, 0, 1800, 0, 90000], ['goldenpherze']),
-    s(8033, 'bayeri', 'Stein Wand', 'Luz Salvadora', 'Báculo de Stein', 5, [80, 120, 0, 1000, 20000, 600000], ['steinwand']),
-    s(8034, 'bayeri', 'Heilage Stange', 'Illuminatus', 'Cetro Sagrado', 10, [48, 102, 0, 1500, 0, 0], ['hailegestar']),
-    s(8035, 'bayeri', 'Angriffs Modus', 'Raiva Iluminada', 'Modo Angriffs', 5, [60, 80, 0, 1000, 0, 90000], ['angriffmodus']),
-    s(8056, 'bayeri', 'Glanzen Spies', 'Ponta Reluzente', 'Punta Reluciente', 10, [60, 105, 700, 0, 250, 0], ['glanzenspies']),
-    s(8057, 'bayeri', 'Heilige Pferd', 'Equitatio', 'Equitatio', 10, [122, 185, 300, 1000, 500, 0], ['heiligepferd']),
-    s(8058, 'bayeri', 'Goldene Tone', 'Couro Dourado', 'Cuero Dorado', 10, [124, 205, 1000, 2000, 120000, 120000], ['goldenetone']),
-    // Dieter
-    s(8039, 'dieter', 'Magma Flow', 'Inundação de Magma', 'Flujo de Magma', 5, [34, 50, 0, 4000, 0, 90000], ['magmaflow']),
-    s(8040, 'dieter', 'Granitic Armor', 'Armadura de Granito', 'Armadura Granítica', 5, [54, 70, 1000, 3000, 0, 60000], ['graniticarmor']),
-    s(8041, 'dieter', 'Lava Slide', 'Derretimento com Lava', 'Deslizamiento de Lava', 10, [40, 85, 0, 2000, 3000, 15000], ['lavaslide']),
-    s(8042, 'dieter', 'Pyroclastic', 'Piroclástico', 'Piroclástico', 10, [20, 70, 0, 2500, 0, 600000], ['pyroclastic']),
-    s(8043, 'dieter', 'Volcanic Ash', 'Cinzas Vulcânicas', 'Ceniza Volcánica', 5, [60, 80, 1000, 2000, 0, 40000], ['volcanicash']),
-    s(8044, 'dieter', 'Blast Forge', 'Grande Fornalha', 'Gran Forja', 10, [52, 115, 1000, 0, 3000, 5000], ['blastforge']),
-    s(8045, 'dieter', 'Tempering', 'Têmpera', 'Temple', 10, [83, 155, 2000, 0, 120000, 180000], ['tempering']),
-    // Eleanor
-    s(8027, 'eleanor', 'Style Change', 'Estilo de Luta', 'Cambio de Estilo', 1, [35, 35, 0, 0, 0, 0], ['donotswitchmode']),
-    s(8028, 'eleanor', 'Sonic Claw', 'Garra Supersônica', 'Garra Sónica', 5, [20, 40, 0, 0, 1000, 0], ['sonicclaw']),
-    s(8029, 'eleanor', 'Silvervein Rush', 'Rastro Brilhante', 'Ráfaga Trepadora', 10, [17, 35, 0, 0, 1500, 0], ['silvervein']),
-    s(8030, 'eleanor', 'Midnight Frenzy', 'Delírio Noturno', 'Frenesí de Medianoche', 10, [18, 45, 0, 0, 1500, 0], ['midnight']),
-    s(8036, 'eleanor', 'Tinder Breaker', 'Quebra-Costelas', 'Rompepiernas', 5, [20, 40, 0, 1000, 0, 0], ['tinderbreaker']),
-    s(8037, 'eleanor', 'C.B.C : Continual Break Combo', 'Dreno Traumático', 'Combo de Pausa Continua', 5, [10, 50, 0, 0, 0, 0], ['eleanorcbc']),
-    s(8038, 'eleanor', 'E.Q.C : Eternal Quick Combo', 'Estado Traumático', 'Combo Eterno Rápido', 5, [24, 40, 0, 0, 0, 0], ['eleanoreqc']),
-    s(8050, 'eleanor', 'Blazing And Furious', 'Veloz e Furiosa', 'Ardiente y Furioso', 10, [103, 148, 0, 0, 1000, 0], ['blazingandfurious']),
-    s(8051, 'eleanor', 'The One Fighter Rises', 'Lutadora Ascendente', 'Luchadora Ascendente', 10, [100, 154, 0, 0, 2000, 0], ['theonefighterrises'])
   ];
 
   var BY_ID = {};
