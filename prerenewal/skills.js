@@ -15,7 +15,7 @@
 
   var HOMUNCULI = [
     ['lif', 'Lif'], ['amistr', 'Amistr'], ['filir', 'Filir'], ['vanilmirth', 'Vanilmirth'],
-    ['lif', 'Lif'], ['amistr', 'Amistr'], ['filir', 'Filir'], ['vanilmirth', 'Vanilmirth']
+    
   ];
 
   function s(id, homun, en, pt, es, maxlv, stats, match) {
