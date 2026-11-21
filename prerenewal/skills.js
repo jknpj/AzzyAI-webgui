@@ -32,19 +32,19 @@
     s(8006, 'amistr', 'Amistr Bulwark', 'Fortaleza', 'Bastión de Amistr', 5, [20, 40, 0, 0, 30000, 20000], ['bulwark']),
     s(8008, 'amistr', 'Blood Lust', 'Desejo de Sangue', 'Lujuria de Sangre', 3, [120, 120, 0, 0, 900000, 300000], ['bloodlust']),
     // Filir
-    s(8009, 'filir', 'Moonlight', 'Pica-Pau', 'Luz de Luna', 5, [4, 20, 0, 0, 2000, 0], []),
+    s(8009, 'filir', 'Moonlight', 'Pica-Pau', 'Luz de Luna', 5, [4, 20, 0, 0, 2000, 0], ['usefilirmoon']),
     s(8010, 'filir', 'Flitting', 'Voo Frenético', 'Revoloteo', 5, [30, 70, 0, 0, 120000, 40000], ['filirflit']),
     s(8011, 'filir', 'Accelerated Flight', 'Voo Acelerado', 'Vuelo Acelerado', 5, [30, 70, 0, 0, 120000, 40000], ['filiraccel']),
     s(8012, 'filir', 'S.B.R.44', 'S.B.R.44', 'S.B.R.44', 3, [1, 1, 0, 0, 1000, 0], ['sbr44']),
     // Vanilmirth
     s(8013, 'vanilmirth', 'Caprice', 'Capricho', 'Capricho', 5, [22, 30, 0, 0, 2800, 0], ['vanilcaprice']),
     s(8014, 'vanilmirth', 'Chaotic Blessings', 'Bênção Caótica', 'Bendiciones Caóticas', 5, [40, 40, 0, 0, 3000, 0], []),
-    s(8016, 'vanilmirth', 'Self-Destruction', 'Bioexplosão', 'Autodestrucción', 3, [1, 1, 0, 0, 1000, 0], []),
+    s(8016, 'vanilmirth', 'Self-Destruction', 'Bioexplosão', 'Autodestrucción', 3, [1, 1, 0, 0, 1000, 0], ['usevanilselfdestruct']),
   ];
 
 
   // Settings that drive each skill (a setting can drive more than one skill).
-  var SKILL_SETTINGS = {"8001": ["UseAutoHeal"], "8004": ["UseOffensiveBuff"], "8014": ["UseAutoHeal"]};
+  var SKILL_SETTINGS = {"8001": ["UseAutoHeal"], "8004": ["UseOffensiveBuff"], "8014": ["UseAutoHeal"], "8009": ["UseFilirMoon"], "8016": ["UseVanilSelfDestruct"]};
   var BY_ID = {};
   LIST.forEach(function (k) { BY_ID[k.id] = k; });
 

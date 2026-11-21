@@ -100,13 +100,15 @@
         "UseDamageDanger": "Reacciona al daño recibido: si el homúnculo pierde DamageDangerDrop% de su HP máximo en 3 segundos con HP por debajo de DamageDangerHP%, kitea (incluso sin KiteMonsters).",
         "UseDanceAttack": "Ponlo en true si quieres que tu homúnculo supere el límite de ASPD \"bailando\" mientras ataca. Solo se recomienda si tu homúnculo no tiene habilidades ofensivas.",
         "UseDefensiveBuff": "Elige cuándo quieres que tu homúnculo use habilidades de buff defensivas como Bastión de Amistr, Vuelo Acelerado y Escape Urgente.",
+        "UseFilirMoon": "El Filir ataca con Moonlight. Desactivado, solo ataca normalmente.",
         "UseIdleWalk": "Cuando tenga el HP completo y no tenga nada mejor que hacer, elige en esta opción el patrón por el que debe caminar. Consulta la documentación para más información antes de usar la caminata por ruta (Route).",
         "UseMobInfo": "Usa la base de datos de monstruos (MobInfo.lua: elemento, raza, tamaño, jefe/MVP y planta de cada monstruo) para elegir habilidades y para tratar jefes y plantas. Desactívalo para volver al comportamiento anterior.",
         "UseOffensiveBuff": "Elige cuándo quieres que tu homúnculo use habilidades de buff ofensivas: Revoloteo, Carga Mental y Lujuria de Sangre.",
         "UseProvokeOwner": "Usa Cambio de Lugar de Amistr para proteger al dueño en los estados de la IA seleccionados.",
         "UseSkillOnly": "Si quieres que tu homúnculo use habilidades al atacar y también al perseguir, cuando su habilidad tenga más alcance que su ataque normal, elige Chasing. Si quieres que solo use habilidades cuando esté en rango cuerpo a cuerpo, elige Attacking. Si quieres que solo use habilidades y no ataque normalmente, elige SkillOnly.",
         "UseSmartBulwark": "A veces los Amistr se quedan sin SP intentando mantener otros buffs para poder mantener activo Bastión de Amistr. Si esta opción está activada, Bastión de Amistr solo se usará si el Amistr tiene suficiente SP para lanzar todos los demás buffs que tiene configurados.",
-        "UseVanilCaprice": "Actívalo para usar la habilidad de ataque Capricho heredada de Vanilmirth en homúnculos con esa base."
+        "UseVanilCaprice": "Actívalo para usar la habilidad de ataque Capricho heredada de Vanilmirth en homúnculos con esa base.",
+        "UseVanilSelfDestruct": "El Vanilmirth puede usar Self Destruct: daño en área 9x9, pero mata al homúnculo. Desactivado por defecto."
       },
       "homClassic": {},
       "mer": {
@@ -290,13 +292,15 @@
         "UseDamageDanger": "Reage ao dano recebido: se o homúnculo perder DamageDangerDrop% do HP máximo em 3 segundos com HP abaixo de DamageDangerHP%, ele kita (mesmo sem KiteMonsters).",
         "UseDanceAttack": "Defina como true se você quiser que o homúnculo contorne o limite de ASPD \"dançando\" enquanto ataca. Recomendado apenas se o seu homúnculo não tiver habilidades ofensivas.",
         "UseDefensiveBuff": "Define quando o homúnculo deve usar habilidades de buff defensivo, como Fortaleza, Voo Acelerado e Bater em Retirada.",
+        "UseFilirMoon": "O Filir ataca com Moonlight. Desligado, só ataca normalmente.",
         "UseIdleWalk": "Quando estiver com o HP cheio e sem nada melhor para fazer, o homúnculo caminha no padrão escolhido aqui. Consulte a documentação para mais informações antes de usar a caminhada por rota (Route).",
         "UseMobInfo": "Usa o banco de monstros (MobInfo.lua: elemento, raça, tamanho, chefe/MVP e planta de cada monstro) para escolher habilidades e para tratar chefes e plantas. Desative para voltar ao comportamento antigo.",
         "UseOffensiveBuff": "Define quando o homúnculo deve usar habilidades de buff ofensivo: Voo Frenético, Esforço Mental e Desejo de Sangue.",
         "UseProvokeOwner": "Usa Troca de Lugar do Amistr para proteger o dono nos estados da IA selecionados.",
         "UseSkillOnly": "Se você quiser que o homúnculo use habilidades ao atacar e também ao perseguir, quando a habilidade tiver alcance maior que o ataque normal, escolha Chasing. Se quiser que ele use habilidades apenas quando estiver no alcance corpo a corpo, escolha Attacking. Se quiser que ele use apenas habilidades e nunca ataque normalmente, escolha SkillOnly.",
         "UseSmartBulwark": "Às vezes os Amistr gastam todo o SP mantendo outros buffs para conseguir manter a Fortaleza. Se esta opção estiver ativada, Fortaleza só será usada se o Amistr tiver SP suficiente para conjurar todos os outros buffs configurados.",
-        "UseVanilCaprice": "Ative para usar a habilidade de ataque Capricho herdada do Vanilmirth em homúnculos com essa base."
+        "UseVanilCaprice": "Ative para usar a habilidade de ataque Capricho herdada do Vanilmirth em homúnculos com essa base.",
+        "UseVanilSelfDestruct": "O Vanilmirth pode usar Self Destruct: dano em área 9x9, mas mata o homúnculo. Desligado por padrão."
       },
       "homClassic": {},
       "mer": {
@@ -549,7 +553,7 @@
       "Off self": "Empujar de sí",
       "Off self + friend": "Empujar de sí + amigo",
       "Official": "Oficial",
-      "Official LATAM values at max level.": "Valores oficiales de LATAM en el nivel máximo.",
+      "Official client values at max level.": "Valores del cliente oficial en el nivel máximo.",
       "Once; level:": "Una vez; nivel:",
       "Only changed from default": "Solo cambiadas del predeterminado",
       "Only values that differ from the global settings are saved, in Types/{0}.lua.": "Solo se guardan los valores distintos de los globales, en Types/{0}.lua.",
@@ -851,7 +855,7 @@
       "Off self": "Empurrar de si",
       "Off self + friend": "Empurrar de si + amigo",
       "Official": "Oficial",
-      "Official LATAM values at max level.": "Valores oficiais do LATAM no nível máximo.",
+      "Official client values at max level.": "Valores do cliente oficial no nível máximo.",
       "Once; level:": "Uma vez; nível:",
       "Only changed from default": "Só alteradas do padrão",
       "Only values that differ from the global settings are saved, in Types/{0}.lua.": "Apenas valores diferentes dos globais são salvos, em Types/{0}.lua.",

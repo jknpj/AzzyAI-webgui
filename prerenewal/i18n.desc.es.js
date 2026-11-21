@@ -34,6 +34,8 @@ window.AzzyI18nDesc.es = {
     AoEFixedLevel: 'Actívalo para ignorar las tácticas de nivel de habilidad al usar ataques AoE.',
     AutoMobMode: 'Elige si se usan automáticamente las habilidades anti-mob y si esa decisión se basa en la cantidad de monstruos agresivos dentro del área (AoE) o en la cantidad de TODOS los monstruos, agresivos o no.',
     UseVanilCaprice: 'Actívalo para usar la habilidad de ataque Capricho heredada de Vanilmirth en homúnculos con esa base.',
+    UseFilirMoon: 'El Filir ataca con Moonlight. Desactivado, solo ataca normalmente.',
+    UseVanilSelfDestruct: 'El Vanilmirth puede usar Self Destruct: daño en área 9x9, pero mata al homúnculo. Desactivado por defecto.',
     AoEMaximizeTargets: 'Si está activado, intentaremos golpear a la mayor cantidad posible de objetivos con una habilidad AoE, aunque eso signifique no golpear al objetivo que estábamos atacando.',
     StayAwayDistance: 'Mantiene al homúnculo a esta distancia (en celdas) de ti (0 = seguir normalmente). Útil para limpiar instancias con un dueño sin equipo. Limitado por los move bounds; igualmente pelea contra monstruos que se acercan.',
     StayAwayHold: 'Con StayAwayDistance: se queda en un punto y vuelve a él tras las peleas, en vez de seguir cada paso tuyo.',
