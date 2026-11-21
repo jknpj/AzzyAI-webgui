@@ -79,6 +79,10 @@ window.AzzyHomSchema = [
     description: 'Keep fighting a monster you ordered the homunculus to attack until it dies or you give another order, even if you walk away. Turn off to let it give up and return when the target leaves the move bounds or AttackTimeLimit passes. An H_Extra.lua override takes precedence.' },
   { name: 'UseVanilCaprice', category: 'AutoSkill Options', type: 'bool', default: true,
     description: 'Enable the inherited Vanilmirth attack skill Caprice for Vanilmirth-based homunculi.' },
+  { name: 'UseFilirMoon', category: 'AutoSkill Options', type: 'bool', default: true,
+    description: 'Filir attacks with Moonlight. Off = normal attacks only.' },
+  { name: 'UseVanilSelfDestruct', category: 'AutoSkill Options', type: 'bool', default: false,
+    description: 'Vanilmirth may use Self Destruct, which damages a 9x9 area and kills the homunculus. Off by default.' },
   { name: 'AoEMaximizeTargets', category: 'AutoSkill Options', type: 'bool', default: false,
     description: 'If enabled, we will try to hit as many targets as possible withan AoE skill, even if that means we don\'t hit the target we werecurrently attacking' },
   { name: 'StayAwayDistance', category: 'Walk/Follow Options', type: 'int', default: 0, min: 0, max: 20,
@@ -238,5 +242,6 @@ window.AzzyHomHgOnly = [
   'CastInterruptLimit', 'CastInterruptPause', 'CastInterruptUnconfirmed',
   'ServerType', 'AutoDetectServerType', 'CommandedFightStay', 'AllowBloodlust', 'AllowSBR44',
   'UseMobInfo', 'SkillElementMinRate', 'PlantSkills', 'BossAggro', 'TargetPriority', 'KiteByRange', 'TrustSkillProbe',
-  'SkillLevelProbing'
+  'SkillLevelProbing',
+  'UseFilirMoon', 'UseVanilSelfDestruct'
 ];

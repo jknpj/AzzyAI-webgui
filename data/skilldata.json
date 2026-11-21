@@ -152,7 +152,9 @@
       "pt": "Nível máximo: ^7777775^000000\nTipo: ^777777Ofensiva^000000\nDescrição:\n^777777Faz o Filir causar dano físico no alvo único.^000000\nNível l ATQ l Bicadas\n[Nv 1]: ^777777220%^000000 l ^7777771 ataque^000000\n[Nv 2]: ^777777330%^000000 l ^7777772 ataques^000000\n[Nv 3]: ^777777440%^000000 l ^7777772 ataques^000000\n[Nv 4]: ^777777550%^000000 l ^7777772 ataques^000000\n[Nv 5]: ^777777660%^000000 l ^7777773 ataques^000000"
     },
     "homun": "filir",
-    "match": [],
+    "match": [
+      "usefilirmoon"
+    ],
     "maxlv": 5,
     "name": {
       "en": "Moonlight",
@@ -250,7 +252,9 @@
       "pt": "Nível máximo: ^7777775^000000\nTipo: ^777777Ofensiva^000000\nDescrição:\n^777777Invoca aleatoriamente Coluna de Pedra,\nLanças de Fogo, Gelo ou Relâmpago.\nO nv. da magia depende do nv. de Capricho.^000000\nNível l Nível das magias\n[Nv 1]: ^777777Nível 1^000000\n[Nv 2]: ^777777Nível 2^000000\n[Nv 3]: ^777777Nível 3^000000\n[Nv 4]: ^777777Nível 4^000000\n[Nv 5]: ^777777Nível 5^000000"
     },
     "homun": "vanilmirth",
-    "match": [],
+    "match": [
+      "vanilcaprice"
+    ],
     "maxlv": 5,
     "name": {
       "en": "Caprice",
@@ -296,7 +300,9 @@
       "pt": "Nível máximo: ^7777773^000000\nPré-requisitos: ^CD3278Lealdade alta na 2ª forma^000000\nTipo: ^777777Ofensiva^000000\nDescrição:\n^777777Causa dano físico na área de 9x9 células.\nO dano depende do HP máx. do Vanilmirth.\nApós a explosão, seu homúnculo morre e\nele perderá todos os pontos de lealdade.^000000\nNível l Dano\n[Nv 1]: ^777777HP máx. × 1^000000\n[Nv 2]: ^777777HP máx. × 1,5^000000\n[Nv 3]: ^777777HP máx. × 2^000000"
     },
     "homun": "vanilmirth",
-    "match": [],
+    "match": [
+      "usevanilselfdestruct"
+    ],
     "maxlv": 3,
     "name": {
       "en": "Self-Destruction",
