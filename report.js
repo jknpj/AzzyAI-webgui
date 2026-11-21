@@ -28,7 +28,7 @@
   }
 
   function shortName(path) {
-    // "AI/USER_AI/Types/Dieter.lua" -> "Types/Dieter.lua"
+    // "AI/USER_AI/Types/Amistr.lua" -> "Types/Amistr.lua"
     var i = path.indexOf('USER_AI/');
     return i >= 0 ? path.substring(i + 'USER_AI/'.length) : path;
   }

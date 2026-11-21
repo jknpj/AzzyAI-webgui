@@ -35,7 +35,6 @@ The last applied configuration is kept in the browser's local storage and reload
 The selector at the bottom left chooses which AzzyAI the files are for:
 
 - **AzzyAI**: every option.
-- **AzzyAI Classic**: hides the options the classic AI does not use (server type, the newer Homunculus S skills, Dieter Tempering/Blast Forge, Eira Light of Regenerate, inherited Bloodlust/SBR44) and does not write them to `H_Config.lua`.
 
 When you open a `USER_AI` folder, the version is detected automatically: the current AI defines `ServerType` in `Defaults.lua`, the classic AI does not. Tactics and PVP tactics files have the same format in both versions. The list of options the classic AI lacks is `AzzyHomHgOnly` in `homSchema.js`.
 
@@ -50,7 +49,6 @@ backoff, not a change to skill mechanics or server cooldowns.
 failures without visible casting or confirmed completion when the target is
 alive/in range and SP is sufficient; these may include server refusals.
 
-For Eleanor, **AutoSkill Options > SphereTrackInterval** sets the minimum
 milliseconds between attack attempts counted toward the fighting-style sphere
 estimate (positive integer, default 800). It is not a skill cooldown; use shorter
 intervals only for faster homunculi. The setting is saved in `H_Config.lua`;
