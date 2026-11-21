@@ -962,7 +962,7 @@
       el('div', { class: 'flex-grow-1' }, [
         el('div', { class: 'skill-title', text: SK.name(skill, curLang()) }),
         el('div', { class: 'skill-stats', text: parts.join(' \u00B7 ') }),
-        el('div', { class: 'skill-stats fst-italic', text: tr('Official LATAM values at max level.') }),
+        el('div', { class: 'skill-stats fst-italic', text: tr('Official client values at max level.') }),
         details
       ])
     ]);
