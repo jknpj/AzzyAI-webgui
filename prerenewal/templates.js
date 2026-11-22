@@ -1,4 +1,4 @@
-// Default AzzyAI config files embedded for the web GUI. H_Config.lua and M_Config.lua are the
+﻿// Default AzzyAI config files embedded for the web GUI. H_Config.lua and M_Config.lua are the
 // shipped preset and must stay identical to USER_AI/H_Config.lua and USER_AI/M_Config.lua in the
 // parent repository (CI checks it), because a config created here starts from them.
 // The tactics, PVP and Extra files only carry their defaults.
@@ -30,6 +30,8 @@ AttackSkillReserveSP     = 0
 AutoMobMode              = 2 
 AutoMobCount             = 2
 UseVanilCaprice          = 1
+UseFilirMoon             = 1
+UseVanilSelfDestruct     = 0
 AutoSkillDelay           = 200
 AoEMaximizeTargets       = 0
 CastTimeRatio            = .80
