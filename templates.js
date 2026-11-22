@@ -35,6 +35,8 @@ AutoComboSpheres         = 1
 UseHomunSSkillChase      = 1
 UseHomunSSkillAttack     = 1 
 UseVanilCaprice          = 1
+UseFilirMoon             = 1
+UseVanilSelfDestruct     = 0
 AutoSkillDelay           = 200
 AoEMaximizeTargets       = 0
 CastTimeRatio            = .80
@@ -181,7 +183,8 @@ EleanorEQCLevel				=5
 -- New OldHomun Defaults
 AllowBloodlust             =0
 AllowSBR44                 =0`,
-  'M_Config.lua': String.raw`ServerType               = SERVER_OFFICIAL -- SERVER_PRIVATE for rAthena/Hercules servers
+  'M_Config.lua': String.raw`
+ServerType               = SERVER_OFFICIAL -- SERVER_PRIVATE for rAthena/Hercules servers
 AggroHP                  = 60
 AggroSP                  = 0
 OldHomunType			= 3
