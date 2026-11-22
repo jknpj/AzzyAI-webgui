@@ -48,7 +48,7 @@
   }
   var FILTER_KEY = 'azzyai.webgui.homFilters';
   var VERSION_KEY = 'azzyai.webgui.version';
-  var DOC_ONLINE_URL = 'https://github.com/jknpj/AzzyAI/blob/HEAD/USER_AI/Documentation.pdf';
+  var DOC_ONLINE_URL = 'https://github.com/jknpj/AzzyAI/blob/prerenewal/USER_AI/Documentation.pdf';
 
   var HOM_CATEGORIES = ['Basic Options', 'AutoSkill Options', 'Walk/Follow Options', 'Autobuff Options',
     'Berserk Options', 'Friending Options', 'PVP Options', 'Standby Options', 'Kiting Options'];
